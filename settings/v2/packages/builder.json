@@ -1,0 +1,159 @@
+{
+  "__version__": "1.3.7",
+  "textureCompressConfig": {
+    "genMipmaps": true,
+    "userPreset": {
+      "a45uAsp9RAX41McOCxIU3s": {
+        "name": "ccgame",
+        "options": {
+          "web": {},
+          "android": {
+            "astc_4x4": {
+              "quality": "medium"
+            }
+          }
+        }
+      }
+    },
+    "customConfigs": {
+      "57zHohKBdKN6US4n5YzGU0": {
+        "id": "57zHohKBdKN6US4n5YzGU0",
+        "name": "New Format Config",
+        "path": "D:\\ccgame\\client\\trunk\\ccgame",
+        "command": " ${quality}",
+        "format": "astc_4x4",
+        "overwrite": false
+      }
+    }
+  },
+  "bundleConfig": {
+    "custom": {
+      "default": {
+        "displayName": "i18n:builder.asset_bundle.defaultConfig",
+        "configs": {
+          "native": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "overwriteSettings": {}
+          },
+          "web": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "fallbackOptions": {
+              "compressionType": "merge_dep"
+            }
+          },
+          "miniGame": {
+            "fallbackOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "configMode": "fallback"
+          }
+        }
+      },
+      "badIjtQstMd5e2Q28fP8rf": {
+        "displayName": "远程ab包",
+        "configs": {
+          "native": {
+            "preferredOptions": {
+              "isRemote": true,
+              "compressionType": "merge_dep"
+            }
+          },
+          "web": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "fallbackOptions": {
+              "compressionType": "merge_dep"
+            }
+          },
+          "miniGame": {
+            "fallbackOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "configMode": "fallback"
+          }
+        }
+      },
+      "05JAr+a2VLjYrixKJd6PEY": {
+        "displayName": "subGamesCommon",
+        "configs": {
+          "native": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_all_json"
+            }
+          },
+          "web": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "fallbackOptions": {
+              "compressionType": "merge_dep"
+            }
+          },
+          "miniGame": {
+            "fallbackOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "configMode": "fallback"
+          }
+        }
+      },
+      "03X7iqiOhME6MePq+Ez502": {
+        "displayName": "subGamesab包",
+        "configs": {
+          "native": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_all_json"
+            }
+          },
+          "web": {
+            "preferredOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "fallbackOptions": {
+              "compressionType": "merge_dep"
+            }
+          },
+          "miniGame": {
+            "fallbackOptions": {
+              "isRemote": false,
+              "compressionType": "merge_dep"
+            },
+            "configMode": "fallback"
+          }
+        }
+      }
+    }
+  },
+  "splash-setting": {
+    "logo": {
+      "type": "custom",
+      "image": "project://settings/logo.png"
+    },
+    "background": {
+      "type": "color",
+      "color": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "w": 1
+      },
+      "image": "project://settings/logo.png"
+    },
+    "totalTime": 500
+  }
+}

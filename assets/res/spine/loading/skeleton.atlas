@@ -1,0 +1,531 @@
+
+skeleton.png
+size: 1908,1384
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+图层 881_00000
+  rotate: true
+  xy: 0, 924
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00001
+  rotate: true
+  xy: 0, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00002
+  rotate: true
+  xy: 0, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00003
+  rotate: true
+  xy: 0, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00004
+  rotate: true
+  xy: 0, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00005
+  rotate: true
+  xy: 151, 1155
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00006
+  rotate: true
+  xy: 151, 924
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00007
+  rotate: true
+  xy: 151, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00008
+  rotate: true
+  xy: 151, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00009
+  rotate: true
+  xy: 151, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00010
+  rotate: true
+  xy: 151, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00011
+  rotate: true
+  xy: 302, 1155
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00012
+  rotate: true
+  xy: 302, 924
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00013
+  rotate: true
+  xy: 302, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00014
+  rotate: true
+  xy: 302, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00015
+  rotate: true
+  xy: 302, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00016
+  rotate: true
+  xy: 302, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00017
+  rotate: true
+  xy: 453, 1155
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00018
+  rotate: true
+  xy: 453, 924
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00019
+  rotate: true
+  xy: 453, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00020
+  rotate: true
+  xy: 453, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00021
+  rotate: true
+  xy: 453, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00022
+  rotate: true
+  xy: 453, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00023
+  rotate: false
+  xy: 604, 1235
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00024
+  rotate: false
+  xy: 835, 1235
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00025
+  rotate: false
+  xy: 1066, 1235
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00026
+  rotate: false
+  xy: 1297, 1235
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00027
+  rotate: false
+  xy: 1528, 1235
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00028
+  rotate: true
+  xy: 1759, 1155
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00029
+  rotate: false
+  xy: 604, 1084
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00030
+  rotate: false
+  xy: 835, 1084
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00031
+  rotate: false
+  xy: 1066, 1084
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00032
+  rotate: false
+  xy: 1297, 1084
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00033
+  rotate: false
+  xy: 1528, 1084
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00034
+  rotate: true
+  xy: 1759, 924
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00035
+  rotate: true
+  xy: 604, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00036
+  rotate: false
+  xy: 604, 933
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00037
+  rotate: true
+  xy: 604, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00038
+  rotate: true
+  xy: 604, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00039
+  rotate: true
+  xy: 604, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00040
+  rotate: false
+  xy: 835, 933
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00041
+  rotate: false
+  xy: 1066, 933
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00042
+  rotate: false
+  xy: 1297, 933
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00043
+  rotate: false
+  xy: 1528, 933
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00044
+  rotate: true
+  xy: 755, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00045
+  rotate: true
+  xy: 755, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00046
+  rotate: true
+  xy: 755, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00047
+  rotate: true
+  xy: 755, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00048
+  rotate: false
+  xy: 906, 782
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00049
+  rotate: false
+  xy: 1137, 782
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00050
+  rotate: false
+  xy: 1368, 782
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00051
+  rotate: true
+  xy: 1599, 702
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00052
+  rotate: true
+  xy: 1750, 693
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00053
+  rotate: false
+  xy: 906, 631
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00054
+  rotate: false
+  xy: 1137, 631
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00055
+  rotate: false
+  xy: 1368, 631
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00056
+  rotate: true
+  xy: 1599, 471
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00057
+  rotate: true
+  xy: 1750, 462
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00058
+  rotate: true
+  xy: 906, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00059
+  rotate: true
+  xy: 906, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00060
+  rotate: false
+  xy: 906, 480
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00061
+  rotate: false
+  xy: 1137, 480
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00062
+  rotate: false
+  xy: 1368, 480
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00063
+  rotate: true
+  xy: 1057, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00064
+  rotate: true
+  xy: 1057, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00065
+  rotate: false
+  xy: 1208, 329
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00066
+  rotate: true
+  xy: 1439, 249
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00067
+  rotate: false
+  xy: 1208, 178
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00068
+  rotate: true
+  xy: 1590, 240
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00069
+  rotate: true
+  xy: 1439, 18
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00070
+  rotate: false
+  xy: 1208, 27
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00071
+  rotate: true
+  xy: 1590, 9
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00072
+  rotate: true
+  xy: 1741, 231
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00073
+  rotate: true
+  xy: 1741, 0
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1
+图层 881_00074
+  rotate: true
+  xy: 0, 1155
+  size: 229, 149
+  orig: 229, 152
+  offset: 0, 0
+  index: -1

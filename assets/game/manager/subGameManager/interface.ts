@@ -44,5 +44,7 @@ export const SubGameEventGame = {
     close: 'SubGameEvent_close',
     /**start*/
     start: 'SubGameEvent_start',
+    /**loading*/
+    loading: 'SubGameEvent_loading',
 }
 

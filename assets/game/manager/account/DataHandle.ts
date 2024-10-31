@@ -116,10 +116,10 @@ export class DataHandle {
      */
     getTekonAndAgent() {
 
-        let aa = "?token=dXVpZD1aRjk2NGJfWTE6NjIzMDEzMTYmdWlkPTQwNjA1ODExJnRva2VuPTYyMzAxMzE2JmJhbGFuY2U9MTAwNDE0ODAwJmdhbWU9MTAxJmdhbWVpbmZvPXsiZnVsbHNjcmVlbiI6MH0mZXhwaT0xNzMwMzc2MTMwJnNpZ249MGVlOWEyYjVkNmFhZDkwODVhNTEwZjJhMGVhNDFjNGQ=&agent=d3NzOi8vZmRzZ2h1azM0OWRmc2Jqay5jY2FwaTIxOG9yYmprc2FwbTAzZmprZHMub3JnL3dzcw==&gameID=101";
-        let params = this.scopeUser(aa);
+        // let aa = "?token=dXVpZD1aRjk2NGJfWTE6NjIzMDEzMTYmdWlkPTQwNjA1ODExJnRva2VuPTYyMzAxMzE2JmJhbGFuY2U9MTAwNDE0ODAwJmdhbWU9MTAxJmdhbWVpbmZvPXsiZnVsbHNjcmVlbiI6MH0mZXhwaT0xNzMwMzc2MTMwJnNpZ249MGVlOWEyYjVkNmFhZDkwODVhNTEwZjJhMGVhNDFjNGQ=&agent=d3NzOi8vZmRzZ2h1azM0OWRmc2Jqay5jY2FwaTIxOG9yYmprc2FwbTAzZmprZHMub3JnL3dzcw==&gameID=101";
+        // let params = this.scopeUser(aa);
 
-        // let params = this.scopeUser(globalThis.location.search);
+        let params = this.scopeUser(globalThis.location.search);
         let token = "";
         let agent = "";
         if (params && params["token"]) {

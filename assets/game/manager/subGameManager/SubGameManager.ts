@@ -16,6 +16,7 @@ import { EMgr } from "../interface";
 import { SubGameDetail, SubGameEventGame, SubGameProducer } from "./interface";
 import { GiGameEvent } from "./interfaceGIApi";
 import { BUILD } from "cc/env";
+import { gi } from "./subGameGlobal";
 
 export class SubGameManager extends IManager {
     private lastGame: SubGameDetail = null;
@@ -36,7 +37,7 @@ export class SubGameManager extends IManager {
 
     constructor() {
         super(EMgr.SUBGAMEMANAGER);
-        this.on([SubGameEventGame.open, SubGameEventGame.close, SubGameEventGame.start]);
+        this.on([SubGameEventGame.open, SubGameEventGame.close, SubGameEventGame.start, SubGameEventGame.loading]);
         this.bindGameEvent();
         this.onproto([]);
     };
@@ -79,9 +80,9 @@ export class SubGameManager extends IManager {
             this.initByEnterGame(detail);
             gui.openBundleLayer(detail.bundleConf.name, detail.bundleConf.layer, null, {
                 onAdded: () => {
-                    if (this.curGame.gameID != 101 && BUILD) {
-                        this.emit(SubGameEventGame.start);
-                    }
+                    // if (BUILD) {
+                    //     this.emit(SubGameEventGame.start);
+                    // }
                     this.doSuccess(detail);
                 },
                 onError: () => {
@@ -96,15 +97,24 @@ export class SubGameManager extends IManager {
                 this.doError(detail, 2);
                 return;
             }
-            AssetsLoader.instance.bundleLoad(bundleName, 'prefab/layer/' + detail.bundleConf.layer, Prefab, null, (err, prefab) => {
-                if (err) {
-                    this.doError(detail, 3);
-                    return;
-                }
-                // enterGame();
-                this.emit(SubGameEventGame.prepare, () => {
+            // AssetsLoader.instance.bundleLoad(bundleName, 'prefab/layer/' + detail.bundleConf.layer, Prefab, null, (err, prefab) => {
+            //     if (err) {
+            //         this.doError(detail, 3);
+            //         return;
+            //     }
+            //     enterGame();
+            //     // this.emit(SubGameEventGame.prepare, () => {
+            //     //     enterGame();
+            //     // })
+            // })
+            gameDownloadMgr.downloadAbs(`${detail.gameID}`, {
+                progress(finished, total, percent) {
+                    this.emit(gi.SubGameEventGame.loading, percent * 100);
+                },
+                target: this,
+                complete(err, data) {
                     enterGame();
-                })
+                },
             })
         })
     }
@@ -150,17 +160,17 @@ export class SubGameManager extends IManager {
         this.curGame = detail;
         this.release();
         setOrientation(!!detail.orientation);
-        gui.openLayer('lyGameLoading', { gameId: detail.gameID }, {
-            onAdded: () => {
-                if (detail.producer == SubGameProducer.c1) {
-                    // this.showCommonUi(false, true);
-                } else {
-                    // this.showCommonUi(false);
-                }
-                this.doOpen(detail);
-            }
-        });
-        // this.doOpen(detail);
+        // gui.openLayer('lyGameLoading', { gameId: detail.gameID }, {
+        //     onAdded: () => {
+        //         if (detail.producer == SubGameProducer.c1) {
+        //             // this.showCommonUi(false, true);
+        //         } else {
+        //             // this.showCommonUi(false);
+        //         }
+        //         this.doOpen(detail);
+        //     }
+        // });
+        this.doOpen(detail);
     }
 
     /** 进入之前的初始化 */
@@ -289,6 +299,9 @@ export class SubGameManager extends IManager {
             case SubGameEventGame.start:
                 this.startGame();
                 break;
+            case SubGameEventGame.loading:
+                this.loadGame(data);
+                break;
             default:
                 break;
         }
@@ -307,6 +320,22 @@ export class SubGameManager extends IManager {
         let animation = document.getElementById('animation');
         if (animation) {
             animation.style.display = 'none';
+        }
+
+        let progressText = document.getElementById('progressText');
+        if (progressText) {
+            progressText.style.display = 'none';
+        }
+    }
+
+    loadGame(progress: number) {
+        if (BUILD) {
+            globalThis.clearInterval(globalThis.ccgameloading);
+            let progressText = document.getElementById('progressText');
+            if (progressText) {
+                // progressText.style.display = 'block';
+                progressText.innerHTML = `${Math.floor(60 + progress * 0.4)}%`;
+            }
         }
     }
 }

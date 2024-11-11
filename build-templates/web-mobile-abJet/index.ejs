@@ -53,7 +53,7 @@
 
 		</div>	
 		
-		<div id="progressText" style="position: absolute; top: 200px;left: 0;right: 0;text-align: center; color: white; font-size: 40px; display: block;">
+		<div id="progressText" style="position: absolute; top: 200px;left: 0;right: 0;text-align: center; color: white; font-size: 40px; display: none;">
 		0%
 		</div>  
     </div>	  
@@ -68,22 +68,17 @@
 	})();
 	var ccgameprogress = 0;
 	var ccgameloading = setInterval(()=>{
-		if(ccgameprogress >= 80){
-			ccgameprogress += 0.02;
-		}else{
-			ccgameprogress += 1;
-		}
-		if(ccgameprogress >= 90){
+		ccgameprogress += 1;
+		if(ccgameprogress >= 60){
 			clearInterval(ccgameloading);
 		}
 		var progressText = document.getElementById('progressText');
-		progressText.innerHTML = `${Math.floor(ccgameprogress)}%`;
-	},50);
+		progressText.innerHTML = `${ccgameprogress}%`;
+	},500);
 	setTimeout(()=>{
 		var progressText = document.getElementById('progressText');
 		progressText.style.display = 'block';
 	}, 4000);
-	window.ccgameloading = ccgameloading;
 </script>	
   <%- include(cocosTemplate, {}) %>
 </body>

@@ -1,0 +1,252 @@
+{
+	"os": {
+		"bundle": {
+			"js": "os_bundle",
+			"desc": [
+				"> :工程目录\n"
+			],
+			"cmd": {
+				"--p": {
+					"priority": "优先级"
+				},
+				"--m": {
+					"meta": "配置"
+				}
+			}
+		},
+		"remote": {
+			"js": "os_remote",
+			"desc": [
+				"> :工程目录\n"
+			],
+			"cmd": {
+				"--p": {
+					"平台": "名字"
+				},
+				"--m": {
+					"模式": "名字"
+				}
+			}
+		},
+		"project": {
+			"js": "os_project",
+			"desc": [
+				"> :工程目录\n"
+			],
+			"cmd": {
+				"--p": {
+					"项目名字": "名字"
+				}
+			}
+		},
+		"quant": {
+			"js": "os_quant",
+			"desc": [
+				"> :png压缩\n"
+			]
+		},
+		"compress": {
+			"js": "os_compress",
+			"desc": [
+				"> :图片压缩\n"
+			]
+		},
+		"size": {
+			"js": "os_size",
+			"desc": [
+				"> :查找存储空间大小图片\n",
+				"    --kb 大小kb"
+			],
+			"cmd": {
+				"--kb": {
+					"name": "大小"
+				}
+			},
+			"default": {
+				"--kb": "100"
+			}
+		},
+		"asset": {
+			"js": "os_checkUUid",
+			"desc": [
+				"> :查找并删除无用资源\n",
+				"    --endsfix 类型（png , skel, fnt）"
+			],
+			"cmd": {
+				"--endsfix": {
+					"name": "类型"
+				}
+			},
+			"default": {
+				"--endsfix": "png"
+			}
+		},
+		"copy": {
+			"js": "os_copy",
+			"desc": [
+				"> :从res-pack/md5res使用相同压缩备份的文件\n",
+				" [*]--t value => target 构建出的目标目录built-dist"
+			],
+			"force": [
+				"--t"
+			],
+			"cmd": {
+				"--t": {
+					"name": "built-dist"
+				}
+			},
+			"default": {}
+		},
+		"clean": {
+			"js": "os_clean",
+			"desc": [
+				"> :从built-dist/res清理tinyPng压缩备份过的文件\n",
+				" [*]--t value => target 构建出的目标目录built-dist",
+				"    --pack    => 清理md5res下的相同资源",
+				"    --file    => 清理built-dist下相同文件的压缩备份资源",
+				"    default:--file"
+			],
+			"force": [
+				"--t"
+			],
+			"cmd": {
+				"--t": {
+					"name": "built-dist"
+				},
+				"--pack": {
+					"name": "pack清理",
+					"filter": [
+						"--file"
+					]
+				},
+				"--file": {
+					"name": "res清理"
+				}
+			},
+			"default": {
+				"--file": 1
+			}
+		},
+		"hotpack": {
+			"js": "os_hotpack",
+			"desc": [
+				"> :从built-dist打包差异文件到build-pack/update\n",
+				" [*]--t value => target 构建出的目标目录built-dist",
+				" [*]--v value => 版本号"
+			],
+			"force": [
+				"--t"
+			],
+			"cmd": {
+				"--t": {
+					"name": "built-dist"
+				},
+				"--v": {
+					"name": "版本号"
+				}
+			},
+			"default": {}
+		},
+		"http": {
+			"js": "os_http",
+			"desc": [
+				"> :从built-dist启动HTTP代理\n",
+				" [*]--t value => target 构建出的目标目录built-dist"
+			],
+			"force": [
+				"--t"
+			],
+			"cmd": {
+				"--t": {
+					"name": "built-dist"
+				}
+			}
+		},
+		"test": {
+			"js": "os_test",
+			"desc": [
+				"> :测试接口\n"
+			],
+			"force": [],
+			"cmd": {
+				"--t": {
+					"name": "built-dist"
+				},
+				"--v": {
+					"name": "版本号"
+				}
+			},
+			"default": {}
+		},
+		"compress_asset": {
+			"js": "os_compress_asset",
+			"desc": [
+				"修改图片资源的压缩方式"
+			]
+		},
+		"build_tools": {
+			"js": "os_build_tools",
+			"desc": [
+				">: 构建工具",
+				"--step => 1：根据server_tag修改build生成的代码中的服务器地址; \n"
+			],
+			"cmd": {
+				"--step": {
+					"name": "步骤号"
+				},
+				"--server_tag": {
+					"name": "服务器tag"
+				},
+				"--md5": {
+					"name": "是否md5"
+				},
+				"--build_env": {
+					"name": "打包环境"
+				},
+				"--build_type": {
+					"name": "打包类型"
+				},
+				"--build_channel": {
+					"name": "打包渠道"
+				},
+				"--app_id": {
+					"name": "包名"
+				},
+				"--af_key": {
+					"name": "af key"
+				},
+				"--pkg_type": {
+					"name": "官包/投放包"
+				},
+				"--pre_name": {
+					"name": "名字前缀"
+				}
+			},
+			"default": {}
+		},
+		"build_subgame": {
+			"js": "os_build_subgame_tools ",
+			"desc": [
+				">: 构建工具",
+				"--step => 1：根据server_tag修改build生成的代码中的服务器地址; \n"
+			],
+			"cmd": {
+				"--step": {
+					"name": "步骤号"
+				},
+				"--md5": {
+					"name": "是否md5"
+				},
+				"--build_env": {
+					"name": "打包环境"
+				},
+				"--bundle": {
+					"name": "包名"
+				}
+			},
+			"default": {}
+		}
+	},
+	"keeplist": [],
+	"copyfilter": []
+}

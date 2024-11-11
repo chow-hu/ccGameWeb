@@ -330,11 +330,11 @@ export class SubGameManager extends IManager {
 
     loadGame(progress: number) {
         if (BUILD) {
-            globalThis.clearInterval(globalThis.ccgameloading);
+            clearInterval(globalThis.ccgameloading);
             let progressText = document.getElementById('progressText');
             if (progressText) {
                 // progressText.style.display = 'block';
-                progressText.innerHTML = `${Math.floor(60 + progress * 0.4)}%`;
+                progressText.innerHTML = `${Math.floor(90 + progress * 0.1)}%`;
             }
         }
     }

@@ -18,6 +18,12 @@ export type NetMsg = {
 
 export enum NetEvent { WILLOPEN, DATA, READY, NOT_READY, AUTH_ERROR, CONNECT_FAILED, CLOSED, DELAY };
 export enum NetState { NONE, WAITING, READY, CLOSED };
+export enum NetFailure {
+    // ConnectTimeout,
+    HeartBeatTimeout,
+    ReconnectTimeout,
+    NormalSocketClose,
+}
 
 /** 消息名映射 */
 export const CmdToPbName: { [key: number]: string } = {};

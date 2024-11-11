@@ -15,7 +15,7 @@ import { glog, valueset } from "../common/general";
 import out from '../extension/buffer/buffer.js';
 import { StorageData } from "../storage/StorageData";
 import { SchedulerManager } from "../timer/SchedulerManager";
-import { CmdToPbName, GameCmdMap, INetContract, NetEvent, NetMsg, NetState } from "./INet";
+import { CmdToPbName, GameCmdMap, INetContract, NetEvent, NetFailure, NetMsg, NetState } from "./INet";
 
 const HEARTBEAT_INTERVAL = 10; // 10秒发送一次心跳  
 const MISSED_HEARTBEATS_BEFORE_DISCONNECT = 3; // 错过3次心跳后断开连接  
@@ -38,7 +38,7 @@ export default class NetWsManager {
     private _nSendHeartId = 0
     private _reconnectNumber: number = -1;
     private _reconnectCount: number = this._reconnectNumber;
-    private _isDestroy: boolean = false;
+    private _isDestroy: boolean = true;
     private _reconnectTimer: any;
     private _reconnectTimeOut: number = 3000;
     private _user: { uid: number } = { uid: 0 };
@@ -86,7 +86,7 @@ export default class NetWsManager {
             }, this._reconnectTimeOut);
         } else {
             this.destroy();
-            this.contract?.onNet(NetEvent.CONNECT_FAILED);
+            this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.ReconnectTimeout);
         }
     };
 
@@ -169,7 +169,7 @@ export default class NetWsManager {
             return;
         }
         this.close()
-        this.contract?.onNet(NetEvent.CONNECT_FAILED);
+        this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.NormalSocketClose);
     }
 
     _on_socket_err(event) {
@@ -234,7 +234,7 @@ export default class NetWsManager {
                 this.reconnect();
             } else {
                 this.destroy();
-                this.contract?.onNet(NetEvent.CONNECT_FAILED);
+                this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.ReconnectTimeout);
             }
         }, this._connectTimeOut);
     }
@@ -247,7 +247,7 @@ export default class NetWsManager {
                 if (this._nSendHeartId >= MISSED_HEARTBEATS_BEFORE_DISCONNECT) {
                     console.warn("网络异常,需要重连...");
                     this.destroy();
-                    this.contract?.onNet(NetEvent.CONNECT_FAILED);
+                    this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.HeartBeatTimeout);
                     return
                 }
                 this.sendHeartBeat();

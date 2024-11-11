@@ -6,13 +6,11 @@
  */
 
 import { Button, Color, Component, EventTouch, Graphics, Label, Mask, Node, ResolutionPolicy, RichText, ScrollView, Size, UIRenderer, UITransform, Vec3, Widget, __private, game, isValid, macro, math, native, screen, sys, view, warn } from 'cc';
-import { BUILD, NATIVE } from "cc/env";
+import { BUILD, HTML5, NATIVE } from "cc/env";
 import EventDispatcher from '../../framework/event/EventDispatcher';
 import { ERichText, ETileButton, NODE_BASE, TileNode, UIBase, convertNum, gui, gutil_char, mixins, sprintf, sprintf_g, ui2d } from '../../framework/ge';
 import { StorageData } from '../../framework/storage/StorageData';
 import { LocalizedLabelPlus } from '../manager/LocalizedLabelPlus/LocalizedLabelPlus';
-import { TapGroupParam } from '../node/TapLayerInfo';
-import { pfDialog } from '../node/pfDialog';
 import { sdk } from '../sdk/sdk';
 import { AppEvent } from './AppEvent';
 import { Utils } from './Utils';
@@ -871,17 +869,6 @@ export function setDayLocalData(localKey: string, def: any, isUser = false) {
     }
 }
 
-export function createDialog(param: TapGroupParam) {
-    let parent = param.host.node;
-    let node = parent.getChildByName('pfDialog');
-    if (!node) {
-        node = gui.build(BUILDER.PFDIALOG, param, param.host.node)!;
-    }
-    let js = node.getComponent('pfDialog')! as pfDialog;
-    return js;
-}
-
-
 /**
  * 后台控制是否显示相应的支付活动按钮
  * @param {string} key key传的是页面名字,名字唯一,
@@ -1444,4 +1431,10 @@ export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, flo
 
 export function closeAlertButNet(tag: string | Node | number | -1, filters: string[] = []) {
     gui.closeAlert(tag, filters.concat(['NET']))
+}
+
+export function showTip(message: string) {
+    if (HTML5) {
+        window.alert(message);
+    }
 }

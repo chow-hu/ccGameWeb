@@ -16,8 +16,6 @@ import { AppEvent } from "../../common/AppEvent";
 import { Utils } from "../../common/Utils";
 import { IManager } from "../IManager";
 import { EMgr } from "../interface";
-import { GiNetGameReconnData } from "../subGameManager/interfaceGIApi";
-import { gi } from "../subGameManager/subGameGlobal";
 import { GameCache } from "./GameCache";
 import { SubGameCache } from "./SubGameCache";
 import { GameEvent, GameProto, GameReq, GameResp } from "./interface";
@@ -193,8 +191,7 @@ export class GameManager extends IManager {
             //关闭网络loading
             gui.loading(false);
             gui.showTips(gutil_char('GAME_MATCH_TABLE_TIME_OUT'));
-            //通知:匹配超时
-            this.emit(GameEvent.REQUEST_ROOM_TIMEOUT);
+            this.detailExitGame();
             return;
         }
         if (Cache.User.LoginRoomState != true && this._inGame && this._curMatchData) {
@@ -218,10 +215,7 @@ export class GameManager extends IManager {
             return;
         }
         if (Cache.User.LoginRoomState != true && this._inGame) {
-            let res = this.checkReconnect();
-            if (res == false) {
-                this.requestJoinGame();
-            }
+            this.requestJoinGame();
         }
     }
 
@@ -233,10 +227,12 @@ export class GameManager extends IManager {
             this.stopAllScheduler();
             this.addSchedulerOnce(2, () => {
                 this.stopAllScheduler();
-                gi.closeGame();
+                // gi.closeGame();
+                this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
             })
         } else {
-            gi.closeGame();
+            // gi.closeGame();
+            this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
         }
     }
 
@@ -252,16 +248,8 @@ export class GameManager extends IManager {
                 //重置获取配置次数
                 this._sendCurrowNum.GetConfig = 0;
 
-                let reconnData: GiNetGameReconnData = GameCache.game.getReconnData();
-                if (!reconnData) {
-                    //关闭网络loading
-                    gui.loading(false);
-                }
-                this.emit(GameEvent.GAME_CONFIG, rspData, reconnData != null);
-                //检查是否是重连加入
-                if (reconnData) {
-                    this.checkReconnect();
-                }
+                gui.loading(false);
+                this.emit(GameEvent.GAME_CONFIG, rspData, false);
                 break;
             case GameResp.ROOM_INFO_BROADCAST: // 配桌成功信息推送
                 console.log("配桌成功信息推送", rspData);
@@ -302,15 +290,6 @@ export class GameManager extends IManager {
                 this._sendCurrowNum.JoinRoom = 0;
                 if (rspData.result === 0) {
                     Cache.User.LoginRoomState = true;
-                    //检查是否是重连加入
-                    let reconn: GiNetGameReconnData = GameCache.game.getReconnData();
-                    if (reconn) {
-                        GameCache.game._set(SubGameCache.GAME_TABLEID, reconn.game_tid);
-                        GameCache.game._set(SubGameCache.GAME_DEST, reconn.game_svid);
-                        GameCache.game._set(SubGameCache.GAME_ID, reconn.game_id);
-                    }
-                    GameCache.game.setReconnData(null);
-
                     let table = rspData as gamebase.IUserJoinTableResp;
                     log("bobo---------------------------加入房间成功 ", table);
                     GameCache.game._set(SubGameCache.GAME_LEVEL, table.room_level);
@@ -329,7 +308,6 @@ export class GameManager extends IManager {
                     this.emit(GameEvent.JOIN_ROOM, roomInfo);
                     this.emit(GameEvent.UPDATE_DATA_JACKPOT);
                 } else {
-                    GameCache.game.setReconnData(null);
                     warn(`============加入房间失败 code:${rspData.result}============`)
                     let key = 'GAME_ERROR_' + rspData.result;
                     let txt = gutil_char(key);
@@ -337,7 +315,7 @@ export class GameManager extends IManager {
                         txt = gutil_char('GAME_ERROR_1');
                     }
                     gui.loading(false);
-                    gui.showTips(txt);
+                    // gui.showTips(txt);
                     this.detailExitGame();
                 }
                 break;
@@ -399,45 +377,6 @@ export class GameManager extends IManager {
         }
     }
 
-    // /** 通知资产变更 */
-    // notifyGetProps(data: ccgame.client_proto.GetPropPush) {
-    //     if (!data || data.reward == null) {
-    //         return;
-    //     }
-    //     let num = 0;
-    //     data.reward.forEach((v, k) => {
-    //         if (v.id == ccgame.client_proto.PROP_ID.PROP_AMOUNT) {
-    //             num = num + v.num;
-    //         }
-    //     })
-    //     if (num <= 0) { return; }
-    //     let oldMoney = GameCache.game._get(SubGameCache.BALANCE);
-    //     GameCache.game._set(SubGameCache.BALANCE, Number(oldMoney) + Number(num));
-    //     warn(`通知:资产变更 变更前: ${oldMoney}变更后：${GameCache.game._get(SubGameCache.BALANCE)}`)
-    //     this.emit(GameEvent.GAME_PUSH_GETMONEY, num);
-    // }
-
-    /** 检查重连 */
-    checkReconnect() {
-        if (!this._isHasLevelConfig) {
-            warn("[检查重连]>>>没有场次配置 先请求此次配置")
-            this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
-            return null;
-        }
-        let reconnData: GiNetGameReconnData = GameCache.game.getReconnData();
-        if (reconnData) {
-            warn("[检查重连]>>>检测到需要重连")
-            this.emit(GameEvent.GAME_RECONNECT, reconnData);
-
-            this._curJoinRoomData = {
-                tid: reconnData.game_tid,
-                svid: reconnData.game_svid,
-            }
-            this.requestJoinGame();
-            return true;
-        }
-        return false;
-    }
     /**子游戏请求游戏配置 */
     requestGameConfig(id: any) {
         if (!this._isHasLevelConfig) {///非首次不超时
@@ -468,16 +407,10 @@ export class GameManager extends IManager {
 
     /**子游戏请求配桌 */
     requestEnterRoom(data: any) {
-        let reconnData: GiNetGameReconnData = GameCache.game.getReconnData();
-        if (reconnData) {
-            warn("[requestEnterRoom]>>>检测到需要重连,不发送配桌请求")
-            return false;
-        }
         if (Cache.User.LoginRoomState) {
             warn("[requestEnterRoom]>>>已经在房间中了,不发送配桌请求")
             return false;
         }
-
 
         this._curMatchData = data;
 

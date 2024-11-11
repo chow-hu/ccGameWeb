@@ -199,7 +199,7 @@ export class LayerStack extends EventContract {
                 if (!uiJs) {
                     throw 'ERROR:cannot find UIBase of ' + name;
                 }
-                uiJs.extDependList.push(prefab._uuid);
+                // uiJs.extDependList.push(prefab._uuid);
                 uiJs.uiCallFun = uiCallFun;
                 // if (uiJs.uiCallFun?.onAdded) uiJs.uiCallFun.onAdded(layer, parm);
                 uiJs.init && uiJs.init(parm);
@@ -295,7 +295,7 @@ export class LayerStack extends EventContract {
                 if (!uiJs) {
                     throw 'ERROR:cannot find UIBase of ' + name;
                 }
-                uiJs.extDependList.push(prefab._uuid);
+                // uiJs.extDependList.push(prefab._uuid);
                 uiJs.uiCallFun = uiCallFun;
                 //add:hook onRemove
                 uiJs.uiCallFun.__onRemoved = uiJs.uiCallFun?.onRemoved;

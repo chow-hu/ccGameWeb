@@ -28,20 +28,12 @@ const gaudio = AudioEngine.instance;
 import { SchedulerManager } from './timer/SchedulerManager';
 const schedulerManager = SchedulerManager;
 
-import * as astar from './extension/astar';
-
 import gameprotoRoot from '../shared/game_common/game_common_proto.js';
 import protoRoot from '../shared/proto.js';
 
 const client_proto = protoRoot.client_proto;
-const bridge_proxy_proto = protoRoot.bridge_proxy_proto;
-const game_manage_proto = protoRoot.game_manage_proto;
 const proto_asset = protoRoot.asset;
 const agent = protoRoot.agent;
-const tgame_proto = protoRoot.tgame_proto;
-const transactions = protoRoot.transactions;
-const gamealloc_proto = protoRoot.gamealloc;
-const vipbetredate = protoRoot.vipbetredate;
 const room_alloc_proto = gameprotoRoot.roomalloc;
 const game_base_proto = gameprotoRoot.gamebase;
 const account_proto = protoRoot.account_proto;
@@ -104,7 +96,7 @@ export class _GE_ {
 export const ge: _GE_ = _GE_.instance;
 
 export {
-    agent, astar, bridge_proxy_proto, client_proto, eventDispatcher, game_base_proto, game_manage_proto, gamealloc_proto, gatlas, gaudio, gnet, gui, loader, proto_asset, room_alloc_proto, schedulerManager, tgame_proto, transactions, vipbetredate, account_proto
+    agent, client_proto, eventDispatcher, game_base_proto, gatlas, gaudio, gnet, gui, loader, proto_asset, room_alloc_proto, schedulerManager, account_proto
 };
 
 

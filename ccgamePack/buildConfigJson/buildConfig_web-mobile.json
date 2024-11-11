@@ -35,8 +35,8 @@
             "output": true
         },
         {
-            "root": "db://assets/subGames/Crash",
-            "name": "abCrash",
+            "root": "db://assets/subGames/abJet",
+            "name": "abJet",
             "output": true
         }
     ],
@@ -76,7 +76,7 @@
         "web-mobile": {
             "orientation": "auto",
             "embedWebDebugger": false,
-            "cullEngineAsmJsModule": false,
+            "cullEngineAsmJsModule": true,
             "__version__": "1.0.1"
         }
     },

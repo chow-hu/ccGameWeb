@@ -48,7 +48,7 @@ export class NetContract implements INetContract {
             } break;
             case NetEvent.CONNECT_FAILED: {
                 // gui.loading(false, PRIORITY.NET);
-                eventDispatcher.dispatchEvent(AppEvent.SYS_NET_CONNECT_FAILED);
+                eventDispatcher.dispatchEvent(AppEvent.SYS_NET_CONNECT_FAILED, data);
             } break;
             case NetEvent.CLOSED: {
                 eventDispatcher.dispatchEvent(AppEvent.SYS_NET_CLOSED);

@@ -38,7 +38,6 @@ export const AccountProto = {
     USERBULLETIN: 'client_proto.UserBulletin',
 }
 
-CmdToPbName[client_proto.BULLETIN_INFO_SUB_MSG_ID.BULLETIN_MSG_ID_USER_BULLETIN_RESP] = AccountProto.USERBULLETIN
 
 /** 自定义事件 */
 export const LoginEvent = {
@@ -76,10 +75,22 @@ export type UserConfig = {
     session: string,
     currency: string,
     temp_uin: number,
+    ingame_info: {},
 }
 
 export type GameConfig = {
     user: UserConfig,
     token: string,
-    agent: string,
+    agent: string[],
 }
+
+// /**
+//  * @description 重连用的
+//  */
+// export type GameInfo = {
+//     game_id: number,
+//     game_srvtype: number,
+//     game_svid: number,
+//     game_tid: number,
+
+// }

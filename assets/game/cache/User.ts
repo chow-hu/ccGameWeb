@@ -149,7 +149,7 @@ export class User extends CacheBase {
             this._dataContinar = {} as GameConfig;
         }
         this._dataContinar.token = data.token;
-        this._dataContinar.agent = data.agent;
+        this._dataContinar.agent = data.agent.split(",");
     }
 
     /**
@@ -160,6 +160,7 @@ export class User extends CacheBase {
     saveUser(data: UserConfig) {
         if (!data) return;
         this._dataContinar.user = this._dataContinar.user || {} as UserConfig;
+
         setValueByKey(data, this._dataContinar.user)
         // 组装一下session数据
         let asession = {
@@ -169,6 +170,7 @@ export class User extends CacheBase {
             platform: this._dataContinar.user.platform,
         }
         this._dataContinar.user.session = JSON.stringify(asession);
+
     }
 
 
@@ -209,6 +211,19 @@ export class User extends CacheBase {
         }
         return null;
     }
+
+
+    /**
+     * 获取重连用的 InGameInfo
+     */
+    getInGameInfo() {
+        let info = this._dataContinar.user.ingame_info;
+        if (info) {
+            return info || null;
+        }
+        return null;
+    }
+
 
     /**
      * 获取用户真实Uid

@@ -8,6 +8,9 @@ import { LoginEvent } from '../game/manager/account/interface';
 import { gi } from '../game/manager/subGameManager/subGameGlobal';
 import { GameCache } from '../game/manager/game/GameCache';
 import { SubGameCache } from '../game/manager/game/SubGameCache';
+import { AppConst } from '../game/common/AppConst';
+import { showTip } from '../game/common/custom-general';
+import { gameMgr } from '../game/manager/game/GameManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('scGame')
@@ -58,10 +61,17 @@ export class scGame extends UIBase {
                 }
                 break;
             case LoginEvent.LOGIN_SUCCESS:
+                let gameId = Cache.User.getUser().game;
+                if (!AppConst.GetGamePackageConfById(gameId)) {
+                    showTip(`chow out gameId is empty: ${gameId}`)
+                    break;
+                }
                 if (!GameCache.game._get(SubGameCache.GAME_TABLEID)) {
                     // 保存用户数据
                     console.log("bobo --------------------- ", data);
-                    gi.openGame(Cache.User.getUser().game, 'c1', Cache.User.getUser().gameinfo.fullscreen)
+                    gi.openGame(gameId, 'c1', Cache.User.getUser().gameinfo.fullscreen)
+                } else {
+                    gameMgr.requestJoinGame();
                 }
                 break;
             default:

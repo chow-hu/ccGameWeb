@@ -5,9 +5,9 @@
  * @Date: 2021-04-26 19:08:46
  * @Reference: 
  */
-import { log, warn } from "cc";
+import { log, randomRangeInt, warn } from "cc";
 import { HTML5, NATIVE } from "cc/env";
-import { NetMsg, NetState, PRIORITY, client_proto, gnet, gui, gutil_char, account_proto, proto_asset } from "../../../framework/ge";
+import { NetMsg, NetState, PRIORITY, client_proto, gnet, gui, gutil_char, account_proto, proto_asset, NetFailure } from "../../../framework/ge";
 import { StorageData } from "../../../framework/storage/StorageData";
 import { Cache } from "../../cache/Cache";
 import { AppConst } from "../../common/AppConst";
@@ -19,6 +19,7 @@ import { GameCache } from "../game/GameCache";
 import { EMgr } from "../interface";
 import { AccountPB, AccountProto, LoginEvent, UserConfig } from "./interface";
 import { Utils } from "../../common/Utils";
+import { showTip } from "../../common/custom-general";
 
 export class AccountManager extends IManager {
     private static _instance: AccountManager;
@@ -89,6 +90,9 @@ export class AccountManager extends IManager {
             case AppEvent.SYS_NET_CONNECT_FAILED:
                 Cache.User.setLoginState(AppConst.UserLoginState.Offline);
                 Cache.User.LoginRoomState = false;
+                if (event == AppEvent.SYS_NET_CONNECT_FAILED && data == NetFailure.NormalSocketClose) {
+                    this.loginLogic()
+                }
                 break;
             default:
                 break;
@@ -111,10 +115,11 @@ export class AccountManager extends IManager {
             return;
         }
         this._loaded = false;
-        let url = Cache.User.getAgent();
+        let urls = Cache.User.getAgent();
+        let aUrl = urls[randomRangeInt(0, urls.length)];
         // gui.loading({ forever: true, type: 0 }, PRIORITY.NET);
-        if (url) {
-            gnet.connect(url, false);
+        if (aUrl) {
+            gnet.connect(aUrl, false);
         } else {
             log("agnet is null");
         }
@@ -165,6 +170,7 @@ export class AccountManager extends IManager {
         Cache.User.initLoginData(receiveData?.data);
         Cache.User.setLoginState(AppConst.UserLoginState.LoginSuccess);
         // 保存用户信息
+        console.log("bobobobobo 看看数据-------------- ", receiveData?.data);
         Cache.User.saveUser(receiveData?.data);
         // 广播登录成功的事件
         this.emit(LoginEvent.LOGIN_SUCCESS, false);
@@ -211,7 +217,7 @@ export class AccountManager extends IManager {
     /** 统一处理登录失败 */
     private _onMessageLoginFail(receiveData: NetMsg) {
         log(`LoginFail: 当前登录失败的事件返回:===>失败`, receiveData);
-
+        showTip(`login fail`);
         // 广播登录失败的事件
         this.emit(LoginEvent.LOGIN_FAIL, false);
         gnet.close();

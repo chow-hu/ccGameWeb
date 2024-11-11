@@ -53,7 +53,7 @@ export class pfLoading extends UIBase {
                 } else {
                     this.img.active = false
                     this.spine.active = true;
-                    this.spine.getComponent(sp.Skeleton).setAnimation(0, "zjh", true);
+                    // this.spine.getComponent(sp.Skeleton).setAnimation(0, "zjh", true);
                     //this.spine.getComponent(sp.Skeleton).timeScale = 0.9
                 }
             } else {

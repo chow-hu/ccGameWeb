@@ -30,8 +30,8 @@ export function nodelink(path: string, target: Node | TileNode): Node | null;
  * @example
  *  let label = nodelink('top/panel/txt',target,Label);
  */
-export function nodelink<T extends Component>(path: string, target: Node | TileNode, value: __private._types_globals__Constructor<T>): T | null;
-export function nodelink<T extends Component>(path: string, target: Node | TileNode, value?: __private._types_globals__Constructor<T>): Node | T | null {
+export function nodelink<T extends Component>(path: string, target: Node | TileNode, value: __private.__types_globals__Constructor<T>): T | null;
+export function nodelink<T extends Component>(path: string, target: Node | TileNode, value?: __private.__types_globals__Constructor<T>): Node | T | null {
     let node: Node | null;
     if (target instanceof TileNode) {
         return value ? target.link(path, value) : target.link(path);
@@ -50,7 +50,7 @@ export function nodelink<T extends Component>(path: string, target: Node | TileN
  * @example
  *  let label = nodeattach('top/panel/txt',target,Label);
  */
-export function nodeattach<T extends Component>(path: string, target: Node | TileNode, value: __private._types_globals__Constructor<T>): T | null {
+export function nodeattach<T extends Component>(path: string, target: Node | TileNode, value: __private.__types_globals__Constructor<T>): T | null {
     let node: Node | null;
     if (target instanceof TileNode) {
         return target.attach(path, value);
@@ -884,7 +884,7 @@ export function isShowActiv(key: string) {
  * @param node 
  */
 
-export function findUIBaseInNode<T extends Component>(node: Node, excComp?: __private._types_globals__Constructor<T> | __private._types_globals__AbstractedConstructor<T>) {
+export function findUIBaseInNode<T extends Component>(node: Node, excComp?: __private.__types_globals__Constructor<T> | __private.__types_globals__AbstractedConstructor<T>) {
     while (node) {
         if (node.getComponent(UIBase) && (!excComp || !node.getComponent(excComp))) {
             break;

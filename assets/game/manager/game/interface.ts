@@ -103,4 +103,14 @@ CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_GET_RULE_RESP] = "gamebase.GetG
 CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_SHARE_POSTER_RESP] = "gamebase.SharePosterResp";
 
 
-
+/** 自定义事件 */
+export const GameActionType = {
+    /** 操作提示 */
+    TIMEOUT_TIPS: 0,
+    /** 踢人 */
+    TIMEOUT_KICK: 1,
+    /** 房间退休换桌 */
+    RETIRE_ALLOC: 2,
+    /** 房间退休踢人 */
+    RETIRE_KICK: 3,
+}

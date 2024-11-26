@@ -2,7 +2,7 @@ import { Asset, AudioClip, Prefab, SpriteAtlas, __private } from "cc";
 import { gatlas, gaudio, gui, loader } from "../../framework/ge";
 import { PreloadAtlasList, PreloadAudioList, PreloadPrefabList } from "./CommonAssestConst";
 
-type AssetInfo = { url: string, name: string, type: __private._types_globals__Constructor<Asset>, isPersist?: boolean };
+type AssetInfo = { url: string, name: string, type: __private.__types_globals__Constructor<Asset>, isPersist?: boolean };
 
 class CommonAssetLoader {
     private static _instance: CommonAssetLoader;

@@ -122,7 +122,7 @@ export class AssetsLoader {
     // }
 
     /** 预加载ab包里面的资源 */
-    public bundlePreload<T extends Asset>(option: IBundleOption, paths: string, type?: __private._types_globals__Constructor<T>, onComp?: Function, onPro?: Function, clear?: boolean) {
+    public bundlePreload<T extends Asset>(option: IBundleOption, paths: string, type?: __private.__types_globals__Constructor<T>, onComp?: Function, onPro?: Function, clear?: boolean) {
         this.loadBundle(option, (err, name) => {
             if (err) {
                 onComp && onComp(err);
@@ -163,7 +163,7 @@ export class AssetsLoader {
     }
 
     /** 加载包里面的资源 */
-    public bundleLoad<T extends Asset>(bundlename: string, paths: string, type: __private._types_globals__Constructor<T>, onProgress: IProgressCallback | null, onComplete: ICompleteCallback | null, is_static: boolean = false, host?: IAssetsDependExt) {
+    public bundleLoad<T extends Asset>(bundlename: string, paths: string, type: __private.__types_globals__Constructor<T>, onProgress: IProgressCallback | null, onComplete: ICompleteCallback | null, is_static: boolean = false, host?: IAssetsDependExt) {
         this._lock = true;
         let bundle = assetManager.getBundle(bundlename);
         if (bundle) {
@@ -189,7 +189,7 @@ export class AssetsLoader {
     }
 
     /** 加载resources包里面的资源 */
-    public load<T extends Asset>(paths: string, type: __private._types_globals__Constructor<T>, onProgress: IProgressCallback | null, onComplete: ICompleteCallback | null, is_static: boolean = false, host?: IAssetsDependExt) {
+    public load<T extends Asset>(paths: string, type: __private.__types_globals__Constructor<T>, onProgress: IProgressCallback | null, onComplete: ICompleteCallback | null, is_static: boolean = false, host?: IAssetsDependExt) {
         this._lock = true;
         let asset = assetManager.resources?.get(paths, type);
         if (asset) {

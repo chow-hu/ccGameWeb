@@ -62,9 +62,9 @@ export class GameCommonUI extends UIBase {
         //     list[element.key] = element.source;
         // }
         // gui.builderInfo(list);
-        // commonAssetLoader.start();
-        // this.schedule(this._commonAssetCheck, 0.1);
-
+        commonAssetLoader.start();
+        this.schedule(this._commonAssetCheck, 0.1);
+        // this._commonAssetCheck();
         this.onGameState();
     }
 

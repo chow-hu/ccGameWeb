@@ -1,5 +1,5 @@
 {
-  "ver": "4.0.23",
+  "ver": "4.0.24",
   "importer": "javascript",
   "imported": true,
   "uuid": "4de61074-4260-4db8-b914-efc8ab45efae",
@@ -12,6 +12,7 @@
     "loadPluginInWeb": true,
     "loadPluginInNative": true,
     "loadPluginInEditor": true,
-    "simulateGlobals": []
+    "simulateGlobals": [],
+    "loadPluginInMiniGame": true
   }
 }

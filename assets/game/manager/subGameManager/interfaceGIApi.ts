@@ -1,4 +1,30 @@
 import { SpriteFrame } from "cc";
+
+export interface GiUserInfo {
+    /** 用户ID */
+    uid: number,
+    /** 用户昵称 */
+    nick: string,
+    /** 用户头像 */
+    avatar: number,
+    /** 性别 1男2女 */
+    sex: number,
+    /** 用户资产 */
+    money: number | string,
+    /** vip等级 */
+    vipLevel: number,
+    /** 用户渠道 */
+    channel: string,
+    /** 用户邀请码 */
+    inviteCode: string,
+    /** ip地址 */
+    ip: string,
+    /** 语言 详见GiLanguageCode*/
+    language: string,
+}
+
+
+
 export interface GiAudioControl {
     /** 总开关 */
     allAllow?: boolean,

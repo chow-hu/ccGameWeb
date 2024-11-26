@@ -5,9 +5,7 @@
 let fs = require('fs');
 let path = require('path');
 const tFilter = {
-    ["res-static/begin"]: 1,
-    ["simheihykaitis.png.meta"]: 1,
-    ["dazuotexiao.png.meta"]: 1,
+
 }
 let getFilesNeedCompress = function (dir, result) {
     let files = fs.readdirSync(dir);
@@ -58,11 +56,11 @@ let setAssetCompressFormat = function (files) {
     }
 }
 
-const astc_jpg = "53xND9LQZCdY1AIAB/oeNr";
-const astc_png = "43u0Adv0VKxqZNFb+WsZZN";
+const astc_jpg = "a45uAsp9RAX41McOCxIU3s";
+const astc_png = "a45uAsp9RAX41McOCxIU3s";
 
 let run = function (os_parm) {
-    let dirs = ["../assets/res", "../assets/res-static", "../assets/resources"];
+    let dirs = ["../assets/res", "../assets/resources", "../assets/subGames"];
     dirs = dirs.map((dir) => {
         return path.join(__dirname, dir);
     });

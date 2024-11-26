@@ -1,7 +1,7 @@
 import { SpriteFrame, error, warn } from "cc";
 import { AudioEngine } from "../../../framework/asset/AudioEngine";
 import EventDispatcher from "../../../framework/event/EventDispatcher";
-import { gatlas } from "../../../framework/ge";
+import { AlertStackEvent, gatlas, LayerStackEvent } from "../../../framework/ge";
 import { GameCmdMap } from "../../../framework/net/INet";
 import { Cache } from "../../cache/Cache";
 import { AppConst } from "../../common/AppConst";
@@ -11,10 +11,11 @@ import { GameCache } from "../game/GameCache";
 import { SubGameCache } from "../game/SubGameCache";
 import { GameEvent, GameReq, GameResp } from "../game/interface";
 import { SubGameDetail, SubGameEventGame, SubGameOrientation } from "./interface";
-import { GiAudioControl, GiGameDownLoadCb } from "./interfaceGIApi";
+import { GiAudioControl, GiGameDownLoadCb, GiUserInfo } from "./interfaceGIApi";
 import { LoginEvent } from "../account/interface";
 import { gameDownloadMgr } from "../gamedownload/GameDownloadManager";
 import { IReportClick, ReportEvent } from "../report/interface";
+import { EMgr } from "../interface";
 
 const GameReqTemp = GameReq;
 const GameRespTemp = GameResp;
@@ -22,6 +23,9 @@ const SubGameEventGameTemp = SubGameEventGame;
 const GameEventTemp = GameEvent;
 const AppEventTemp = AppEvent;
 const LoginEventTemp = LoginEvent;
+const EMgrTemp = EMgr;
+const LayerStackEventTemp = LayerStackEvent;
+const AlertStackEventTemp = AlertStackEvent;
 
 export namespace gi {
     export const GameReq = GameReqTemp;
@@ -30,7 +34,9 @@ export namespace gi {
     export const GameEvent = GameEventTemp;
     export const AppEvent = AppEventTemp;
     export const LoginEvent = LoginEventTemp;
-
+    export const EMgr = EMgrTemp;
+    export const LayerStackEvent = LayerStackEventTemp;
+    export const AlertStackEvent = AlertStackEventTemp;
     /**
      * 注册游戏Net转发事件(进出游戏都会重置)
      * @param cmdList 需要转发到游戏的命令数组 
@@ -45,6 +51,40 @@ export namespace gi {
             }
         })
     }
+
+    /**
+         * 获取用户信息
+         * @param isSendCheck 是否发送同步校验请求 默认false 不发送
+         * @returns 
+         */
+    export function getUserInfo(isSendCheck = false): GiUserInfo {
+        if (isSendCheck == true) {
+            // userMgr.reqAsset();
+        }
+        return {
+            /** 用户ID */
+            uid: Cache.User.getUID(),
+            /** 用户昵称 */
+            nick: Cache.User.getNick(),
+            /** 用户头像 */
+            avatar: Cache.User.getAvatarId(),
+            /** 性别 1男2女 */
+            sex: 1,
+            /** 资产 */
+            money: Number(Cache.User.getUserPropertyByType(AppConst.PropertyType.PROP_BALANCE)),
+            /** vip等级 */
+            vipLevel: 1,
+            /** 用户渠道 */
+            channel: "1",
+            /** 用户邀请码 */
+            inviteCode: "",
+            /** IP地址 */
+            ip: "127.0.0.1",
+            /** 语言 */
+            language: globalThis.gutil_code,
+        }
+    }
+
 
     /** 根据ID获取默认的头像SpriteFrame */
     export function getDefaultHeadSpriteFrame(avatar_id: number | string): SpriteFrame | null {

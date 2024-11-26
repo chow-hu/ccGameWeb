@@ -1,4 +1,5 @@
 import { IBundleOption } from "../../framework/asset/AssetsLoader";
+import { SubGameOrientation } from "../manager/subGameManager/interface";
 
 /** 本地数据存储key */
 export const StoreKey = {
@@ -68,24 +69,18 @@ export namespace AppConst {
         abActivity: { name: "abActivity", url: "", md5: "" },
     };
     /** 子游戏包名配置 */
-    export const GameBundleConf: { [key: string | number]: IBundleOption } = {
+    export const GameBundleConf: { [key: string | number]: IBundleOption & { orientation?: SubGameOrientation } } = {
         /** 游戏:Crash */
         101: { name: "abCrash", layer: "lyLoadingView", url: "", md5: "" },
         /** 游戏: AndarBahar */
-        102: { name: "abAndarBahar", layer: "lyAndarLoading", url: "", md5: "", depends: ["abJackPot"] },
+        102: { name: "abAndarBahar", layer: "lyAndarLoading", url: "", md5: "", depends: ["abJackPot"], orientation: SubGameOrientation.landScape },
         /** 游戏:Jet */
         103: { name: "abJet", layer: "lyJetLoadingView", url: "", md5: "" },
         /** 游戏:UpDown */
         104: { name: "abUpDown", layer: "lyUpDownLoading", url: "", md5: "" },
-        /** 游戏: teenpatti */
-        201: { name: "teenpatti", scene: "teenpattiLoading", url: "", md5: "", depends: ['kbp_common'] },
-        /**  游戏: 3patti */
-        202: { name: "3patti", scene: "3pattiLoading", url: "", md5: "", depends: ['kbp_common'] },
     }
     /** 附属包配置 */
     export const SubBundleConf: { [key: string | number]: IBundleOption } = {
-        /** 游戏: teenpatti */
-        kbp_common: { name: "kbp_common", url: "", md5: "" },
         /** abJackPot */
         abJackPot: { name: "abJackPot", url: "", md5: "" },
     }
@@ -103,7 +98,7 @@ export namespace AppConst {
         return null;
     }
     /** 根据子游戏id获取子游戏 */
-    export const GetGamePackageConfById = function (id): IBundleOption {
+    export const GetGamePackageConfById = function (id): IBundleOption & { orientation?: SubGameOrientation } {
         id = Number(id);
         if (isNaN(id)) { return null; }
         return AppConst.GameBundleConf[id];

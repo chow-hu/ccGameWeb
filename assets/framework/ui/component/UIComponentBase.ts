@@ -135,7 +135,7 @@ export class UIComponentBase extends Component implements IAssetsDependExt, IEve
      * @param onComplete 
      * @param is_static 
      */
-    load<T extends Asset>(paths: string, type: __private._types_globals__Constructor<T>, onProgress: (finished: number, total: number, item: AssetManager.RequestItem) => void | null, onComplete: (err: Error | null, data: T) => void | null, is_static: boolean = false) {
+    load<T extends Asset>(paths: string, type: __private.__types_globals__Constructor<T>, onProgress: (finished: number, total: number, item: AssetManager.RequestItem) => void | null, onComplete: (err: Error | null, data: T) => void | null, is_static: boolean = false) {
         let self = this;
         AssetsLoader.instance.load(paths, type,
             (_finished: number, _total: number, _item: AssetManager.RequestItem) => {
@@ -215,7 +215,7 @@ export class UIComponentBase extends Component implements IAssetsDependExt, IEve
      * @param onComplete 
      * @param is_static 
      */
-    bundleLoad<T extends Asset>(bundlename: string, paths: string, type: __private._types_globals__Constructor<T>, onProgress: (finished: number, total: number, item: AssetManager.RequestItem) => void | null, onComplete: (err: Error | null, data: T) => void | null, is_static: boolean = false) {
+    bundleLoad<T extends Asset>(bundlename: string, paths: string, type: __private.__types_globals__Constructor<T>, onProgress: (finished: number, total: number, item: AssetManager.RequestItem) => void | null, onComplete: (err: Error | null, data: T) => void | null, is_static: boolean = false) {
         let self = this;
         AssetsLoader.instance.bundleLoad(bundlename, paths, type,
             (_finished: number, _total: number, _item: AssetManager.RequestItem) => {

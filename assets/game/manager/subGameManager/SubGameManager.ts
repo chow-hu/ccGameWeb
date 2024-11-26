@@ -312,9 +312,9 @@ export class SubGameManager extends IManager {
         if (splashbg) {
             splashbg.style.display = 'none';
         }
-        let splash = document.getElementById('splash');
-        if (splash) {
-            splash.style.display = 'none';
+        let splashcc = document.getElementById('splashcc');
+        if (splashcc) {
+            splashcc.style.display = 'none';
         }
 
         let animation = document.getElementById('animation');

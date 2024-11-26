@@ -88,10 +88,10 @@ export class DataHandle {
     getTekonAndAgent() {
         // let aa = "?token=dXVpZD1aRjk2NGJfWTE6Njk1MTc1NDAmdWlkPTY3NjA2NDYyJnRva2VuPTY5NTE3NTQwJmJhbGFuY2U9MTAwMDAwMDAwJmdhbWU9MTAzJmdhbWVpbmZvPXsiZnVsbHNjcmVlbiI6MH0mZXhwaT0xNzMwNTk4MjMyJnNpZ249YzJiY2Y5NWE5NTU0NjhkMGM0MGU3MWJhMzY1ZWU1MDQ=&agent=d3NzOi8vZmRzZ2h1azM0OWRmc2Jqay5jY2FwaTIxOG9yYmprc2FwbTAzZmprZHMub3JnL3dzcw==&gameID=103";
         // let params = this.scopeUser(aa);
-
         let params = this.scopeUser(globalThis.location.search);
         let token = "";
         let agent = "";
+        let displayMode = 0;
         if (params && params["token"]) {
             log("bobo-------handleData", params["token"]);
             token = params["token"];
@@ -105,7 +105,11 @@ export class DataHandle {
             log("bobo-------handleData", agent);
         }
 
-        return { token: token, agent: agent };
+        if (params && params["DisplayMode"]) {
+            displayMode = Number(params["DisplayMode"]);
+        }
+
+        return { token: token, agent: agent, displayMode };
     }
 
 }

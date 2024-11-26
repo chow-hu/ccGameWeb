@@ -1,4 +1,4 @@
-import { _decorator, director, instantiate, log, Prefab } from 'cc';
+import { _decorator, director, instantiate, Prefab } from 'cc';
 import { gnet, loader, UIBase } from '../framework/ge';
 import { accountMgr } from '../game/manager/account/AccountManager';
 import { Cache } from '../game/cache/Cache';
@@ -11,6 +11,7 @@ import { SubGameCache } from '../game/manager/game/SubGameCache';
 import { AppConst } from '../game/common/AppConst';
 import { showTip } from '../game/common/custom-general';
 import { gameMgr } from '../game/manager/game/GameManager';
+import { SubGameOrientation } from '../game/manager/subGameManager/interface';
 const { ccclass, property } = _decorator;
 
 @ccclass('scGame')
@@ -62,14 +63,15 @@ export class scGame extends UIBase {
                 break;
             case LoginEvent.LOGIN_SUCCESS:
                 let gameId = Cache.User.getUser().game;
-                if (!AppConst.GetGamePackageConfById(gameId)) {
+                let pack = AppConst.GetGamePackageConfById(gameId);
+                if (!pack) {
                     showTip(`chow out gameId is empty: ${gameId}`)
                     break;
                 }
                 if (!GameCache.game._get(SubGameCache.GAME_TABLEID)) {
                     // 保存用户数据
                     console.log("bobo --------------------- ", data);
-                    gi.openGame(gameId, 'c1', Cache.User.getUser().gameinfo.fullscreen)
+                    gi.openGame(gameId, 'c1', Cache.User.getDisplayMode() || pack.orientation || SubGameOrientation.portrail)
                 } else {
                     gameMgr.requestJoinGame();
                 }

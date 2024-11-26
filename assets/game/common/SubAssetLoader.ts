@@ -7,7 +7,7 @@ export type SubAssestLoaderConfig = {
     bundle?: string,
     name?: string,
     url: string,
-    type: __private._types_globals__Constructor<Asset>,
+    type: __private.__types_globals__Constructor<Asset>,
 }
 
 export class SubAssetLoader {

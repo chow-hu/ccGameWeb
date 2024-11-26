@@ -18,7 +18,7 @@ import { IManager } from "../IManager";
 import { EMgr } from "../interface";
 import { GameCache } from "./GameCache";
 import { SubGameCache } from "./SubGameCache";
-import { GameEvent, GameProto, GameReq, GameResp } from "./interface";
+import { GameActionType, GameEvent, GameProto, GameReq, GameResp } from "./interface";
 
 export class GameManager extends IManager {
 
@@ -271,6 +271,9 @@ export class GameManager extends IManager {
 
                 // 配桌成功后发送确认
                 if (rspData.table_id && rspData.table_id > 0) {
+                    //fix:为了兼容 先这么写 1.1.5去掉
+                    Cache.User.LoginRoomState = false;
+
                     this._curJoinRoomData = {
                         tid: rspData.table_id,
                         svid: null,
@@ -339,8 +342,20 @@ export class GameManager extends IManager {
                 }
                 break;
             case GameResp.GAMENOTIFICATION_PUSH: // 踢出房间广播
-                console.log("%%%%%%%%%%%%%%%%%%%%%踢人广播")
-                this.emit(GameEvent.GAMENOTIFICATION_PUSH, rspData)
+                warn("============踢人广播============", rspData)
+                if (rspData) {
+                    if (rspData?.action != GameActionType.TIMEOUT_TIPS) {
+                        warn(">>>登录房间状态===>false");
+                        this.__stopCheckTimeOut();
+                        Cache.User.LoginRoomState = false;
+                    }
+                    if (rspData?.action == GameActionType.RETIRE_ALLOC) {
+                        warn(">>>进入房间退休换桌机制，等待连回来===>");
+                    } else if (rspData?.action == GameActionType.RETIRE_KICK) {
+                        warn(">>>server踢人===>");
+                    }
+                }
+                this.emit(GameEvent.GAMENOTIFICATION_PUSH, rspData);
                 break;
             case GameResp.SIT_DOWN: // 坐下
 

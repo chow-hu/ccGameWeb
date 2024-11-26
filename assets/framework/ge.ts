@@ -101,8 +101,6 @@ export {
 
 
 export * from './asset/IFileUtils';
-export * from './asset/ManifestAssetsManager';
-
 export * from './common/EMap';
 export * from './common/ETw';
 export * from './common/general';

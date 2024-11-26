@@ -302,11 +302,8 @@
       "b": 255,
       "a": 255
     },
-    "_skeletonData": {
-      "__uuid__": "49bdee45-c52a-4799-a375-48c4762e62f3",
-      "__expectedType__": "sp.SkeletonData"
-    },
-    "defaultSkin": "default",
+    "_skeletonData": null,
+    "defaultSkin": "",
     "defaultAnimation": "",
     "_premultipliedAlpha": false,
     "_timeScale": 1,
@@ -399,6 +396,7 @@
       "__id__": 0
     },
     "fileId": "c46/YsCPVOJYA4mWEpNYRx",
-    "instance": null
+    "instance": null,
+    "targetOverrides": null
   }
 ]

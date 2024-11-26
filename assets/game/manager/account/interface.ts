@@ -2,8 +2,8 @@
  * @Description: 账号常量
  * @Author: zy
  * @Date: 2021-04-13 09:02:59
- * @LastEditTime: 2023-09-27 10:26:21
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-11-25 20:46:27
+ * @LastEditors: jackMa 2442563207@qq.com
  * @Reference: 
  */
 
@@ -75,13 +75,16 @@ export type UserConfig = {
     session: string,
     currency: string,
     temp_uin: number,
-    ingame_info: {},
+    ingame_info: string,
+    avatar: string,
+    nick: string,
 }
 
 export type GameConfig = {
     user: UserConfig,
     token: string,
     agent: string[],
+    displayMode: number,
 }
 
 // /**

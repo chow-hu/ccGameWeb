@@ -1,5 +1,5 @@
 {
-  "__version__": "1.0.8",
+  "__version__": "1.0.9",
   "modules": {
     "cache": {
       "base": {
@@ -12,7 +12,7 @@
         "_value": true
       },
       "gfx-webgl2": {
-        "_value": true
+        "_value": false
       },
       "animation": {
         "_value": true
@@ -21,7 +21,7 @@
         "_value": false
       },
       "3d": {
-        "_value": true
+        "_value": false
       },
       "2d": {
         "_value": true
@@ -68,7 +68,7 @@
         "_value": false
       },
       "profiler": {
-        "_value": true
+        "_value": false
       },
       "occlusion-query": {
         "_value": false
@@ -123,18 +123,19 @@
       },
       "custom-pipeline": {
         "_value": false
+      },
+      "graphics": {
+        "_value": true
       }
     },
     "includeModules": [
       "2d",
-      "3d",
       "animation",
       "audio",
       "base",
       "gfx-webgl",
-      "gfx-webgl2",
+      "meshopt",
       "particle-2d",
-      "profiler",
       "spine",
       "tween",
       "ui",

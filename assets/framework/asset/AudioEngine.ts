@@ -326,6 +326,9 @@ export class AudioEngine {
     }
 
     resumeMusic(pipeIdx: number) {
+        if (this.isBackground) {
+            return
+        }
         if (pipeIdx !== -1) {
             let device = this._music_devices.get(AUDIO_PIPE + pipeIdx);
             device && device.resume();
@@ -337,6 +340,9 @@ export class AudioEngine {
     }
 
     resumeEffect(pipeIdx: number) {
+        if (this.isBackground) {
+            return
+        }
         if (pipeIdx !== -1) {
             let device = this._effect_devices.get(AUDIO_PIPE + pipeIdx);
             device && device.resume();

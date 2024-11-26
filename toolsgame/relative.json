@@ -242,6 +242,9 @@
 				},
 				"--bundle": {
 					"name": "包名"
+				},
+				"--orientation": {
+					"name": "横竖屏 auto|portrait|landscape"
 				}
 			},
 			"default": {}

@@ -5,11 +5,11 @@ export const PreloadAtlasList = [
 ];
 
 export const PreloadAudioList = [
-    EAudio.BTNCLICK,
-    EAudio.BTNCLOSE,
-    EAudio.MESSAGE,
-    EAudio.BTNSWITCH,
-    EAudio.SPLAHPAGE,
+    // EAudio.BTNCLICK,
+    // EAudio.BTNCLOSE,
+    // EAudio.MESSAGE,
+    // EAudio.BTNSWITCH,
+    // EAudio.SPLAHPAGE,
 ];
 
 export const PreloadPrefabList = {

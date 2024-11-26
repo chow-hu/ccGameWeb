@@ -12,7 +12,7 @@ export const _config_: Record<string, any> = {
     report: "http://192.168.2.60:8785",        //上报地址(动态)
     chat: "http://192.168.2.60:8784/livechat.html", //聊天客服(动态)
     io: 2, // 1 内网  2 外网测试  3 外网正式  4 预发布
-    version: '1.1.0',
+    version: '1.0.0',
     astver: '0.0.1',
     ip: '',
     use_abpackage: true,                       //是否使用ab包

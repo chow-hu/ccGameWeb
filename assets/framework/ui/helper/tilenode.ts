@@ -427,8 +427,8 @@ export class TileNode extends CCObject {
      * @example
      *  let label = this.link('top/panel/txt',Label);
      */
-    link<T extends Component>(paths: string, classConstructor: __private._types_globals__Constructor<T>): T | null;
-    link<T extends Component>(paths: string, classConstructor?: __private._types_globals__Constructor<T>): T | Node | null {
+    link<T extends Component>(paths: string, classConstructor: __private.__types_globals__Constructor<T>): T | null;
+    link<T extends Component>(paths: string, classConstructor?: __private.__types_globals__Constructor<T>): T | Node | null {
         let node = this.find(paths);
         if (classConstructor) {
             if (node instanceof Node) {
@@ -446,7 +446,7 @@ export class TileNode extends CCObject {
      * @param classConstructor Component 子类
      * @returns 
      */
-    attach<T extends Component>(paths: string, classConstructor: __private._types_globals__Constructor<T>): T | null {
+    attach<T extends Component>(paths: string, classConstructor: __private.__types_globals__Constructor<T>): T | null {
         let node = this.find(paths);
         if (!node || !isValid(node) || !(node instanceof Node)) {
             return null;
@@ -527,7 +527,7 @@ export class TileNode extends CCObject {
     }
 
     // extra
-    public getComponentsInChildren<T extends Component>(typeOrClassName: string | __private._types_globals__Constructor<T>): T[] {
+    public getComponentsInChildren<T extends Component>(typeOrClassName: string | __private.__types_globals__Constructor<T>): T[] {
         let components: T[] = [];
         for (let index = 0; index < this._list.length; index++) {
             let item = this._list[index];

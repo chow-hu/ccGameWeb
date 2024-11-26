@@ -161,7 +161,13 @@ export class User extends CacheBase {
         if (!data) return;
         this._dataContinar.user = this._dataContinar.user || {} as UserConfig;
 
-        setValueByKey(data, this._dataContinar.user)
+        this._dataContinar.user.avatar = data.avatar || "1";
+        let nickName = data.uid.toString();
+
+        setValueByKey(data, this._dataContinar.user);
+        // this._dataContinar.user.username = nickName.length <= 4 ? nickName : ("*" + nickName.substring(nickName.length - 4, nickName.length));
+        this._dataContinar.user.nick = this._dataContinar.user.nick || ("Player" + nickName);
+
         // 组装一下session数据
         let asession = {
             token: this._dataContinar.user.token,
@@ -170,7 +176,8 @@ export class User extends CacheBase {
             platform: this._dataContinar.user.platform,
         }
         this._dataContinar.user.session = JSON.stringify(asession);
-
+        this._dataContinar.user.ingame_info = JSON.stringify(data.ingame_info);
+        console.log("bobo----------***** ", this._dataContinar.user.ingame_info);
     }
 
 
@@ -192,6 +199,14 @@ export class User extends CacheBase {
         return null;
     }
 
+    getDisplayMode() {
+        let info = this._dataContinar.displayMode;
+        if (info) {
+            return info || null;
+        }
+        return null;
+    }
+
     getUser(): UserConfig {
         let user = this._dataContinar.user;
 
@@ -200,6 +215,31 @@ export class User extends CacheBase {
         }
         return null;
     }
+    /**
+     * 获取用户昵称
+     * @returns string
+    */
+    getNick(): string {
+        return Utils.nullToDefault(this.getUserInfoProp("user_name"), "");
+    }
+
+    /**
+    * 获取用户头像
+    * @returns string|number
+    */
+    getAvatar(): string {
+        return "touxiang_" + Utils.nullToDefault(this.getUserInfoProp("user_avatar"), "1");
+    }
+
+
+    /**
+     * 获取头像id
+     * @returns 
+     */
+    getAvatarId(): number {
+        return Utils.nullToDefault(parseInt(this.getUserInfoProp("user_avatar")), 1);
+    }
+
 
     /**
      * 获取session
@@ -249,4 +289,21 @@ export class User extends CacheBase {
         }
         return 0;
     }
+
+    setBalance(balance: number) {
+        this._dataContinar.user.balance = balance;
+    }
+
+
+    /**
+     * 获取第三方返回大厅的url
+     */
+    getHallUrl() {
+        let info = this._dataContinar.user.hall_url;
+        if (info) {
+            return info || null;
+        }
+        return null;
+    }
+
 }

@@ -124,8 +124,8 @@ export class UIBase extends UIComponentBase implements UIDialogBase {
      * @example
      *  let label = this.link('top/panel/txt',Label);
      */
-    link<T extends Component>(paths: string, classConstructor: __private._types_globals__Constructor<T>): T | null;
-    link<T extends Component>(paths: string, classConstructor?: __private._types_globals__Constructor<T>): T | Node | null {
+    link<T extends Component>(paths: string, classConstructor: __private.__types_globals__Constructor<T>): T | null;
+    link<T extends Component>(paths: string, classConstructor?: __private.__types_globals__Constructor<T>): T | Node | null {
         let node = this.find(paths);
         if (classConstructor) {
             return node && node.getComponent(classConstructor);

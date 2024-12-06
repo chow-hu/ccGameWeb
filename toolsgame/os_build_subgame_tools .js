@@ -19,6 +19,14 @@ let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orie
     }
 
     configStr = configStr.replace(/"orientation":\s*"([a-z"]+)",/g, `"orientation": "${orientation}",`);
+    let setingStr = fs.readFileSync(path.join(__dirname, "../settings/v2/packages/project.json"), { encoding: 'utf-8' });
+    let setingCon = JSON.parse(setingStr);
+    let max = Math.max(setingCon.general.designResolution.width, setingCon.general.designResolution.height);
+    let min = Math.min(setingCon.general.designResolution.width, setingCon.general.designResolution.height);
+    setingCon.general.designResolution.width = orientation == 'landscape' ? max : min;
+    setingCon.general.designResolution.height = orientation == 'landscape' ? min : max;
+    console.log(setingCon)
+    fs.writeFileSync(path.join(__dirname, "../settings/v2/packages/project.json"), JSON.stringify(setingCon, undefined, 4));
 
     let str = JSON.parse(configStr);
     str.bundleConfigs.length = 3;

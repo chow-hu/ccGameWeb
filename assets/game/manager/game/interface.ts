@@ -50,6 +50,9 @@ export const GameEvent = {
     /** 游戏-加入房间 */
     JOIN_ROOM: "gamebase-UserJoinTableResp",
 
+    /** 游戏-加入房间 */
+    JOIN_ROOM_ERROR: "GameEvent_game_Join_Room_Error",
+
     /** 游戏-离开房间 */
     LEAVE_ROOM: "gamebase-LeaveRoomResp",
 

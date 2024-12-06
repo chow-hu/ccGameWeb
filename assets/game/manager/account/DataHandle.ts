@@ -92,6 +92,7 @@ export class DataHandle {
         let token = "";
         let agent = "";
         let displayMode = 0;
+        let gameId = 0;
         if (params && params["token"]) {
             log("bobo-------handleData", params["token"]);
             token = params["token"];
@@ -109,7 +110,11 @@ export class DataHandle {
             displayMode = Number(params["DisplayMode"]);
         }
 
-        return { token: token, agent: agent, displayMode };
+        if (params && params["gameID"]) {
+            gameId = Number(params["gameID"]);
+        }
+
+        return { token: token, agent: agent, displayMode, gameId };
     }
 
 }

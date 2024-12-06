@@ -8,6 +8,7 @@
  */
 
 import { CmdToPbName, client_proto } from "../../../framework/ge";
+import ccgame from "../../../shared/proto";
 import { GetAppEventID } from "../../common/AppEvent";
 
 /** PB事件 */
@@ -84,6 +85,7 @@ export type GameConfig = {
     user: UserConfig,
     token: string,
     agent: string[],
+    gameId: string | number,
     displayMode: number,
 }
 

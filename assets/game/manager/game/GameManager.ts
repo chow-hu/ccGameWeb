@@ -19,6 +19,7 @@ import { EMgr } from "../interface";
 import { GameCache } from "./GameCache";
 import { SubGameCache } from "./SubGameCache";
 import { GameActionType, GameEvent, GameProto, GameReq, GameResp } from "./interface";
+import { GiNetGameReconnData } from "../subGameManager/interfaceGIApi";
 
 export class GameManager extends IManager {
 
@@ -171,8 +172,7 @@ export class GameManager extends IManager {
             warn("Error:超出获取游戏房间配置的最大次数 直接退出游戏场景")
             //关闭网络loading
             gui.loading(false);
-            gui.showTips(gutil_char('GAME_GET_CONFIG_TIME_OUT'));
-            this.detailExitGame();
+            this.detailExitGame(gutil_char('GAME_GET_CONFIG_TIME_OUT'));
             return;
         }
         if (this._inGame && this._curGameID != null) {
@@ -190,8 +190,7 @@ export class GameManager extends IManager {
             warn("Error:超出匹配的最大次数")
             //关闭网络loading
             gui.loading(false);
-            gui.showTips(gutil_char('GAME_MATCH_TABLE_TIME_OUT'));
-            this.detailExitGame();
+            this.detailExitGame(gutil_char('GAME_MATCH_TABLE_TIME_OUT'));
             return;
         }
         if (Cache.User.LoginRoomState != true && this._inGame && this._curMatchData) {
@@ -210,8 +209,7 @@ export class GameManager extends IManager {
             warn("Error:超出登录的最大次数 直接退出游戏场景")
             //关闭网络loading
             gui.loading(false);
-            gui.showTips(gutil_char('GAME_JOIN_TIME_OUT'));
-            this.detailExitGame();
+            this.detailExitGame(gutil_char('GAME_JOIN_TIME_OUT'));
             return;
         }
         if (Cache.User.LoginRoomState != true && this._inGame) {
@@ -220,7 +218,13 @@ export class GameManager extends IManager {
     }
 
     /** 延迟退出游戏 */
-    detailExitGame(isDetail: boolean = true) {
+    detailExitGame(tip?: string, isDetail: boolean = true) {
+        tip && gui.showTips(tip + gutil_char('GAME_ERROR_TIP'));
+        this._sendCurrowNum = {
+            GetConfig: 0,
+            MatchTable: 0,
+            JoinRoom: 0,
+        };
         //显示Loading屏蔽层(不转圈)
         gui.loading({ ts: 10, block: true, notshow: true }, PRIORITY.NET);
         if (isDetail) {
@@ -236,6 +240,27 @@ export class GameManager extends IManager {
         }
     }
 
+    checkReconnect() {
+        if (!this._isHasLevelConfig) {
+            warn("[检查重连]>>>没有场次配置 先请求此次配置")
+            this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
+            return null;
+        }
+        let reconnData: GiNetGameReconnData = GameCache.game.getReconnData();
+        if (reconnData) {
+            warn("[检查重连]>>>检测到需要重连")
+            this.emit(GameEvent.GAME_RECONNECT, reconnData);
+
+            this._curJoinRoomData = {
+                tid: reconnData.game_tid,
+                svid: reconnData.game_svid,
+            }
+            this.requestJoinGame();
+            return true;
+        }
+        return false;
+    }
+
     /** 收到消息 */
     onRecv(event: string, data: any): void {
         // if (data.rc) return;
@@ -248,10 +273,19 @@ export class GameManager extends IManager {
                 //重置获取配置次数
                 this._sendCurrowNum.GetConfig = 0;
 
-                gui.loading(false);
-                this.emit(GameEvent.GAME_CONFIG, rspData, false);
+                let reconnData: GiNetGameReconnData = GameCache.game.getReconnData();
+                if (!reconnData) {
+                    //关闭网络loading
+                    gui.loading(false);
+                }
+                this.emit(GameEvent.GAME_CONFIG, rspData, reconnData != null);
+                //检查是否是重连加入
+                if (reconnData) {
+                    this.checkReconnect();
+                }
                 break;
             case GameResp.ROOM_INFO_BROADCAST: // 配桌成功信息推送
+                // gui.showTips('加入房间：' + rspData.table_id);
                 console.log("配桌成功信息推送", rspData);
                 // 记录游戏dstid,之后子游戏每条消息都需要带进去
                 if (rspData.table_id) {
@@ -293,6 +327,14 @@ export class GameManager extends IManager {
                 this._sendCurrowNum.JoinRoom = 0;
                 if (rspData.result === 0) {
                     Cache.User.LoginRoomState = true;
+                    //检查是否是重连加入
+                    let reconn: GiNetGameReconnData = GameCache.game.getReconnData();
+                    if (reconn) {
+                        GameCache.game._set(SubGameCache.GAME_TABLEID, reconn.game_tid);
+                        GameCache.game._set(SubGameCache.GAME_DEST, reconn.game_svid);
+                        GameCache.game._set(SubGameCache.GAME_ID, reconn.game_id);
+                    }
+                    GameCache.game.setReconnData(null);
                     let table = rspData as gamebase.IUserJoinTableResp;
                     log("bobo---------------------------加入房间成功 ", table);
                     GameCache.game._set(SubGameCache.GAME_LEVEL, table.room_level);
@@ -311,6 +353,7 @@ export class GameManager extends IManager {
                     this.emit(GameEvent.JOIN_ROOM, roomInfo);
                     this.emit(GameEvent.UPDATE_DATA_JACKPOT);
                 } else {
+                    GameCache.game.setReconnData(null);
                     warn(`============加入房间失败 code:${rspData.result}============`)
                     let key = 'GAME_ERROR_' + rspData.result;
                     let txt = gutil_char(key);
@@ -318,8 +361,8 @@ export class GameManager extends IManager {
                         txt = gutil_char('GAME_ERROR_1');
                     }
                     gui.loading(false);
-                    // gui.showTips(txt);
-                    this.detailExitGame();
+                    this.emit(GameEvent.JOIN_ROOM_ERROR);
+                    this.detailExitGame(txt);
                 }
                 break;
             case GameResp.REQUEST_ROOM: // 请求配桌
@@ -331,6 +374,7 @@ export class GameManager extends IManager {
                 if (rspData.result == 0) {
                     Cache.User.LoginRoomState = false;
                     this.emit(GameEvent.LEAVE_ROOM, rspData);
+                    GameCache.game._set(SubGameCache.GAME_TABLEID, 0)
                 } else {
                     warn(`============离开房间失败 code:${rspData.result}============`)
                     let key = 'GAME_ERROR_' + rspData.result;
@@ -340,6 +384,7 @@ export class GameManager extends IManager {
                     }
                     gui.showTips(txt);
                 }
+                // gui.showTips('退出房间：' + GameCache.game._get(SubGameCache.GAME_TABLEID));
                 break;
             case GameResp.GAMENOTIFICATION_PUSH: // 踢出房间广播
                 warn("============踢人广播============", rspData)
@@ -355,7 +400,9 @@ export class GameManager extends IManager {
                         warn(">>>server踢人===>");
                     }
                 }
+                GameCache.game._set(SubGameCache.GAME_TABLEID, 0)
                 this.emit(GameEvent.GAMENOTIFICATION_PUSH, rspData);
+                // gui.showTips('踢出房间：' + GameCache.game._get(SubGameCache.GAME_TABLEID));
                 break;
             case GameResp.SIT_DOWN: // 坐下
 
@@ -473,6 +520,8 @@ export class GameManager extends IManager {
         }
         if (this._curJoinRoomData.svid == null) {
             this._curJoinRoomData.svid = GameCache.game._get(SubGameCache.GAME_DEST);
+        } else {
+            GameCache.game._set(SubGameCache.GAME_DEST, this._curJoinRoomData.svid);
         }
         //显示进入Loading
         gui.loading({ forever: true, block: true }, PRIORITY.NET);

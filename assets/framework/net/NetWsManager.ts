@@ -36,7 +36,7 @@ export default class NetWsManager {
     private _connectTimer: any;
     private _connectTimeOut = 6000;
     private _nSendHeartId = 0
-    private _reconnectNumber: number = -1;
+    private _reconnectNumber: number = 3;
     private _reconnectCount: number = this._reconnectNumber;
     private _isDestroy: boolean = true;
     private _reconnectTimer: any;
@@ -85,7 +85,7 @@ export default class NetWsManager {
                 this._reconnectCount--;
             }, this._reconnectTimeOut);
         } else {
-            this.destroy();
+            this.destroy(false);
             this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.ReconnectTimeout);
         }
     };
@@ -203,9 +203,9 @@ export default class NetWsManager {
         this.user.uid = 0;
     };
 
-    public destroy() {
+    public destroy(flag: boolean = true) {
         this._reconnectCount = this._reconnectNumber;
-        this._isDestroy = true;
+        this._isDestroy = flag;
         this.close();
     }
 
@@ -233,7 +233,7 @@ export default class NetWsManager {
             if (this._reconnectCount > 0 || this._reconnectNumber == -1) {
                 this.reconnect();
             } else {
-                this.destroy();
+                this.destroy(this._isDestroy);
                 this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.ReconnectTimeout);
             }
         }, this._connectTimeOut);

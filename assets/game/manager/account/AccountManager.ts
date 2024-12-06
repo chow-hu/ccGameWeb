@@ -20,6 +20,7 @@ import { EMgr } from "../interface";
 import { AccountPB, AccountProto, LoginEvent, UserConfig } from "./interface";
 import { Utils } from "../../common/Utils";
 import { showTip } from "../../common/custom-general";
+import { gmgr } from "../gmgr";
 
 export class AccountManager extends IManager {
     private static _instance: AccountManager;
@@ -49,7 +50,8 @@ export class AccountManager extends IManager {
             case AccountPB.PUSH.KickPush: {
                 // this._alertLogout("sameless_8", 0);
                 // 被踢了
-                this.emit(LoginEvent.PUSH_KICKPUSH);
+                let result = rsp?.data?.result || 0;
+                this.emit(LoginEvent.PUSH_KICKPUSH, result);
             } break;
             case AccountPB.PUSH.ForbitPush: {
                 gnet.close();
@@ -90,8 +92,22 @@ export class AccountManager extends IManager {
             case AppEvent.SYS_NET_CONNECT_FAILED:
                 Cache.User.setLoginState(AppConst.UserLoginState.Offline);
                 Cache.User.LoginRoomState = false;
-                if (event == AppEvent.SYS_NET_CONNECT_FAILED && data == NetFailure.NormalSocketClose) {
-                    this.loginLogic()
+                if (event == AppEvent.SYS_NET_CONNECT_FAILED) {
+                    if (data == NetFailure.NormalSocketClose) {
+                        this.loginLogic()
+                    } else {
+                        gui.loading(false, PRIORITY.NET);
+                        gui.alert({
+                            content: gutil_char('NET_RECONNECT_FAILED'),
+                            enableClose: false,
+                            ok: {
+                                text: gutil_char('OK'),
+                                cb: () => {
+                                    gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
+                                }
+                            }
+                        }, PRIORITY.NET, 'NET');
+                    }
                 }
                 break;
             default:

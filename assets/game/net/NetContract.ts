@@ -36,10 +36,10 @@ export class NetContract implements INetContract {
                 this._netdata(data);
             } break;
             case NetEvent.WILLOPEN: {
-                // gui.loading({ forever: true, block: true }, PRIORITY.NET);
+                gui.loading({ forever: true, block: true }, PRIORITY.NET);
             } break;
             case NetEvent.READY: {
-                // gui.loading(false, PRIORITY.NET);
+                gui.loading(false, PRIORITY.NET);
                 this.msgstack = [];
                 eventDispatcher.dispatchEvent(AppEvent.SYS_NET_READY, data);
             } break;

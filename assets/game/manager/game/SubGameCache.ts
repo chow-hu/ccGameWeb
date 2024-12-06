@@ -40,22 +40,6 @@ export class SubGameCache extends CacheBase {
         this.addProperty(SubGameCache.RECONN_DATA, null);
     }
 
-    public initData() {
-        this._set(SubGameCache.GAME_ID, 0);
-        this._set(SubGameCache.GAME_DEST, 0);
-        this._set(SubGameCache.GAME_TABLEID, 0);
-        this._set(SubGameCache.GAME_PLAT, "");
-
-        this._set(SubGameCache.GAME_CONFIG, {});
-        this._set(SubGameCache.CUR_ROOM_CONFIG, {});
-        this._set(SubGameCache.GAME_STATUS, 0);
-        this._set(SubGameCache.GAME_LEVEL, null);
-        this._set(SubGameCache.BALANCE, 0);
-        this._set(SubGameCache.USER_INFO, {});
-        this.addProperty(SubGameCache.JACKPOT_USER_DATA, {});
-
-        this.addProperty(SubGameCache.RECONN_DATA, null);
-    }
     /** 进入游戏初始化 */
     public initByIntoGame() {
         this._set(SubGameCache.GAME_ID, 0);

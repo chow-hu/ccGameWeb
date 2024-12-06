@@ -120,11 +120,11 @@ export interface GiNetGameReconnData {
     /** 游戏tid */
     game_tid: number;
     /** 游戏平台 */
-    game_plat: string;
+    //game_plat: string;
     /** 横竖屏 */
-    screen_mode: number;
+    //screen_mode: number;
     /** 自研类型 c1 c2 */
-    y1studio: string;
+    //y1studio: string;
 }
 
 export interface GiApi {

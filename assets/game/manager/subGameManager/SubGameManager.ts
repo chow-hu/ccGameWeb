@@ -20,7 +20,13 @@ import { gi } from "./subGameGlobal";
 
 export class SubGameManager extends IManager {
     private lastGame: SubGameDetail = null;
-    private curGame: SubGameDetail = null;
+    private _curGame: SubGameDetail = null;
+    public get curGame(): SubGameDetail {
+        return this._curGame;
+    }
+    public set curGame(value: SubGameDetail) {
+        this._curGame = value;
+    }
 
     private static _instance: SubGameManager;
 

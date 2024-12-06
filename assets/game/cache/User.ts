@@ -5,6 +5,9 @@ import { Utils } from "../common/Utils";
 import { GameConfig, LoginEvent, UserConfig } from "../manager/account/interface";
 import { CacheBase } from "./CacheBase";
 import _ from 'lodash';
+import { GameCache } from '../manager/game/GameCache';
+import { GiNetGameReconnData } from '../manager/subGameManager/interfaceGIApi';
+import ccgame from '../../shared/proto';
 
 /**
  * Name = User
@@ -150,6 +153,7 @@ export class User extends CacheBase {
         }
         this._dataContinar.token = data.token;
         this._dataContinar.agent = data.agent.split(",");
+        this._dataContinar.gameId = data.gameId;
     }
 
     /**
@@ -177,6 +181,13 @@ export class User extends CacheBase {
         }
         this._dataContinar.user.session = JSON.stringify(asession);
         this._dataContinar.user.ingame_info = JSON.stringify(data.ingame_info);
+        let ingame_info = data.ingame_info as ccgame.account_proto.IInGameInfo;
+        if (ingame_info && ingame_info.game_id != Number(this._dataContinar.gameId)) {
+            this._dataContinar.user.ingame_info = '';
+            GameCache.game.setReconnData(null);
+        } else {
+            GameCache.game.setReconnData(ingame_info as GiNetGameReconnData);
+        }
         console.log("bobo----------***** ", this._dataContinar.user.ingame_info);
     }
 

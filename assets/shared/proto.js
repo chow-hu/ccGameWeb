@@ -2822,6 +2822,7 @@ $root.client_proto = (function() {
      * @property {number} COMM_MSG_USER_GUIDE_PUSH=3004 COMM_MSG_USER_GUIDE_PUSH value
      * @property {number} COMM_MSG_GUIDE_FINISH_REQ=3005 COMM_MSG_GUIDE_FINISH_REQ value
      * @property {number} COMM_MSG_GUIDE_FINISH_RESP=3006 COMM_MSG_GUIDE_FINISH_RESP value
+     * @property {number} COMM_MSG_USER_NOTIFY_PUSH=3007 COMM_MSG_USER_NOTIFY_PUSH value
      * @property {number} COMM_MSG_ID_MAX=3050 COMM_MSG_ID_MAX value
      */
     client_proto.COMMON_MSG_SUB_ID = (function() {
@@ -2834,6 +2835,7 @@ $root.client_proto = (function() {
         values[valuesById[3004] = "COMM_MSG_USER_GUIDE_PUSH"] = 3004;
         values[valuesById[3005] = "COMM_MSG_GUIDE_FINISH_REQ"] = 3005;
         values[valuesById[3006] = "COMM_MSG_GUIDE_FINISH_RESP"] = 3006;
+        values[valuesById[3007] = "COMM_MSG_USER_NOTIFY_PUSH"] = 3007;
         values[valuesById[3050] = "COMM_MSG_ID_MAX"] = 3050;
         return values;
     })();
@@ -2881,6 +2883,7 @@ $root.client_proto = (function() {
      * @property {number} SERVER_TYPE_AGENT_RANK=53 SERVER_TYPE_AGENT_RANK value
      * @property {number} SERVER_TYPE_AGENT_GET_RANK=55 SERVER_TYPE_AGENT_GET_RANK value
      * @property {number} SERVER_TYPE_FLOATING=56 SERVER_TYPE_FLOATING value
+     * @property {number} SERVER_TYPE_REPORT_SWITCH=59 SERVER_TYPE_REPORT_SWITCH value
      */
     client_proto.SERVER_INNER_MSG_TYPE = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -2923,6 +2926,7 @@ $root.client_proto = (function() {
         values[valuesById[53] = "SERVER_TYPE_AGENT_RANK"] = 53;
         values[valuesById[55] = "SERVER_TYPE_AGENT_GET_RANK"] = 55;
         values[valuesById[56] = "SERVER_TYPE_FLOATING"] = 56;
+        values[valuesById[59] = "SERVER_TYPE_REPORT_SWITCH"] = 59;
         return values;
     })();
 
@@ -3147,6 +3151,7 @@ $root.client_proto = (function() {
                 case 13:
                 case 14:
                 case 15:
+                case 16:
                     break;
                 }
             if (message.params != null && message.hasOwnProperty("params"))
@@ -3242,6 +3247,10 @@ $root.client_proto = (function() {
             case 15:
                 message.propfrom = 15;
                 break;
+            case "ACTIVITY_SURPRISE_GIFT":
+            case 16:
+                message.propfrom = 16;
+                break;
             }
             if (object.params != null)
                 message.params = String(object.params);
@@ -3310,6 +3319,7 @@ $root.client_proto = (function() {
          * @property {number} ACTIVITE_GIFT=13 ACTIVITE_GIFT value
          * @property {number} ACTIVITY_REGRESS_GIFT=14 ACTIVITY_REGRESS_GIFT value
          * @property {number} ACTIVITY_REGRESS_WELFARE=15 ACTIVITY_REGRESS_WELFARE value
+         * @property {number} ACTIVITY_SURPRISE_GIFT=16 ACTIVITY_SURPRISE_GIFT value
          */
         GetPropPush.PROP_FROM = (function() {
             var valuesById = {}, values = Object.create(valuesById);
@@ -3329,6 +3339,7 @@ $root.client_proto = (function() {
             values[valuesById[13] = "ACTIVITE_GIFT"] = 13;
             values[valuesById[14] = "ACTIVITY_REGRESS_GIFT"] = 14;
             values[valuesById[15] = "ACTIVITY_REGRESS_WELFARE"] = 15;
+            values[valuesById[16] = "ACTIVITY_SURPRISE_GIFT"] = 16;
             return values;
         })();
 
@@ -4625,6 +4636,256 @@ $root.client_proto = (function() {
         return UserGuideFinishResp;
     })();
 
+    /**
+     * NotifyPushType enum.
+     * @name client_proto.NotifyPushType
+     * @enum {number}
+     * @property {number} NORMAL=0 NORMAL value
+     * @property {number} ERROR=1 ERROR value
+     * @property {number} NOTIFY=2 NOTIFY value
+     * @property {number} BROADCAST=3 BROADCAST value
+     */
+    client_proto.NotifyPushType = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "NORMAL"] = 0;
+        values[valuesById[1] = "ERROR"] = 1;
+        values[valuesById[2] = "NOTIFY"] = 2;
+        values[valuesById[3] = "BROADCAST"] = 3;
+        return values;
+    })();
+
+    client_proto.NotifyPush = (function() {
+
+        /**
+         * Properties of a NotifyPush.
+         * @memberof client_proto
+         * @interface INotifyPush
+         * @property {number|null} [type] NotifyPush type
+         * @property {number|null} [code] NotifyPush code
+         * @property {string|null} [values] NotifyPush values
+         */
+
+        /**
+         * Constructs a new NotifyPush.
+         * @memberof client_proto
+         * @classdesc Represents a NotifyPush.
+         * @implements INotifyPush
+         * @constructor
+         * @param {client_proto.INotifyPush=} [properties] Properties to set
+         */
+        function NotifyPush(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * NotifyPush type.
+         * @member {number} type
+         * @memberof client_proto.NotifyPush
+         * @instance
+         */
+        NotifyPush.prototype.type = 0;
+
+        /**
+         * NotifyPush code.
+         * @member {number} code
+         * @memberof client_proto.NotifyPush
+         * @instance
+         */
+        NotifyPush.prototype.code = 0;
+
+        /**
+         * NotifyPush values.
+         * @member {string} values
+         * @memberof client_proto.NotifyPush
+         * @instance
+         */
+        NotifyPush.prototype.values = "";
+
+        /**
+         * Creates a new NotifyPush instance using the specified properties.
+         * @function create
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.INotifyPush=} [properties] Properties to set
+         * @returns {client_proto.NotifyPush} NotifyPush instance
+         */
+        NotifyPush.create = function create(properties) {
+            return new NotifyPush(properties);
+        };
+
+        /**
+         * Encodes the specified NotifyPush message. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+         * @function encode
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.INotifyPush} message NotifyPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NotifyPush.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+            if (message.code != null && Object.hasOwnProperty.call(message, "code"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.code);
+            if (message.values != null && Object.hasOwnProperty.call(message, "values"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.values);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified NotifyPush message, length delimited. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.INotifyPush} message NotifyPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NotifyPush.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a NotifyPush message from the specified reader or buffer.
+         * @function decode
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {client_proto.NotifyPush} NotifyPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NotifyPush.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.client_proto.NotifyPush();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.type = reader.int32();
+                    break;
+                case 2:
+                    message.code = reader.int32();
+                    break;
+                case 3:
+                    message.values = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a NotifyPush message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {client_proto.NotifyPush} NotifyPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NotifyPush.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a NotifyPush message.
+         * @function verify
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        NotifyPush.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.code != null && message.hasOwnProperty("code"))
+                if (!$util.isInteger(message.code))
+                    return "code: integer expected";
+            if (message.values != null && message.hasOwnProperty("values"))
+                if (!$util.isString(message.values))
+                    return "values: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a NotifyPush message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {client_proto.NotifyPush} NotifyPush
+         */
+        NotifyPush.fromObject = function fromObject(object) {
+            if (object instanceof $root.client_proto.NotifyPush)
+                return object;
+            var message = new $root.client_proto.NotifyPush();
+            if (object.type != null)
+                message.type = object.type | 0;
+            if (object.code != null)
+                message.code = object.code | 0;
+            if (object.values != null)
+                message.values = String(object.values);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a NotifyPush message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.NotifyPush} message NotifyPush
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        NotifyPush.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.type = 0;
+                object.code = 0;
+                object.values = "";
+            }
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = message.type;
+            if (message.code != null && message.hasOwnProperty("code"))
+                object.code = message.code;
+            if (message.values != null && message.hasOwnProperty("values"))
+                object.values = message.values;
+            return object;
+        };
+
+        /**
+         * Converts this NotifyPush to JSON.
+         * @function toJSON
+         * @memberof client_proto.NotifyPush
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        NotifyPush.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return NotifyPush;
+    })();
+
     return client_proto;
 })();
 
@@ -5362,6 +5623,8 @@ $root.asset = (function() {
      * @property {number} ACT_ACTIVITY_REGRESS_WELFARE=26 ACT_ACTIVITY_REGRESS_WELFARE value
      * @property {number} ACT_AGENT_RANK=27 ACT_AGENT_RANK value
      * @property {number} ACT_MAIL=28 ACT_MAIL value
+     * @property {number} ACT_ACTIVITY_SURPRISE_GIFT=29 ACT_ACTIVITY_SURPRISE_GIFT value
+     * @property {number} ACT_ACTIVITY_SHOOTUP_GIFT=30 ACT_ACTIVITY_SHOOTUP_GIFT value
      */
     asset.OP_ACT = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -5394,6 +5657,8 @@ $root.asset = (function() {
         values[valuesById[26] = "ACT_ACTIVITY_REGRESS_WELFARE"] = 26;
         values[valuesById[27] = "ACT_AGENT_RANK"] = 27;
         values[valuesById[28] = "ACT_MAIL"] = 28;
+        values[valuesById[29] = "ACT_ACTIVITY_SURPRISE_GIFT"] = 29;
+        values[valuesById[30] = "ACT_ACTIVITY_SHOOTUP_GIFT"] = 30;
         return values;
     })();
 
@@ -6548,6 +6813,8 @@ $root.asset = (function() {
                 case 26:
                 case 27:
                 case 28:
+                case 29:
+                case 30:
                     break;
                 }
             if (message.delt != null && message.hasOwnProperty("delt"))
@@ -6746,6 +7013,14 @@ $root.asset = (function() {
             case "ACT_MAIL":
             case 28:
                 message.act = 28;
+                break;
+            case "ACT_ACTIVITY_SURPRISE_GIFT":
+            case 29:
+                message.act = 29;
+                break;
+            case "ACT_ACTIVITY_SHOOTUP_GIFT":
+            case 30:
+                message.act = 30;
                 break;
             }
             if (object.delt != null)

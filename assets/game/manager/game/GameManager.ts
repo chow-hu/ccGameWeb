@@ -52,26 +52,24 @@ export class GameManager extends IManager {
 
     /** 发送请求超时的时间 */
     private _sendTimeOut = 8;
-    /** 发送超时的超时检测句柄 */
-    private _handlerSendTimeOut = {
+
+    /** 支持的keyMap */
+    private _keyMap = {
         /** 获取场次配置 */
-        GetConfig: null,
+        GetConfig: "GetConfig",
         /** 匹配桌子 */
-        MatchTable: null,
+        MatchTable: "MatchTable",
         /** 加入房间 */
-        JoinRoom: null,
+        JoinRoom: "JoinRoom",
+        /** 退出房间（只发1次） */
+        ExitRoom: "ExitRoom",
     };
+    /** 发送超时的超时检测句柄 */
+    private _handlerSendTimeOut: any = {};
+    /** 当前发送数据次数的配置 */
+    private _sendCurrowNum: any = {}
     /** 发送请求最大的次数 */
     private _sendReqMax = 3;
-    /** 当前发送数据次数的配置 */
-    private _sendCurrowNum = {
-        /** 发送获取场次配置请求的次数 */
-        GetConfig: 0,
-        /** 发送匹配桌子请求的次数 */
-        MatchTable: 0,
-        /** 发送加入请求的次数 */
-        JoinRoom: 0,
-    }
 
 
     /** 当前游戏ID */
@@ -84,8 +82,15 @@ export class GameManager extends IManager {
         svid: null
     }
 
+
     constructor() {
         super(EMgr.GAME);
+        for (let key in this._keyMap) {
+            if (Object.prototype.hasOwnProperty.call(this._keyMap, key)) {
+                this._handlerSendTimeOut[key] = null;
+                this._sendCurrowNum[key] = 0;
+            }
+        }
         this._pbList = [
             GameResp.GAME_CONFIG,
             GameResp.ROOM_INFO_BROADCAST,
@@ -98,6 +103,7 @@ export class GameManager extends IManager {
             GameResp.GAME_RULES,
             GameResp.STAND_UP_BROADCAST,
             GameResp.SHARE_POSTER,
+            GameResp.REQUEST_USER_BALANCE,
             GameProto.GetPropPush,
         ];
         this._eventList = [
@@ -105,18 +111,13 @@ export class GameManager extends IManager {
             AppEvent.SYS_NET_CONNECT_FAILED,
         ]
         GameCache.init();
-
     };
     /** 进入一个游戏 */
     enterOneGame() {
         //显示进入Loading
         gui.loading({ ts: 10, block: true }, PRIORITY.NET);
         this.__stopCheckTimeOut();
-        this._sendCurrowNum = {
-            GetConfig: 0,
-            MatchTable: 0,
-            JoinRoom: 0,
-        }
+        this.__initTimeOutNum();
         this._inGame = true;
         this._isHasLevelConfig = false;
         this._curGameID = null;
@@ -132,8 +133,9 @@ export class GameManager extends IManager {
     }
     /** 退出一个游戏 */
     exitOneGame() {
-        this.__stopCheckTimeOut();
         this._inGame = false;
+        this.__stopCheckTimeOut();
+        this.__initTimeOutNum();
         this._isHasLevelConfig = false;
         this._curGameID = null;
         this._curMatchData = null;
@@ -160,15 +162,28 @@ export class GameManager extends IManager {
         this.stopScheduler(this._handlerSendTimeOut[key]);
         this._handlerSendTimeOut[key] = null;
     }
-
-    /** 获取游戏房间配置超时 */
-    private __getRoomConfigOutTime() {
-        if (!this._handlerSendTimeOut.GetConfig) {
+    /** 重置超时次数 */
+    private __initTimeOutNum(key = null) {
+        if (key == null) {
+            for (let key in this._sendCurrowNum) {
+                if (Object.prototype.hasOwnProperty.call(this._sendCurrowNum, key)) {
+                    this._sendCurrowNum[key] = 0;
+                }
+            }
             return;
         }
-        warn("获取游戏房间配置超时" + this._sendCurrowNum.GetConfig);
-        this.__stopCheckTimeOut('GetConfig');
-        if (this._sendCurrowNum.GetConfig >= this._sendReqMax) {
+        this._sendCurrowNum[key] = 0;
+    }
+    /** 获取游戏房间配置超时 */
+    private __getRoomConfigOutTime() {
+        let _key = this._keyMap.GetConfig;
+
+        if (!this._handlerSendTimeOut[_key]) {
+            return;
+        }
+        warn("获取游戏房间配置超时" + this._sendCurrowNum[_key]);
+        this.__stopCheckTimeOut(_key);
+        if (this._sendCurrowNum[_key] >= this._sendReqMax) {
             warn("Error:超出获取游戏房间配置的最大次数 直接退出游戏场景")
             //关闭网络loading
             gui.loading(false);
@@ -181,12 +196,13 @@ export class GameManager extends IManager {
     }
     /** 匹配房间超时 */
     private __matchRoomOutTime() {
-        if (!this._handlerSendTimeOut.MatchTable) {
+        let _key = this._keyMap.MatchTable;
+        if (!this._handlerSendTimeOut[_key]) {
             return
         }
-        warn("匹配房间超时" + this._sendCurrowNum.MatchTable);
-        this.__stopCheckTimeOut('MatchTable');
-        if (this._sendCurrowNum.MatchTable >= this._sendReqMax) {
+        warn("匹配房间超时" + this._sendCurrowNum[_key]);
+        this.__stopCheckTimeOut(_key);
+        if (this._sendCurrowNum[_key] >= this._sendReqMax) {
             warn("Error:超出匹配的最大次数")
             //关闭网络loading
             gui.loading(false);
@@ -200,12 +216,13 @@ export class GameManager extends IManager {
 
     /** 加入游戏房间超时 */
     private __joinRoomOutTime() {
-        if (!this._handlerSendTimeOut.JoinRoom) {
+        let _key = this._keyMap.JoinRoom;
+        if (!this._handlerSendTimeOut[_key]) {
             return
         }
-        warn("加入游戏房间超时" + this._sendCurrowNum.JoinRoom);
-        this.__stopCheckTimeOut('JoinRoom');
-        if (this._sendCurrowNum.JoinRoom >= this._sendReqMax) {
+        warn("加入游戏房间超时" + this._sendCurrowNum[_key]);
+        this.__stopCheckTimeOut(_key);
+        if (this._sendCurrowNum[_key] >= this._sendReqMax) {
             warn("Error:超出登录的最大次数 直接退出游戏场景")
             //关闭网络loading
             gui.loading(false);
@@ -216,28 +233,41 @@ export class GameManager extends IManager {
             this.requestJoinGame();
         }
     }
+    /** 退出游戏房间超时 */
+    private __exitRoomOutTime() {
+        let _key = this._keyMap.ExitRoom;
+        if (!this._handlerSendTimeOut[_key]) {
+            return
+        }
+        warn("退出游戏房间超时" + this._sendCurrowNum[_key]);
+        this.__stopCheckTimeOut(_key);
+        if (this._sendCurrowNum[_key] >= 1) {
+            warn("Error:超出退出请求的最大次数")
+            //关闭网络loading
+            gui.loading(false);
+            //通知:退出超时
+            this.emit(GameEvent.REQUEST_EXIT_ROOM_TIMEOUT);
+            return;
+        }
+    }
 
     /** 延迟退出游戏 */
-    detailExitGame(tip?: string, isDetail: boolean = true) {
-        tip && gui.showTips(tip + gutil_char('GAME_ERROR_TIP'));
-        this._sendCurrowNum = {
-            GetConfig: 0,
-            MatchTable: 0,
-            JoinRoom: 0,
-        };
-        //显示Loading屏蔽层(不转圈)
-        gui.loading({ ts: 10, block: true, notshow: true }, PRIORITY.NET);
-        if (isDetail) {
-            this.stopAllScheduler();
-            this.addSchedulerOnce(2, () => {
-                this.stopAllScheduler();
-                // gi.closeGame();
-                this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
-            })
-        } else {
-            // gi.closeGame();
-            this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
-        }
+    detailExitGame(tip: string) {
+        let content = tip + gutil_char('GAME_ERROR_TIP');
+        this.stopAllScheduler();
+        this.__initTimeOutNum();
+        gui.loading(false, PRIORITY.NET);
+        gui.alert({
+            content: content,
+            enableClose: false,
+            ok: {
+                text: gutil_char('OK'),
+                cb: () => {
+                    gui.loading({ ts: 10, block: true, notshow: true }, PRIORITY.NET);
+                    this.requestGameConfig(GameCache.game._get(SubGameCache.GAME_ID))
+                }
+            }
+        }, PRIORITY.NET, 'NET');
     }
 
     checkReconnect() {
@@ -271,7 +301,7 @@ export class GameManager extends IManager {
                 //停止检测超时
                 this.__stopCheckTimeOut();
                 //重置获取配置次数
-                this._sendCurrowNum.GetConfig = 0;
+                this._sendCurrowNum[this._keyMap.GetConfig] = 0;
 
                 let reconnData: GiNetGameReconnData = GameCache.game.getReconnData();
                 if (!reconnData) {
@@ -297,11 +327,10 @@ export class GameManager extends IManager {
                 if (rspData.game_id) {
                     GameCache.game._set(SubGameCache.GAME_ID, rspData.game_id);
                 }
-
                 //停止检测超时
                 this.__stopCheckTimeOut();
                 //重置获取配置次数
-                this._sendCurrowNum.MatchTable = 0;
+                this._sendCurrowNum[this._keyMap.MatchTable] = 0;
 
                 // 配桌成功后发送确认
                 if (rspData.table_id && rspData.table_id > 0) {
@@ -321,10 +350,10 @@ export class GameManager extends IManager {
             case GameResp.JOIN_ROOM: // 加入房间
                 //停止检测进房超时
                 this.__stopCheckTimeOut();
+                //重置登录次数
+                this._sendCurrowNum[this._keyMap.JoinRoom] = 0;
                 //关闭网络loading
                 gui.loading(false);
-                //重置登录次数
-                this._sendCurrowNum.JoinRoom = 0;
                 if (rspData.result === 0) {
                     Cache.User.LoginRoomState = true;
                     //检查是否是重连加入
@@ -366,11 +395,28 @@ export class GameManager extends IManager {
                 }
                 break;
             case GameResp.REQUEST_ROOM: // 请求配桌
-                //停止检测超时
-                this.__stopCheckTimeOut();
-                this.emit(GameEvent.REQUEST_ROOM, rspData);
+                warn(`============配桌 code:${rspData.result}============`)
+                if (rspData.result === 0) {
+                    //停止检测超时
+                    this.__stopCheckTimeOut();
+                    this.emit(GameEvent.REQUEST_ROOM, rspData);
+                } else {
+                    let key = 'GAME_ERROR_' + rspData.result;
+                    let txt = gutil_char(key);
+                    if (!txt || txt == key) {
+                        txt = gutil_char('GAME_ERROR_1');
+                    }
+                    gui.loading(false);
+                    this.detailExitGame(txt);
+                }
                 break;
             case GameResp.LEAVE_ROOM: // 离开房间
+                //停止检测进房超时
+                this.__stopCheckTimeOut();
+                //重置退桌次数
+                this._sendCurrowNum[this._keyMap.ExitRoom] = 0;
+                //关闭网络loading
+                gui.loading(false);
                 if (rspData.result == 0) {
                     Cache.User.LoginRoomState = false;
                     this.emit(GameEvent.LEAVE_ROOM, rspData);
@@ -392,7 +438,9 @@ export class GameManager extends IManager {
                     if (rspData?.action != GameActionType.TIMEOUT_TIPS) {
                         warn(">>>登录房间状态===>false");
                         this.__stopCheckTimeOut();
+                        this.__initTimeOutNum();
                         Cache.User.LoginRoomState = false;
+                        GameCache.game._set(SubGameCache.GAME_TABLEID, 0)
                     }
                     if (rspData?.action == GameActionType.RETIRE_ALLOC) {
                         warn(">>>进入房间退休换桌机制，等待连回来===>");
@@ -400,7 +448,6 @@ export class GameManager extends IManager {
                         warn(">>>server踢人===>");
                     }
                 }
-                GameCache.game._set(SubGameCache.GAME_TABLEID, 0)
                 this.emit(GameEvent.GAMENOTIFICATION_PUSH, rspData);
                 // gui.showTips('踢出房间：' + GameCache.game._get(SubGameCache.GAME_TABLEID));
                 break;
@@ -420,6 +467,12 @@ export class GameManager extends IManager {
             case GameResp.SHARE_POSTER:
                 this.emit(GameEvent.SHARE_POSTER, rspData);
                 break;
+            case GameResp.REQUEST_USER_BALANCE: {
+                gui.loading(false);
+                GameCache.game._set(SubGameCache.BALANCE, rspData.balance);
+                this.emit(GameEvent.REQUEST_USER_BALANCE, rspData.balance);
+            }
+                break;
             case GameProto.GetPropPush:
                 // this.notifyGetProps(rspData as ccgame.client_proto.GetPropPush);
                 break;
@@ -433,6 +486,8 @@ export class GameManager extends IManager {
         switch (event) {
             case AppEvent.SYS_NET_CONNECT_FAILED:
             case AppEvent.SYS_NET_CLOSED:
+                this.__stopCheckTimeOut();
+                this.__initTimeOutNum()
                 Cache.User.LoginRoomState = false;
             default:
                 break;
@@ -441,11 +496,12 @@ export class GameManager extends IManager {
 
     /**子游戏请求游戏配置 */
     requestGameConfig(id: any) {
-        if (!this._isHasLevelConfig) {///非首次不超时
+        log(`requestGameConfig _isHasLevelConfig = ${this._isHasLevelConfig} LoginRoomState = ${Cache.User.LoginRoomState}`);
+        if (!this._isHasLevelConfig || !Cache.User.LoginRoomState) {///非首次不超时
             //显示进入Loading
             gui.loading({ forever: true, block: true }, PRIORITY.NET);
             //次数计次
-            this._sendCurrowNum.GetConfig = this._sendCurrowNum.GetConfig + 1;
+            this._sendCurrowNum[this._keyMap.GetConfig] = this._sendCurrowNum[this._keyMap.GetConfig] + 1;
             //开启超时检测
             this.__stopCheckTimeOut('GetConfig');
             let self = this;
@@ -479,7 +535,7 @@ export class GameManager extends IManager {
         //显示进入Loading
         gui.loading({ forever: true, block: true }, PRIORITY.NET);
         //加入次数计次
-        this._sendCurrowNum.MatchTable = this._sendCurrowNum.MatchTable + 1;
+        this._sendCurrowNum[this._keyMap.MatchTable] = this._sendCurrowNum[this._keyMap.MatchTable] + 1;
 
         //开启超时检测
         this.__stopCheckTimeOut();
@@ -526,7 +582,7 @@ export class GameManager extends IManager {
         //显示进入Loading
         gui.loading({ forever: true, block: true }, PRIORITY.NET);
         //加入次数计次
-        this._sendCurrowNum.JoinRoom = this._sendCurrowNum.JoinRoom + 1;
+        this._sendCurrowNum[this._keyMap.JoinRoom] = this._sendCurrowNum[this._keyMap.JoinRoom] + 1;
 
         //开启超时检测
         this.__stopCheckTimeOut();
@@ -555,6 +611,20 @@ export class GameManager extends IManager {
             warn(`离开桌子失败，桌子ID:${tableID} 登录房间状态:${Cache.User.LoginRoomState}`)
             return false;
         }
+        //显示进入Loading
+        gui.loading({ forever: true, block: true }, PRIORITY.NET);
+        //加入次数计次
+        this._sendCurrowNum[this._keyMap.ExitRoom] = this._sendCurrowNum[this._keyMap.ExitRoom] + 1;
+        //开启超时检测
+        this.__stopCheckTimeOut();
+        let self = this;
+        this._handlerSendTimeOut.ExitRoom = this.addScheduler(this._sendTimeOut, () => {
+            if (isValid(self) && self._inGame) {
+                //开启加入超时检测
+                self.__exitRoomOutTime();
+            }
+        })
+
         let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ROOMSERVER;
         let ctype = game_base_proto.CCGAME_MSGID.CC_GAME_LEAVE_REQ;
         let param = {
@@ -605,6 +675,15 @@ export class GameManager extends IManager {
         });
     }
 
+    /** CC_GAME_RESET_BALANCE_REQ重置用户余额, 仅试玩平台使用 */
+    requestResetUserBalance() {
+        let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ROOMSERVER;
+        let ctype = game_base_proto.CCGAME_MSGID.CC_GAME_RESET_BALANCE_REQ;
+        gui.loading({ ts: 10, block: true }, PRIORITY.NET);
+        gnet.send(GameReq.REQUEST_USER_BALANCE, stype, ctype, {
+            dstid: GameCache.game._get(SubGameCache.GAME_DEST),
+        });
+    }
 }
 
 

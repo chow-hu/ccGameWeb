@@ -9,6 +9,7 @@ export const GameReq = {
     JOIN_ROOM: "gamebase.UserJoinTableReq",
     GAME_RULES: "gamebase.GetGameRuleReq",
     SHARE_POSTER: "gamebase.SharePosterReq",
+    REQUEST_USER_BALANCE: "gamebase.ResetUserBalanceReq",
 }
 
 export const GameResp = {
@@ -24,7 +25,7 @@ export const GameResp = {
     ROOM_INFO_BROADCAST: "gamebase.AllocTablePush",
     GAME_RULES: "gamebase.GetGameRuleResp",
     SHARE_POSTER: "gamebase.SharePosterResp",
-
+    REQUEST_USER_BALANCE: "gamebase.ResetUserBalanceResp",
 }
 
 export const GameProto = {
@@ -47,6 +48,8 @@ export const GameEvent = {
     REQUEST_ROOM: "roomalloc-AllocTableResp",
     /** 匹配超时 */
     REQUEST_ROOM_TIMEOUT: "GameEvent_match_room_timeout",
+    /** 退出房间超时 */
+    REQUEST_EXIT_ROOM_TIMEOUT: "GameEvent_exit_room_timeout",
     /** 游戏-加入房间 */
     JOIN_ROOM: "gamebase-UserJoinTableResp",
 
@@ -79,6 +82,20 @@ export const GameEvent = {
     // 领取jp奖励
     UPDATE_DATA_GET_JP_REWARD: "update_data_get_jp_reward",
 
+    /** 重置用户余额 */
+    REQUEST_USER_BALANCE: "gamebase-ResetUserBalanceResp",
+
+}
+/** 自定义事件 */
+export const GameActionType = {
+    /** 操作提示 */
+    TIMEOUT_TIPS: 0,
+    /** 踢人 */
+    TIMEOUT_KICK: 1,
+    /** 房间退休换桌 */
+    RETIRE_ALLOC: 2,
+    /** 房间退休踢人 */
+    RETIRE_KICK: 3,
 }
 
 // 请求游戏配置
@@ -104,16 +121,5 @@ CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_ALLOC_TABLE_PUSH] = "gamebase.A
 CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_GET_RULE_RESP] = "gamebase.GetGameRuleResp";
 // 分享海报返回
 CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_SHARE_POSTER_RESP] = "gamebase.SharePosterResp";
-
-
-/** 自定义事件 */
-export const GameActionType = {
-    /** 操作提示 */
-    TIMEOUT_TIPS: 0,
-    /** 踢人 */
-    TIMEOUT_KICK: 1,
-    /** 房间退休换桌 */
-    RETIRE_ALLOC: 2,
-    /** 房间退休踢人 */
-    RETIRE_KICK: 3,
-}
+// 重置用户余额
+CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_RESET_BALANCE_RESP] = "gamebase.ResetUserBalanceResp";

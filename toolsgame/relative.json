@@ -245,6 +245,9 @@
 				},
 				"--orientation": {
 					"name": "横竖屏 auto|portrait|landscape"
+				},
+				"--platorm": {
+					"name": "平台 web-mobile|web-desk"
 				}
 			},
 			"default": {}

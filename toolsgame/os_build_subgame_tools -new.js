@@ -1,6 +1,6 @@
 const path = require('path');
 let fs = require('fs-extra');
-const tools = require('./core/tools');
+const tools = require('./core/tools.js');
 const { writeJSONSync } = require('fs-extra');
 
 let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation) {

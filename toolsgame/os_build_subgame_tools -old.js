@@ -1,11 +1,11 @@
 const path = require('path');
 let fs = require('fs-extra');
-const tools = require('./core/tools');
+const tools = require('./core/tools.js');
 const { writeJSONSync } = require('fs-extra');
 
 let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation) {
     // 修改md5Cache
-    let configStr = fs.readFileSync(path.join(urlPack, `buildConfigJson/buildConfig_${platorm}.json`), { encoding: 'utf-8' });
+    let configStr = fs.readFileSync(path.join(urlPack, "buildConfigJson/buildConfig_web-mobile.json"), { encoding: 'utf-8' });
     if (md5 == "true") {
         configStr = configStr.replace(/"md5Cache":\s*false,/g, '"md5Cache": true,');
     } else {
@@ -36,7 +36,7 @@ let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orie
         let name = rename(bundles[i]);
         str.bundleConfigs.push({ root: `db://assets/subGames/${bundles[i]}`, name: name, output: true });
     }
-    fs.writeFileSync(path.join(urlPack, `buildConfigJson/buildConfig_${platorm}.json`), JSON.stringify(str, undefined, 4));
+    fs.writeFileSync(path.join(urlPack, "buildConfigJson/buildConfig_web-mobile.json"), JSON.stringify(str, undefined, 4));
 }
 
 let rename = function (name) {
@@ -48,10 +48,10 @@ let rename = function (name) {
 }
 
 let modifyBuildTemplate = function (name) {
-    fs.emptyDirSync(`build-templates/${platorm}`);
-    let path = name == 'Crash' ? `build-templates/${platorm}-spribe/` : `build-templates/${platorm}-koolbet/`;
+    fs.emptyDirSync('build-templates/web-mobile');
+    let path = name == 'Crash' ? 'build-templates/web-mobile-spribe/' : 'build-templates/web-mobile-koolbet/';
     // console.log(path);
-    fs.copySync(path, `build-templates/${platorm}`, { overwrite: true })
+    fs.copySync(path, 'build-templates/web-mobile', { overwrite: true })
 }
 
 let getVersion = function () {
@@ -67,39 +67,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 
 let backupApk = function (build_env, bundle) {
-    fs.copySync(`./build-templates/${platorm}`, `./build/${platorm}`, { overwrite: true })
+    fs.copySync('./build-templates/web-mobile', `./build/web-mobile`, { overwrite: true })
     var buildHtml = __importDefault(require("../extensions/super-html/dist/core/build.js"))
-    let input = path.join(__dirname, `../build/${platorm}`);
+    let input = path.join(__dirname, `../build/web-mobile`);
     let out = path.join(__dirname, `../build/super-html`);
     console.log(`input:${input} out:${out}`)
 
     let name = rename(bundle);
-    dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${name}`);//${platorm}/
+    dst = path.join(__dirname, `../ccgamePack/game/${build_env}/${getVersion()}/${name}`);//${platorm}/
     console.log(dst);
     if (fs.existsSync(dst)) {
         fs.emptydirSync(dst);
     }
-    fs.copySync(`./build/${platorm}`, `${dst}`, { overwrite: true })
+    fs.copySync('./build/web-mobile', `${dst}`, { overwrite: true })
     return
 
     new buildHtml.default("3.8.3", input, out, () => {
         console.log("success");
 
         let name = rename(bundle);
-        dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${name}`);//${platorm}/
+        dst = path.join(__dirname, `../ccgamePack/game/${build_env}/${getVersion()}/${name}`);//${platorm}/
         console.log(dst);
         if (fs.existsSync(dst)) {
             fs.emptydirSync(dst);
         }
-        fs.copySync(`./build/${platorm}`, `${dst}/${platorm}`, { overwrite: true })
+        fs.copySync('./build/web-mobile', `${dst}/web-mobile`, { overwrite: true })
         fs.copySync(urlBuild, `${dst}/index.html`, { overwrite: true })
-        fs.copySync(`./build-templates/${platorm}/logo.gif`, `${dst}/logo.gif`, { overwrite: true })
+        fs.copySync('./build-templates/web-mobile/logo.gif', `${dst}/logo.gif`, { overwrite: true })
     });
 }
 
 let urlPack = path.join(__dirname, "../ccgamePack");
 let urlBuild = path.join(__dirname, "../build/super-html/common_min/ccgame_common_min.html")
-let platorm = 'web-mobile';
 let run = function (os_param) {
     step = os_param["--step"];
     let bundle = os_param["--bundle"] || '';
@@ -108,7 +107,6 @@ let run = function (os_param) {
     let bundles = groups[0].split('_');
     console.log(`orientation = ${orientation}, bundles = ${bundles}`);
     let build_env = os_param["--build_env"];
-    platorm = os_param["--platorm"] || platorm;
     if (bundles.length == 0) {
         process.exit(1);
     }

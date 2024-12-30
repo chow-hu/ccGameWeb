@@ -1,5 +1,5 @@
 import { _decorator, director, instantiate, Prefab } from 'cc';
-import { gnet, gui, loader, UIBase } from '../framework/ge';
+import { gnet, gutil_char, loader, UIBase } from '../framework/ge';
 import { accountMgr } from '../game/manager/account/AccountManager';
 import { Cache } from '../game/cache/Cache';
 import { NetContract } from '../game/net/NetContract';
@@ -62,6 +62,8 @@ export class scGame extends UIBase {
             case LoginEvent.LOGIN_READY:
                 if (data) {
                     accountMgr.loginLogic();
+                } else {
+                    showTip(gutil_char('NET_INVALID_PARAM'));
                 }
                 break;
             case LoginEvent.LOGIN_SUCCESS:

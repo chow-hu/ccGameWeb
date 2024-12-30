@@ -39,6 +39,8 @@ export class AccountManager extends IManager {
     };
 
     private _loaded = false;
+    private _loginTime: number = -1;
+    private _isFirstLogin: boolean = true;
 
     /** 收到pb消息 */
     onRecv(event: string, data: NetMsg) {
@@ -90,24 +92,30 @@ export class AccountManager extends IManager {
                 break;
             case AppEvent.SYS_NET_CLOSED:
             case AppEvent.SYS_NET_CONNECT_FAILED:
+                if (this._isFirstLogin) {
+                    if (globalThis.confirm(gutil_char('NET_RECONNECT_FAILED'))) {
+                        gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
+                    }
+                    return
+                }
                 Cache.User.setLoginState(AppConst.UserLoginState.Offline);
                 Cache.User.LoginRoomState = false;
                 if (event == AppEvent.SYS_NET_CONNECT_FAILED) {
-                    if (data == NetFailure.NormalSocketClose) {
-                        this.loginLogic()
-                    } else {
-                        gui.loading(false, PRIORITY.NET);
-                        gui.alert({
-                            content: gutil_char('NET_RECONNECT_FAILED'),
-                            enableClose: false,
-                            ok: {
-                                text: gutil_char('OK'),
-                                cb: () => {
+                    gui.loading(false, PRIORITY.NET);
+                    gui.alert({
+                        content: gutil_char('NET_RECONNECT_FAILED'),
+                        enableClose: false,
+                        ok: {
+                            text: gutil_char('OK'),
+                            cb: () => {
+                                if (data == NetFailure.NormalSocketClose) {
+                                    this.loginLogic()
+                                } else {
                                     gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
                                 }
                             }
-                        }, PRIORITY.NET, 'NET');
-                    }
+                        }
+                    }, PRIORITY.NET, 'NET');
                 }
                 break;
             default:
@@ -141,8 +149,31 @@ export class AccountManager extends IManager {
         }
     }
 
+    alertFail() {
+        if (this._isFirstLogin) {
+            if (globalThis.confirm(gutil_char('LOGIN_FAILED'))) {
+                this.startLogin();
+            }
+            return
+        }
+        gui.loading(false, PRIORITY.NET);
+        gui.alert({
+            content: gutil_char('LOGIN_FAILED'),
+            enableClose: false,
+            ok: {
+                text: gutil_char('OK'),
+                cb: () => {
+                    this.startLogin();
+                }
+            }
+        }, PRIORITY.NET, 'NET');
+    }
+
     /** 开始登录 */
     startLogin() {
+        this._loginTime = this.addSchedulerOnce(15, () => {
+            this.alertFail();
+        })
         GameCache.game.setReconnData(null);
         log("bobo--------------token ", atob(Cache.User.getToken()));
         let param = {
@@ -150,7 +181,7 @@ export class AccountManager extends IManager {
             trans: null,
         }
         log("startLogin 开始登录 param= ****************************", param);
-        // gui.loading({ forever: true, type: 0 }, PRIORITY.NET);
+        gui.loading({ forever: true, type: 0 }, PRIORITY.NET);
         gnet.send(AccountPB.REQ.Login, client_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ACCOUNT, account_proto.LOGIN_SUB_MSG_ID.ACCOUNT_CMD_VERIFY_LOGIN_TOKEN_REQ, param);
     }
 
@@ -158,8 +189,9 @@ export class AccountManager extends IManager {
 
     //登录/注册后返回的结果
     respNetLogin(receiveData: NetMsg) {
-        // gui.loading(false, PRIORITY.NET);
+        gui.loading(false, PRIORITY.NET);
         log("登录/注册后返回的结果", receiveData);
+        this.stopSchedulerOnce(this._loginTime);
         //同步时间戳
         StorageData.sysTs = receiveData.data?.timestamp;
         if (receiveData.data.result !== 0) {
@@ -189,7 +221,8 @@ export class AccountManager extends IManager {
         console.log("bobobobobo 看看数据-------------- ", receiveData?.data);
         Cache.User.saveUser(receiveData?.data);
         // 广播登录成功的事件
-        this.emit(LoginEvent.LOGIN_SUCCESS, false);
+        this.emit(LoginEvent.LOGIN_SUCCESS);
+        this._isFirstLogin = false;
         //请求通用队列
         // this._reqCommSuccessQuene();
         if (NATIVE) {
@@ -233,10 +266,11 @@ export class AccountManager extends IManager {
     /** 统一处理登录失败 */
     private _onMessageLoginFail(receiveData: NetMsg) {
         log(`LoginFail: 当前登录失败的事件返回:===>失败`, receiveData);
-        showTip(`login fail`);
+        // showTip(`login fail`);
         // 广播登录失败的事件
-        this.emit(LoginEvent.LOGIN_FAIL, false);
-        gnet.close();
+        this.emit(LoginEvent.LOGIN_FAIL);
+        // gnet.close();
+        this.alertFail();
         // if (receiveData.data.result == client_proto.LOGIN_ERR_CODE.LOGIN_ERR_TOKEN_INVALID) {
         //     // token无效,向php请求新的token
         //     gui.showTips(gutil_char('LOGIN_FAILED'));

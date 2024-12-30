@@ -1206,6 +1206,7 @@ declare namespace ccgame {
             COMM_MSG_USER_GUIDE_PUSH = 3004,
             COMM_MSG_GUIDE_FINISH_REQ = 3005,
             COMM_MSG_GUIDE_FINISH_RESP = 3006,
+            COMM_MSG_USER_NOTIFY_PUSH = 3007,
             COMM_MSG_ID_MAX = 3050
         }
 
@@ -1249,7 +1250,8 @@ declare namespace ccgame {
             SERVER_TYPE_VIP_BET_REDATE = 48,
             SERVER_TYPE_AGENT_RANK = 53,
             SERVER_TYPE_AGENT_GET_RANK = 55,
-            SERVER_TYPE_FLOATING = 56
+            SERVER_TYPE_FLOATING = 56,
+            SERVER_TYPE_REPORT_SWITCH = 59
         }
 
         /** PROP_ID enum. */
@@ -1387,7 +1389,8 @@ declare namespace ccgame {
                 VIP_BET_REDATE = 12,
                 ACTIVITE_GIFT = 13,
                 ACTIVITY_REGRESS_GIFT = 14,
-                ACTIVITY_REGRESS_WELFARE = 15
+                ACTIVITY_REGRESS_WELFARE = 15,
+                ACTIVITY_SURPRISE_GIFT = 16
             }
         }
 
@@ -1955,6 +1958,116 @@ declare namespace ccgame {
              */
             public toJSON(): { [k: string]: any };
         }
+
+        /** NotifyPushType enum. */
+        enum NotifyPushType {
+            NORMAL = 0,
+            ERROR = 1,
+            NOTIFY = 2,
+            BROADCAST = 3
+        }
+
+        /** Properties of a NotifyPush. */
+        interface INotifyPush {
+
+            /** NotifyPush type */
+            type?: (number|null);
+
+            /** NotifyPush code */
+            code?: (number|null);
+
+            /** NotifyPush values */
+            values?: (string|null);
+        }
+
+        /** Represents a NotifyPush. */
+        class NotifyPush implements INotifyPush {
+
+            /**
+             * Constructs a new NotifyPush.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: client_proto.INotifyPush);
+
+            /** NotifyPush type. */
+            public type: number;
+
+            /** NotifyPush code. */
+            public code: number;
+
+            /** NotifyPush values. */
+            public values: string;
+
+            /**
+             * Creates a new NotifyPush instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns NotifyPush instance
+             */
+            public static create(properties?: client_proto.INotifyPush): client_proto.NotifyPush;
+
+            /**
+             * Encodes the specified NotifyPush message. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+             * @param message NotifyPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: client_proto.INotifyPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified NotifyPush message, length delimited. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+             * @param message NotifyPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: client_proto.INotifyPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a NotifyPush message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns NotifyPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): client_proto.NotifyPush;
+
+            /**
+             * Decodes a NotifyPush message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns NotifyPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): client_proto.NotifyPush;
+
+            /**
+             * Verifies a NotifyPush message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a NotifyPush message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns NotifyPush
+             */
+            public static fromObject(object: { [k: string]: any }): client_proto.NotifyPush;
+
+            /**
+             * Creates a plain object from a NotifyPush message. Also converts values to other types if specified.
+             * @param message NotifyPush
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: client_proto.NotifyPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this NotifyPush to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Namespace asset. */
@@ -2249,7 +2362,9 @@ declare namespace ccgame {
             ACT_ACTIVITY_REGRESS_GIFT = 25,
             ACT_ACTIVITY_REGRESS_WELFARE = 26,
             ACT_AGENT_RANK = 27,
-            ACT_MAIL = 28
+            ACT_MAIL = 28,
+            ACT_ACTIVITY_SURPRISE_GIFT = 29,
+            ACT_ACTIVITY_SHOOTUP_GIFT = 30
         }
 
         /** OP_UPDATE_TYPE enum. */

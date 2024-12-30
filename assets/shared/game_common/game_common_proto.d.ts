@@ -17,6 +17,7 @@ declare namespace ccgame {
             COMM_MSG_USER_GUIDE_PUSH = 3004,
             COMM_MSG_GUIDE_FINISH_REQ = 3005,
             COMM_MSG_GUIDE_FINISH_RESP = 3006,
+            COMM_MSG_USER_NOTIFY_PUSH = 3007,
             COMM_MSG_ID_MAX = 3050
         }
 
@@ -60,7 +61,8 @@ declare namespace ccgame {
             SERVER_TYPE_VIP_BET_REDATE = 48,
             SERVER_TYPE_AGENT_RANK = 53,
             SERVER_TYPE_AGENT_GET_RANK = 55,
-            SERVER_TYPE_FLOATING = 56
+            SERVER_TYPE_FLOATING = 56,
+            SERVER_TYPE_REPORT_SWITCH = 59
         }
 
         /** PROP_ID enum. */
@@ -198,7 +200,8 @@ declare namespace ccgame {
                 VIP_BET_REDATE = 12,
                 ACTIVITE_GIFT = 13,
                 ACTIVITY_REGRESS_GIFT = 14,
-                ACTIVITY_REGRESS_WELFARE = 15
+                ACTIVITY_REGRESS_WELFARE = 15,
+                ACTIVITY_SURPRISE_GIFT = 16
             }
         }
 
@@ -762,6 +765,116 @@ declare namespace ccgame {
 
             /**
              * Converts this UserGuideFinishResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** NotifyPushType enum. */
+        enum NotifyPushType {
+            NORMAL = 0,
+            ERROR = 1,
+            NOTIFY = 2,
+            BROADCAST = 3
+        }
+
+        /** Properties of a NotifyPush. */
+        interface INotifyPush {
+
+            /** NotifyPush type */
+            type?: (number|null);
+
+            /** NotifyPush code */
+            code?: (number|null);
+
+            /** NotifyPush values */
+            values?: (string|null);
+        }
+
+        /** Represents a NotifyPush. */
+        class NotifyPush implements INotifyPush {
+
+            /**
+             * Constructs a new NotifyPush.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: client_proto.INotifyPush);
+
+            /** NotifyPush type. */
+            public type: number;
+
+            /** NotifyPush code. */
+            public code: number;
+
+            /** NotifyPush values. */
+            public values: string;
+
+            /**
+             * Creates a new NotifyPush instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns NotifyPush instance
+             */
+            public static create(properties?: client_proto.INotifyPush): client_proto.NotifyPush;
+
+            /**
+             * Encodes the specified NotifyPush message. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+             * @param message NotifyPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: client_proto.INotifyPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified NotifyPush message, length delimited. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+             * @param message NotifyPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: client_proto.INotifyPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a NotifyPush message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns NotifyPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): client_proto.NotifyPush;
+
+            /**
+             * Decodes a NotifyPush message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns NotifyPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): client_proto.NotifyPush;
+
+            /**
+             * Verifies a NotifyPush message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a NotifyPush message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns NotifyPush
+             */
+            public static fromObject(object: { [k: string]: any }): client_proto.NotifyPush;
+
+            /**
+             * Creates a plain object from a NotifyPush message. Also converts values to other types if specified.
+             * @param message NotifyPush
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: client_proto.NotifyPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this NotifyPush to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -1365,7 +1478,8 @@ declare namespace ccgame {
             CCGAME_ID_NULL = 0,
             CCGAME_AVIATOR = 101,
             CCGAME_ANDAR = 102,
-            CCGAME_AVIATOR2 = 103
+            CCGAME_AVIATOR2 = 103,
+            CCGAME_SEVENUP = 104
         }
 
         /** CCGAME_ERR_CODE enum. */
@@ -1392,7 +1506,8 @@ declare namespace ccgame {
             RET_USER_IS_NULL = 19,
             RET_ERROR_AMOUNT = 20,
             RET_ERROR_NOT_BET = 21,
-            RET_ERROR_BET_TIMEOUT = 22
+            RET_ERROR_BET_TIMEOUT = 22,
+            RET_ERROR_BET_NOT_RESP = 23
         }
 
         /** CCGAME_MSGID enum. */
@@ -1425,7 +1540,9 @@ declare namespace ccgame {
             CC_GAME_SHARE_POSTER_REQ = 10034,
             CC_GAME_SHARE_POSTER_RESP = 10035,
             CC_GAME_JACKPOT_POOL_CHANGE_PUSH = 10036,
-            CC_GAME_NOTIFICATION_PUSH = 10037
+            CC_GAME_NOTIFICATION_PUSH = 10037,
+            CC_GAME_RESET_BALANCE_REQ = 10038,
+            CC_GAME_RESET_BALANCE_RESP = 10039
         }
 
         /** Properties of a Card. */
@@ -1693,102 +1810,6 @@ declare namespace ccgame {
 
             /**
              * Converts this LeaveRoomResp to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a KickoutRoomPush. */
-        interface IKickoutRoomPush {
-
-            /** KickoutRoomPush result */
-            result?: (number|null);
-
-            /** KickoutRoomPush value */
-            value?: (number|null);
-        }
-
-        /** Represents a KickoutRoomPush. */
-        class KickoutRoomPush implements IKickoutRoomPush {
-
-            /**
-             * Constructs a new KickoutRoomPush.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: gamebase.IKickoutRoomPush);
-
-            /** KickoutRoomPush result. */
-            public result: number;
-
-            /** KickoutRoomPush value. */
-            public value: number;
-
-            /**
-             * Creates a new KickoutRoomPush instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns KickoutRoomPush instance
-             */
-            public static create(properties?: gamebase.IKickoutRoomPush): gamebase.KickoutRoomPush;
-
-            /**
-             * Encodes the specified KickoutRoomPush message. Does not implicitly {@link gamebase.KickoutRoomPush.verify|verify} messages.
-             * @param message KickoutRoomPush message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: gamebase.IKickoutRoomPush, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Encodes the specified KickoutRoomPush message, length delimited. Does not implicitly {@link gamebase.KickoutRoomPush.verify|verify} messages.
-             * @param message KickoutRoomPush message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: gamebase.IKickoutRoomPush, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
-             * Decodes a KickoutRoomPush message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns KickoutRoomPush
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.KickoutRoomPush;
-
-            /**
-             * Decodes a KickoutRoomPush message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns KickoutRoomPush
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.KickoutRoomPush;
-
-            /**
-             * Verifies a KickoutRoomPush message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a KickoutRoomPush message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns KickoutRoomPush
-             */
-            public static fromObject(object: { [k: string]: any }): gamebase.KickoutRoomPush;
-
-            /**
-             * Creates a plain object from a KickoutRoomPush message. Also converts values to other types if specified.
-             * @param message KickoutRoomPush
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: gamebase.KickoutRoomPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this KickoutRoomPush to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -4778,9 +4799,185 @@ declare namespace ccgame {
 
             /** ActionType enum. */
             enum ActionType {
-                ACTION_OP_TIPS = 0,
-                ACTION_OP_KICK = 1
+                ACTION_TIMEOUT_TIPS = 0,
+                ACTION_TIMEOUT_KICK = 1,
+                ACTION_RETIRE_ALLOC = 2,
+                ACTION_RETIRE_KICK = 3
             }
+        }
+
+        /** Properties of a ResetUserBalanceReq. */
+        interface IResetUserBalanceReq {
+        }
+
+        /** Represents a ResetUserBalanceReq. */
+        class ResetUserBalanceReq implements IResetUserBalanceReq {
+
+            /**
+             * Constructs a new ResetUserBalanceReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IResetUserBalanceReq);
+
+            /**
+             * Creates a new ResetUserBalanceReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ResetUserBalanceReq instance
+             */
+            public static create(properties?: gamebase.IResetUserBalanceReq): gamebase.ResetUserBalanceReq;
+
+            /**
+             * Encodes the specified ResetUserBalanceReq message. Does not implicitly {@link gamebase.ResetUserBalanceReq.verify|verify} messages.
+             * @param message ResetUserBalanceReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IResetUserBalanceReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ResetUserBalanceReq message, length delimited. Does not implicitly {@link gamebase.ResetUserBalanceReq.verify|verify} messages.
+             * @param message ResetUserBalanceReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IResetUserBalanceReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ResetUserBalanceReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ResetUserBalanceReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.ResetUserBalanceReq;
+
+            /**
+             * Decodes a ResetUserBalanceReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ResetUserBalanceReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.ResetUserBalanceReq;
+
+            /**
+             * Verifies a ResetUserBalanceReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ResetUserBalanceReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ResetUserBalanceReq
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.ResetUserBalanceReq;
+
+            /**
+             * Creates a plain object from a ResetUserBalanceReq message. Also converts values to other types if specified.
+             * @param message ResetUserBalanceReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.ResetUserBalanceReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ResetUserBalanceReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ResetUserBalanceResp. */
+        interface IResetUserBalanceResp {
+
+            /** ResetUserBalanceResp balance */
+            balance?: (number|Long|null);
+        }
+
+        /** Represents a ResetUserBalanceResp. */
+        class ResetUserBalanceResp implements IResetUserBalanceResp {
+
+            /**
+             * Constructs a new ResetUserBalanceResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IResetUserBalanceResp);
+
+            /** ResetUserBalanceResp balance. */
+            public balance: (number|Long);
+
+            /**
+             * Creates a new ResetUserBalanceResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ResetUserBalanceResp instance
+             */
+            public static create(properties?: gamebase.IResetUserBalanceResp): gamebase.ResetUserBalanceResp;
+
+            /**
+             * Encodes the specified ResetUserBalanceResp message. Does not implicitly {@link gamebase.ResetUserBalanceResp.verify|verify} messages.
+             * @param message ResetUserBalanceResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IResetUserBalanceResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ResetUserBalanceResp message, length delimited. Does not implicitly {@link gamebase.ResetUserBalanceResp.verify|verify} messages.
+             * @param message ResetUserBalanceResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IResetUserBalanceResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ResetUserBalanceResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ResetUserBalanceResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.ResetUserBalanceResp;
+
+            /**
+             * Decodes a ResetUserBalanceResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ResetUserBalanceResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.ResetUserBalanceResp;
+
+            /**
+             * Verifies a ResetUserBalanceResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ResetUserBalanceResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ResetUserBalanceResp
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.ResetUserBalanceResp;
+
+            /**
+             * Creates a plain object from a ResetUserBalanceResp message. Also converts values to other types if specified.
+             * @param message ResetUserBalanceResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.ResetUserBalanceResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ResetUserBalanceResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
         }
     }
 }

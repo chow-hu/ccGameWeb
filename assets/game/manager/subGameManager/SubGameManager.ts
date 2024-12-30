@@ -2,7 +2,7 @@ import { AssetManager, assetManager, director, game, isValid, Prefab, warn } fro
 import _ from "lodash";
 import { AssetsLoader, IBundleOption } from "../../../framework/asset/AssetsLoader";
 import { AudioEngine } from "../../../framework/asset/AudioEngine";
-import { GameCmdMap, gui, PRIORITY, SchedulerManager } from "../../../framework/ge";
+import { GameCmdMap, gui, gutil_char, PRIORITY, SchedulerManager } from "../../../framework/ge";
 import { Cache } from "../../cache/Cache";
 import { AppConst } from "../../common/AppConst";
 import { setOrientation } from "../../common/custom-general";
@@ -120,6 +120,12 @@ export class SubGameManager extends IManager {
                 target: this,
                 complete(err, data) {
                     enterGame();
+                },
+                error: () => {
+                    if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
+                        // this.doOpen(detail);
+                        location.reload();
+                    }
                 },
             })
         })
@@ -300,7 +306,7 @@ export class SubGameManager extends IManager {
                 this.openGame(data as SubGameDetail)
                 break;
             case SubGameEventGame.close:
-                this.closeGame();
+                // this.closeGame();
                 break;
             case SubGameEventGame.start:
                 this.startGame();
@@ -332,6 +338,7 @@ export class SubGameManager extends IManager {
         if (progressText) {
             progressText.style.display = 'none';
         }
+        globalThis.xmlhttpcheck = false;
     }
 
     loadGame(progress: number) {

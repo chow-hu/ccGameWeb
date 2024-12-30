@@ -30,6 +30,7 @@ $root.client_proto = (function() {
      * @property {number} COMM_MSG_USER_GUIDE_PUSH=3004 COMM_MSG_USER_GUIDE_PUSH value
      * @property {number} COMM_MSG_GUIDE_FINISH_REQ=3005 COMM_MSG_GUIDE_FINISH_REQ value
      * @property {number} COMM_MSG_GUIDE_FINISH_RESP=3006 COMM_MSG_GUIDE_FINISH_RESP value
+     * @property {number} COMM_MSG_USER_NOTIFY_PUSH=3007 COMM_MSG_USER_NOTIFY_PUSH value
      * @property {number} COMM_MSG_ID_MAX=3050 COMM_MSG_ID_MAX value
      */
     client_proto.COMMON_MSG_SUB_ID = (function() {
@@ -42,6 +43,7 @@ $root.client_proto = (function() {
         values[valuesById[3004] = "COMM_MSG_USER_GUIDE_PUSH"] = 3004;
         values[valuesById[3005] = "COMM_MSG_GUIDE_FINISH_REQ"] = 3005;
         values[valuesById[3006] = "COMM_MSG_GUIDE_FINISH_RESP"] = 3006;
+        values[valuesById[3007] = "COMM_MSG_USER_NOTIFY_PUSH"] = 3007;
         values[valuesById[3050] = "COMM_MSG_ID_MAX"] = 3050;
         return values;
     })();
@@ -89,6 +91,7 @@ $root.client_proto = (function() {
      * @property {number} SERVER_TYPE_AGENT_RANK=53 SERVER_TYPE_AGENT_RANK value
      * @property {number} SERVER_TYPE_AGENT_GET_RANK=55 SERVER_TYPE_AGENT_GET_RANK value
      * @property {number} SERVER_TYPE_FLOATING=56 SERVER_TYPE_FLOATING value
+     * @property {number} SERVER_TYPE_REPORT_SWITCH=59 SERVER_TYPE_REPORT_SWITCH value
      */
     client_proto.SERVER_INNER_MSG_TYPE = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -131,6 +134,7 @@ $root.client_proto = (function() {
         values[valuesById[53] = "SERVER_TYPE_AGENT_RANK"] = 53;
         values[valuesById[55] = "SERVER_TYPE_AGENT_GET_RANK"] = 55;
         values[valuesById[56] = "SERVER_TYPE_FLOATING"] = 56;
+        values[valuesById[59] = "SERVER_TYPE_REPORT_SWITCH"] = 59;
         return values;
     })();
 
@@ -355,6 +359,7 @@ $root.client_proto = (function() {
                 case 13:
                 case 14:
                 case 15:
+                case 16:
                     break;
                 }
             if (message.params != null && message.hasOwnProperty("params"))
@@ -450,6 +455,10 @@ $root.client_proto = (function() {
             case 15:
                 message.propfrom = 15;
                 break;
+            case "ACTIVITY_SURPRISE_GIFT":
+            case 16:
+                message.propfrom = 16;
+                break;
             }
             if (object.params != null)
                 message.params = String(object.params);
@@ -518,6 +527,7 @@ $root.client_proto = (function() {
          * @property {number} ACTIVITE_GIFT=13 ACTIVITE_GIFT value
          * @property {number} ACTIVITY_REGRESS_GIFT=14 ACTIVITY_REGRESS_GIFT value
          * @property {number} ACTIVITY_REGRESS_WELFARE=15 ACTIVITY_REGRESS_WELFARE value
+         * @property {number} ACTIVITY_SURPRISE_GIFT=16 ACTIVITY_SURPRISE_GIFT value
          */
         GetPropPush.PROP_FROM = (function() {
             var valuesById = {}, values = Object.create(valuesById);
@@ -537,6 +547,7 @@ $root.client_proto = (function() {
             values[valuesById[13] = "ACTIVITE_GIFT"] = 13;
             values[valuesById[14] = "ACTIVITY_REGRESS_GIFT"] = 14;
             values[valuesById[15] = "ACTIVITY_REGRESS_WELFARE"] = 15;
+            values[valuesById[16] = "ACTIVITY_SURPRISE_GIFT"] = 16;
             return values;
         })();
 
@@ -1831,6 +1842,256 @@ $root.client_proto = (function() {
         };
 
         return UserGuideFinishResp;
+    })();
+
+    /**
+     * NotifyPushType enum.
+     * @name client_proto.NotifyPushType
+     * @enum {number}
+     * @property {number} NORMAL=0 NORMAL value
+     * @property {number} ERROR=1 ERROR value
+     * @property {number} NOTIFY=2 NOTIFY value
+     * @property {number} BROADCAST=3 BROADCAST value
+     */
+    client_proto.NotifyPushType = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "NORMAL"] = 0;
+        values[valuesById[1] = "ERROR"] = 1;
+        values[valuesById[2] = "NOTIFY"] = 2;
+        values[valuesById[3] = "BROADCAST"] = 3;
+        return values;
+    })();
+
+    client_proto.NotifyPush = (function() {
+
+        /**
+         * Properties of a NotifyPush.
+         * @memberof client_proto
+         * @interface INotifyPush
+         * @property {number|null} [type] NotifyPush type
+         * @property {number|null} [code] NotifyPush code
+         * @property {string|null} [values] NotifyPush values
+         */
+
+        /**
+         * Constructs a new NotifyPush.
+         * @memberof client_proto
+         * @classdesc Represents a NotifyPush.
+         * @implements INotifyPush
+         * @constructor
+         * @param {client_proto.INotifyPush=} [properties] Properties to set
+         */
+        function NotifyPush(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * NotifyPush type.
+         * @member {number} type
+         * @memberof client_proto.NotifyPush
+         * @instance
+         */
+        NotifyPush.prototype.type = 0;
+
+        /**
+         * NotifyPush code.
+         * @member {number} code
+         * @memberof client_proto.NotifyPush
+         * @instance
+         */
+        NotifyPush.prototype.code = 0;
+
+        /**
+         * NotifyPush values.
+         * @member {string} values
+         * @memberof client_proto.NotifyPush
+         * @instance
+         */
+        NotifyPush.prototype.values = "";
+
+        /**
+         * Creates a new NotifyPush instance using the specified properties.
+         * @function create
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.INotifyPush=} [properties] Properties to set
+         * @returns {client_proto.NotifyPush} NotifyPush instance
+         */
+        NotifyPush.create = function create(properties) {
+            return new NotifyPush(properties);
+        };
+
+        /**
+         * Encodes the specified NotifyPush message. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+         * @function encode
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.INotifyPush} message NotifyPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NotifyPush.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+            if (message.code != null && Object.hasOwnProperty.call(message, "code"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.code);
+            if (message.values != null && Object.hasOwnProperty.call(message, "values"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.values);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified NotifyPush message, length delimited. Does not implicitly {@link client_proto.NotifyPush.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.INotifyPush} message NotifyPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        NotifyPush.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a NotifyPush message from the specified reader or buffer.
+         * @function decode
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {client_proto.NotifyPush} NotifyPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NotifyPush.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.client_proto.NotifyPush();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.type = reader.int32();
+                    break;
+                case 2:
+                    message.code = reader.int32();
+                    break;
+                case 3:
+                    message.values = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a NotifyPush message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {client_proto.NotifyPush} NotifyPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        NotifyPush.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a NotifyPush message.
+         * @function verify
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        NotifyPush.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.code != null && message.hasOwnProperty("code"))
+                if (!$util.isInteger(message.code))
+                    return "code: integer expected";
+            if (message.values != null && message.hasOwnProperty("values"))
+                if (!$util.isString(message.values))
+                    return "values: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a NotifyPush message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {client_proto.NotifyPush} NotifyPush
+         */
+        NotifyPush.fromObject = function fromObject(object) {
+            if (object instanceof $root.client_proto.NotifyPush)
+                return object;
+            var message = new $root.client_proto.NotifyPush();
+            if (object.type != null)
+                message.type = object.type | 0;
+            if (object.code != null)
+                message.code = object.code | 0;
+            if (object.values != null)
+                message.values = String(object.values);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a NotifyPush message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof client_proto.NotifyPush
+         * @static
+         * @param {client_proto.NotifyPush} message NotifyPush
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        NotifyPush.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.type = 0;
+                object.code = 0;
+                object.values = "";
+            }
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = message.type;
+            if (message.code != null && message.hasOwnProperty("code"))
+                object.code = message.code;
+            if (message.values != null && message.hasOwnProperty("values"))
+                object.values = message.values;
+            return object;
+        };
+
+        /**
+         * Converts this NotifyPush to JSON.
+         * @function toJSON
+         * @memberof client_proto.NotifyPush
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        NotifyPush.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return NotifyPush;
     })();
 
     return client_proto;
@@ -3444,6 +3705,7 @@ $root.gamebase = (function() {
      * @property {number} CCGAME_AVIATOR=101 CCGAME_AVIATOR value
      * @property {number} CCGAME_ANDAR=102 CCGAME_ANDAR value
      * @property {number} CCGAME_AVIATOR2=103 CCGAME_AVIATOR2 value
+     * @property {number} CCGAME_SEVENUP=104 CCGAME_SEVENUP value
      */
     gamebase.CCGAME_ID = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -3451,6 +3713,7 @@ $root.gamebase = (function() {
         values[valuesById[101] = "CCGAME_AVIATOR"] = 101;
         values[valuesById[102] = "CCGAME_ANDAR"] = 102;
         values[valuesById[103] = "CCGAME_AVIATOR2"] = 103;
+        values[valuesById[104] = "CCGAME_SEVENUP"] = 104;
         return values;
     })();
 
@@ -3481,6 +3744,7 @@ $root.gamebase = (function() {
      * @property {number} RET_ERROR_AMOUNT=20 RET_ERROR_AMOUNT value
      * @property {number} RET_ERROR_NOT_BET=21 RET_ERROR_NOT_BET value
      * @property {number} RET_ERROR_BET_TIMEOUT=22 RET_ERROR_BET_TIMEOUT value
+     * @property {number} RET_ERROR_BET_NOT_RESP=23 RET_ERROR_BET_NOT_RESP value
      */
     gamebase.CCGAME_ERR_CODE = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -3507,6 +3771,7 @@ $root.gamebase = (function() {
         values[valuesById[20] = "RET_ERROR_AMOUNT"] = 20;
         values[valuesById[21] = "RET_ERROR_NOT_BET"] = 21;
         values[valuesById[22] = "RET_ERROR_BET_TIMEOUT"] = 22;
+        values[valuesById[23] = "RET_ERROR_BET_NOT_RESP"] = 23;
         return values;
     })();
 
@@ -3543,6 +3808,8 @@ $root.gamebase = (function() {
      * @property {number} CC_GAME_SHARE_POSTER_RESP=10035 CC_GAME_SHARE_POSTER_RESP value
      * @property {number} CC_GAME_JACKPOT_POOL_CHANGE_PUSH=10036 CC_GAME_JACKPOT_POOL_CHANGE_PUSH value
      * @property {number} CC_GAME_NOTIFICATION_PUSH=10037 CC_GAME_NOTIFICATION_PUSH value
+     * @property {number} CC_GAME_RESET_BALANCE_REQ=10038 CC_GAME_RESET_BALANCE_REQ value
+     * @property {number} CC_GAME_RESET_BALANCE_RESP=10039 CC_GAME_RESET_BALANCE_RESP value
      */
     gamebase.CCGAME_MSGID = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -3575,6 +3842,8 @@ $root.gamebase = (function() {
         values[valuesById[10035] = "CC_GAME_SHARE_POSTER_RESP"] = 10035;
         values[valuesById[10036] = "CC_GAME_JACKPOT_POOL_CHANGE_PUSH"] = 10036;
         values[valuesById[10037] = "CC_GAME_NOTIFICATION_PUSH"] = 10037;
+        values[valuesById[10038] = "CC_GAME_RESET_BALANCE_REQ"] = 10038;
+        values[valuesById[10039] = "CC_GAME_RESET_BALANCE_RESP"] = 10039;
         return values;
     })();
 
@@ -4147,216 +4416,6 @@ $root.gamebase = (function() {
         };
 
         return LeaveRoomResp;
-    })();
-
-    gamebase.KickoutRoomPush = (function() {
-
-        /**
-         * Properties of a KickoutRoomPush.
-         * @memberof gamebase
-         * @interface IKickoutRoomPush
-         * @property {number|null} [result] KickoutRoomPush result
-         * @property {number|null} [value] KickoutRoomPush value
-         */
-
-        /**
-         * Constructs a new KickoutRoomPush.
-         * @memberof gamebase
-         * @classdesc Represents a KickoutRoomPush.
-         * @implements IKickoutRoomPush
-         * @constructor
-         * @param {gamebase.IKickoutRoomPush=} [properties] Properties to set
-         */
-        function KickoutRoomPush(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * KickoutRoomPush result.
-         * @member {number} result
-         * @memberof gamebase.KickoutRoomPush
-         * @instance
-         */
-        KickoutRoomPush.prototype.result = 0;
-
-        /**
-         * KickoutRoomPush value.
-         * @member {number} value
-         * @memberof gamebase.KickoutRoomPush
-         * @instance
-         */
-        KickoutRoomPush.prototype.value = 0;
-
-        /**
-         * Creates a new KickoutRoomPush instance using the specified properties.
-         * @function create
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {gamebase.IKickoutRoomPush=} [properties] Properties to set
-         * @returns {gamebase.KickoutRoomPush} KickoutRoomPush instance
-         */
-        KickoutRoomPush.create = function create(properties) {
-            return new KickoutRoomPush(properties);
-        };
-
-        /**
-         * Encodes the specified KickoutRoomPush message. Does not implicitly {@link gamebase.KickoutRoomPush.verify|verify} messages.
-         * @function encode
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {gamebase.IKickoutRoomPush} message KickoutRoomPush message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        KickoutRoomPush.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.result);
-            if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.value);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified KickoutRoomPush message, length delimited. Does not implicitly {@link gamebase.KickoutRoomPush.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {gamebase.IKickoutRoomPush} message KickoutRoomPush message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        KickoutRoomPush.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a KickoutRoomPush message from the specified reader or buffer.
-         * @function decode
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {gamebase.KickoutRoomPush} KickoutRoomPush
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        KickoutRoomPush.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.KickoutRoomPush();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.result = reader.int32();
-                    break;
-                case 2:
-                    message.value = reader.int32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a KickoutRoomPush message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {gamebase.KickoutRoomPush} KickoutRoomPush
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        KickoutRoomPush.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a KickoutRoomPush message.
-         * @function verify
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        KickoutRoomPush.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.result != null && message.hasOwnProperty("result"))
-                if (!$util.isInteger(message.result))
-                    return "result: integer expected";
-            if (message.value != null && message.hasOwnProperty("value"))
-                if (!$util.isInteger(message.value))
-                    return "value: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a KickoutRoomPush message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {gamebase.KickoutRoomPush} KickoutRoomPush
-         */
-        KickoutRoomPush.fromObject = function fromObject(object) {
-            if (object instanceof $root.gamebase.KickoutRoomPush)
-                return object;
-            var message = new $root.gamebase.KickoutRoomPush();
-            if (object.result != null)
-                message.result = object.result | 0;
-            if (object.value != null)
-                message.value = object.value | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a KickoutRoomPush message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof gamebase.KickoutRoomPush
-         * @static
-         * @param {gamebase.KickoutRoomPush} message KickoutRoomPush
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        KickoutRoomPush.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.result = 0;
-                object.value = 0;
-            }
-            if (message.result != null && message.hasOwnProperty("result"))
-                object.result = message.result;
-            if (message.value != null && message.hasOwnProperty("value"))
-                object.value = message.value;
-            return object;
-        };
-
-        /**
-         * Converts this KickoutRoomPush to JSON.
-         * @function toJSON
-         * @memberof gamebase.KickoutRoomPush
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        KickoutRoomPush.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return KickoutRoomPush;
     })();
 
     gamebase.UserSitDownReq = (function() {
@@ -11583,6 +11642,8 @@ $root.gamebase = (function() {
                     return "action: enum value expected";
                 case 0:
                 case 1:
+                case 2:
+                case 3:
                     break;
                 }
             if (message.param != null && message.hasOwnProperty("param"))
@@ -11607,13 +11668,21 @@ $root.gamebase = (function() {
                 return object;
             var message = new $root.gamebase.GameNotificationPush();
             switch (object.action) {
-            case "ACTION_OP_TIPS":
+            case "ACTION_TIMEOUT_TIPS":
             case 0:
                 message.action = 0;
                 break;
-            case "ACTION_OP_KICK":
+            case "ACTION_TIMEOUT_KICK":
             case 1:
                 message.action = 1;
+                break;
+            case "ACTION_RETIRE_ALLOC":
+            case 2:
+                message.action = 2;
+                break;
+            case "ACTION_RETIRE_KICK":
+            case 3:
+                message.action = 3;
                 break;
             }
             if (object.param != null)
@@ -11637,7 +11706,7 @@ $root.gamebase = (function() {
                 options = {};
             var object = {};
             if (options.defaults) {
-                object.action = options.enums === String ? "ACTION_OP_TIPS" : 0;
+                object.action = options.enums === String ? "ACTION_TIMEOUT_TIPS" : 0;
                 object.param = 0;
                 object.param2 = 0;
             }
@@ -11665,17 +11734,382 @@ $root.gamebase = (function() {
          * ActionType enum.
          * @name gamebase.GameNotificationPush.ActionType
          * @enum {number}
-         * @property {number} ACTION_OP_TIPS=0 ACTION_OP_TIPS value
-         * @property {number} ACTION_OP_KICK=1 ACTION_OP_KICK value
+         * @property {number} ACTION_TIMEOUT_TIPS=0 ACTION_TIMEOUT_TIPS value
+         * @property {number} ACTION_TIMEOUT_KICK=1 ACTION_TIMEOUT_KICK value
+         * @property {number} ACTION_RETIRE_ALLOC=2 ACTION_RETIRE_ALLOC value
+         * @property {number} ACTION_RETIRE_KICK=3 ACTION_RETIRE_KICK value
          */
         GameNotificationPush.ActionType = (function() {
             var valuesById = {}, values = Object.create(valuesById);
-            values[valuesById[0] = "ACTION_OP_TIPS"] = 0;
-            values[valuesById[1] = "ACTION_OP_KICK"] = 1;
+            values[valuesById[0] = "ACTION_TIMEOUT_TIPS"] = 0;
+            values[valuesById[1] = "ACTION_TIMEOUT_KICK"] = 1;
+            values[valuesById[2] = "ACTION_RETIRE_ALLOC"] = 2;
+            values[valuesById[3] = "ACTION_RETIRE_KICK"] = 3;
             return values;
         })();
 
         return GameNotificationPush;
+    })();
+
+    gamebase.ResetUserBalanceReq = (function() {
+
+        /**
+         * Properties of a ResetUserBalanceReq.
+         * @memberof gamebase
+         * @interface IResetUserBalanceReq
+         */
+
+        /**
+         * Constructs a new ResetUserBalanceReq.
+         * @memberof gamebase
+         * @classdesc Represents a ResetUserBalanceReq.
+         * @implements IResetUserBalanceReq
+         * @constructor
+         * @param {gamebase.IResetUserBalanceReq=} [properties] Properties to set
+         */
+        function ResetUserBalanceReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a new ResetUserBalanceReq instance using the specified properties.
+         * @function create
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {gamebase.IResetUserBalanceReq=} [properties] Properties to set
+         * @returns {gamebase.ResetUserBalanceReq} ResetUserBalanceReq instance
+         */
+        ResetUserBalanceReq.create = function create(properties) {
+            return new ResetUserBalanceReq(properties);
+        };
+
+        /**
+         * Encodes the specified ResetUserBalanceReq message. Does not implicitly {@link gamebase.ResetUserBalanceReq.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {gamebase.IResetUserBalanceReq} message ResetUserBalanceReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ResetUserBalanceReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ResetUserBalanceReq message, length delimited. Does not implicitly {@link gamebase.ResetUserBalanceReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {gamebase.IResetUserBalanceReq} message ResetUserBalanceReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ResetUserBalanceReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ResetUserBalanceReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.ResetUserBalanceReq} ResetUserBalanceReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ResetUserBalanceReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.ResetUserBalanceReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ResetUserBalanceReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.ResetUserBalanceReq} ResetUserBalanceReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ResetUserBalanceReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ResetUserBalanceReq message.
+         * @function verify
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ResetUserBalanceReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+
+        /**
+         * Creates a ResetUserBalanceReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.ResetUserBalanceReq} ResetUserBalanceReq
+         */
+        ResetUserBalanceReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.ResetUserBalanceReq)
+                return object;
+            return new $root.gamebase.ResetUserBalanceReq();
+        };
+
+        /**
+         * Creates a plain object from a ResetUserBalanceReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.ResetUserBalanceReq
+         * @static
+         * @param {gamebase.ResetUserBalanceReq} message ResetUserBalanceReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ResetUserBalanceReq.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this ResetUserBalanceReq to JSON.
+         * @function toJSON
+         * @memberof gamebase.ResetUserBalanceReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ResetUserBalanceReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return ResetUserBalanceReq;
+    })();
+
+    gamebase.ResetUserBalanceResp = (function() {
+
+        /**
+         * Properties of a ResetUserBalanceResp.
+         * @memberof gamebase
+         * @interface IResetUserBalanceResp
+         * @property {number|Long|null} [balance] ResetUserBalanceResp balance
+         */
+
+        /**
+         * Constructs a new ResetUserBalanceResp.
+         * @memberof gamebase
+         * @classdesc Represents a ResetUserBalanceResp.
+         * @implements IResetUserBalanceResp
+         * @constructor
+         * @param {gamebase.IResetUserBalanceResp=} [properties] Properties to set
+         */
+        function ResetUserBalanceResp(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ResetUserBalanceResp balance.
+         * @member {number|Long} balance
+         * @memberof gamebase.ResetUserBalanceResp
+         * @instance
+         */
+        ResetUserBalanceResp.prototype.balance = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new ResetUserBalanceResp instance using the specified properties.
+         * @function create
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {gamebase.IResetUserBalanceResp=} [properties] Properties to set
+         * @returns {gamebase.ResetUserBalanceResp} ResetUserBalanceResp instance
+         */
+        ResetUserBalanceResp.create = function create(properties) {
+            return new ResetUserBalanceResp(properties);
+        };
+
+        /**
+         * Encodes the specified ResetUserBalanceResp message. Does not implicitly {@link gamebase.ResetUserBalanceResp.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {gamebase.IResetUserBalanceResp} message ResetUserBalanceResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ResetUserBalanceResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.balance != null && Object.hasOwnProperty.call(message, "balance"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int64(message.balance);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ResetUserBalanceResp message, length delimited. Does not implicitly {@link gamebase.ResetUserBalanceResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {gamebase.IResetUserBalanceResp} message ResetUserBalanceResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ResetUserBalanceResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ResetUserBalanceResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.ResetUserBalanceResp} ResetUserBalanceResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ResetUserBalanceResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.ResetUserBalanceResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.balance = reader.int64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ResetUserBalanceResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.ResetUserBalanceResp} ResetUserBalanceResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ResetUserBalanceResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ResetUserBalanceResp message.
+         * @function verify
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ResetUserBalanceResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.balance != null && message.hasOwnProperty("balance"))
+                if (!$util.isInteger(message.balance) && !(message.balance && $util.isInteger(message.balance.low) && $util.isInteger(message.balance.high)))
+                    return "balance: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a ResetUserBalanceResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.ResetUserBalanceResp} ResetUserBalanceResp
+         */
+        ResetUserBalanceResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.ResetUserBalanceResp)
+                return object;
+            var message = new $root.gamebase.ResetUserBalanceResp();
+            if (object.balance != null)
+                if ($util.Long)
+                    (message.balance = $util.Long.fromValue(object.balance)).unsigned = false;
+                else if (typeof object.balance === "string")
+                    message.balance = parseInt(object.balance, 10);
+                else if (typeof object.balance === "number")
+                    message.balance = object.balance;
+                else if (typeof object.balance === "object")
+                    message.balance = new $util.LongBits(object.balance.low >>> 0, object.balance.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ResetUserBalanceResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.ResetUserBalanceResp
+         * @static
+         * @param {gamebase.ResetUserBalanceResp} message ResetUserBalanceResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ResetUserBalanceResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.balance = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.balance = options.longs === String ? "0" : 0;
+            if (message.balance != null && message.hasOwnProperty("balance"))
+                if (typeof message.balance === "number")
+                    object.balance = options.longs === String ? String(message.balance) : message.balance;
+                else
+                    object.balance = options.longs === String ? $util.Long.prototype.toString.call(message.balance) : options.longs === Number ? new $util.LongBits(message.balance.low >>> 0, message.balance.high >>> 0).toNumber() : message.balance;
+            return object;
+        };
+
+        /**
+         * Converts this ResetUserBalanceResp to JSON.
+         * @function toJSON
+         * @memberof gamebase.ResetUserBalanceResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ResetUserBalanceResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return ResetUserBalanceResp;
     })();
 
     return gamebase;

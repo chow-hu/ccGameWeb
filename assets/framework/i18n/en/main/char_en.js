@@ -552,11 +552,11 @@ const mapping = {
     GAME_ERROR_16: "The activity is not open！",
     GAME_ERROR_17: "Cannot exit running games",
     GAME_ERROR_18: "The share poster is not found!",
-    GAME_ERROR_19: "You are no longer in the room!",
+    GAME_ERROR_19: "You have been removed from the previous room.",
     GAME_ERROR_20: "Wrong amount",
     GAME_ERROR_21: "You are not betting",
     GAME_ERROR_22: "You are betting timeout",
-    GAME_ERROR_TIP: ' we are trying to connect。',
+    GAME_ERROR_TIP: ' Please try again.',
 
 
     DEPOSIT_AMOUNT_TITLE: "Promotion amount",
@@ -627,9 +627,11 @@ const mapping = {
     WALLET_DETAIL_STATUS_24: "Lucky wheel",
     WHEEL_WITHDRAW_SUCCESS: "Withdrawal requirements have been fulfilled!",
 
-    GAME_GET_CONFIG_TIME_OUT: "Failed to get game configuration, please try again later",
-    GAME_JOIN_TIME_OUT: "Failed to join the game, please try again later",
-    GAME_MATCH_TABLE_TIME_OUT: "Failed to match the game, please try again later",
+    GAME_GET_CONFIG_TIME_OUT: "Failed to get game configuration.",
+    GAME_JOIN_TIME_OUT: "Failed to join the game.",
+    GAME_MATCH_TABLE_TIME_OUT: "Failed to match the game.",
+
+    DOWNLOAD_GAME_ERROR: "Failed to download the game, Please try again.",
 }
 
 

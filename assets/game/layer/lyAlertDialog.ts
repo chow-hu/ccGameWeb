@@ -59,6 +59,9 @@ export class lyAlertDialog extends UIBase {
             this.cancelCallback = paramsObj.cancel?.cb;
             this.btnCancel.active = true;
         }
+        
+        this.btnClose.active = !!paramsObj.close;
+
         this.titleTxt.node.active = !!paramsObj.title;
         this.titleNode.active = !paramsObj.title;
         this.titleTxt.renderCb = () => {

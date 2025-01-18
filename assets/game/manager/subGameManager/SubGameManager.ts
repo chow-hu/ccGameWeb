@@ -86,9 +86,9 @@ export class SubGameManager extends IManager {
             this.initByEnterGame(detail);
             gui.openBundleLayer(detail.bundleConf.name, detail.bundleConf.layer, null, {
                 onAdded: () => {
-                    // if (BUILD) {
-                    //     this.emit(SubGameEventGame.start);
-                    // }
+                    if (detail.gameID != 101 && detail.gameID != 103) {
+                        this.emit(SubGameEventGame.start);
+                    }
                     this.doSuccess(detail);
                 },
                 onError: () => {
@@ -103,31 +103,32 @@ export class SubGameManager extends IManager {
                 this.doError(detail, 2);
                 return;
             }
-            // AssetsLoader.instance.bundleLoad(bundleName, 'prefab/layer/' + detail.bundleConf.layer, Prefab, null, (err, prefab) => {
-            //     if (err) {
-            //         this.doError(detail, 3);
-            //         return;
-            //     }
-            //     enterGame();
-            //     // this.emit(SubGameEventGame.prepare, () => {
-            //     //     enterGame();
-            //     // })
-            // })
-            gameDownloadMgr.downloadAbs(`${detail.gameID}`, {
-                progress(finished, total, percent) {
-                    this.emit(gi.SubGameEventGame.loading, percent * 100);
-                },
-                target: this,
-                complete(err, data) {
-                    enterGame();
-                },
-                error: () => {
-                    if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
-                        // this.doOpen(detail);
-                        location.reload();
+            if (detail.gameID != 101 && detail.gameID != 103) {
+                AssetsLoader.instance.bundleLoad(bundleName, 'prefab/layer/' + detail.bundleConf.layer, Prefab, null, (err, prefab) => {
+                    if (err) {
+                        if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
+                            location.reload();
+                        }
+                        return;
                     }
-                },
-            })
+                    enterGame();
+                })
+            } else {
+                gameDownloadMgr.downloadAbs(`${detail.gameID}`, {
+                    progress(finished, total, percent) {
+                        this.emit(gi.SubGameEventGame.loading, percent * 100);
+                    },
+                    target: this,
+                    complete(err, data) {
+                        enterGame();
+                    },
+                    error: () => {
+                        if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
+                            location.reload();
+                        }
+                    },
+                })
+            }
         })
     }
 

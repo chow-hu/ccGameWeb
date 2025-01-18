@@ -38,7 +38,8 @@ export type AlertParm = {
     imageAtlas?: SpriteAtlas;
     noTipKey?: string;
     ok?: AlertBtnParm,
-    cancel?: AlertBtnParm | CANCLE_CB
+    cancel?: AlertBtnParm | CANCLE_CB,
+    close?: boolean,
 }
 
 export interface IAlertStackHelper {

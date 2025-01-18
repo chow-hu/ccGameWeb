@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Cocos Creator | <%= projectName %></title>
+  <title>GameDemo|KOOLBET</title>
+  <link rel="icon" href="favicon_KB.ico" type="image/x-icon">
 
   <!--http://www.html5rocks.com/en/mobile/mobifying/-->
   <meta name="viewport"
@@ -84,43 +85,6 @@
 		progressText.style.display = 'block';
 	}, 4000);
 	window.ccgameloading = ccgameloading;
-	
-	function _errorAjaxInit () {
-		let protocol = window.location.protocol;
-		if (protocol === 'file:') return;
-		// 处理XMLHttpRequest
-		if (!window.XMLHttpRequest) {
-			return;  
-		}
-		let xmlhttp = window.XMLHttpRequest;    
-		// 保存原生send方法
-		let _oldSend = xmlhttp.prototype.send;
-		let _handleEvent = function (event) {
-			try {
-				if (event && event.currentTarget && event.currentTarget.status !== 200) {
-					if (globalThis.confirm("Failed to download the game, Please try again.")) {
-							location.reload();
-						}
-				}
-			} catch (e) {
-				console.log('Tool\'s error: ' + e);
-			}
-		}
-		xmlhttp.prototype.send = function () {
-			window.xmlhttpcheck && this.addEventListener('error', _handleEvent); // 失败
-			window.xmlhttpcheck && this.addEventListener('load', _handleEvent);  // 完成
-			window.xmlhttpcheck && this.addEventListener('abort', _handleEvent); // 取消
-			return _oldSend.apply(this, arguments);
-		}
-	}
-	window.xmlhttpcheck = true;
-	_errorAjaxInit();
-		
-	window.addEventListener('error', (event)=>{ 
-		if (window.xmlhttpcheck && globalThis.confirm("Failed to download the game, Please try again.")) {
-			location.reload();
-		}
-	}, true);
 </script>	
   <%- include(cocosTemplate, {}) %>
 </body>

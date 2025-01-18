@@ -1,13 +1,12 @@
 #splashcc {
   margin:auto;
   position: absolute;
-  top: 30%;
-  left: 0;
-  right:0;
-  width:293px;
-  height: 183px;
+  top: 50%;
+  left: 50%;
+  width:623px;
+  height: 179px;
   background: url(./logo_koolbet.png) no-repeat center;
-  transform:scale(0.5, 0.5);
+  transform:translate(-50%, -50%) rotate(0deg) scale(0.5, 0.5) ;
  background-color: transparent;
 }
 #animation {

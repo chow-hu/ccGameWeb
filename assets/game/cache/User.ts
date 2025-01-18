@@ -1,5 +1,5 @@
 import { log, warn } from 'cc';
-import { mixins, setValueByKey, valueof, valueset } from '../../framework/ge';
+import { mixins, setValueByKey, sprintf, valueof, valueset } from '../../framework/ge';
 import { AppConst } from "../common/AppConst";
 import { Utils } from "../common/Utils";
 import { GameConfig, LoginEvent, UserConfig } from "../manager/account/interface";
@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { GameCache } from '../manager/game/GameCache';
 import { GiNetGameReconnData } from '../manager/subGameManager/interfaceGIApi';
 import ccgame from '../../shared/proto';
+import { RandomInt } from '../common/custom-general';
 
 /**
  * Name = User
@@ -169,8 +170,9 @@ export class User extends CacheBase {
         let nickName = data.uid.toString();
 
         setValueByKey(data, this._dataContinar.user);
+        this._dataContinar.user.gameinfo = JSON.parse(this._dataContinar.user.gameinfo as any);
         // this._dataContinar.user.username = nickName.length <= 4 ? nickName : ("*" + nickName.substring(nickName.length - 4, nickName.length));
-        this._dataContinar.user.nick = this._dataContinar.user.nick || ("Player" + nickName);
+        this._dataContinar.user.nick = this._dataContinar.user.gameinfo.env == 100 ? ("DEMO" + sprintf('%04d', nickName.substring(nickName.length - 4))) : (this._dataContinar.user.nick || ("Player" + nickName));
 
         // 组装一下session数据
         let asession = {
@@ -302,7 +304,7 @@ export class User extends CacheBase {
     }
 
     setBalance(balance: number) {
-        this._dataContinar.user.balance = balance;
+        this._dataContinar.user.balance = balance || 0;
     }
 
 

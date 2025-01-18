@@ -47,10 +47,10 @@ let rename = function (name) {
     return dst;
 }
 
-let modifyBuildTemplate = function (name) {
+let modifyBuildTemplate = function (name, orientation) {
     fs.emptyDirSync(`build-templates/${platorm}`);
-    let path = name == 'Crash' ? `build-templates/${platorm}-spribe/` : `build-templates/${platorm}-koolbet/`;
-    // console.log(path);
+    let path = name == 'Crash' ? `build-templates/${platorm}-spribe${kb ? '-kb' : ''}/` : `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
+    console.log(path);
     fs.copySync(path, `build-templates/${platorm}`, { overwrite: true })
 }
 
@@ -100,6 +100,7 @@ let backupApk = function (build_env, bundle) {
 let urlPack = path.join(__dirname, "../ccgamePack");
 let urlBuild = path.join(__dirname, "../build/super-html/common_min/ccgame_common_min.html")
 let platorm = 'web-mobile';
+let kb = false;
 let run = function (os_param) {
     step = os_param["--step"];
     let bundle = os_param["--bundle"] || '';
@@ -109,6 +110,7 @@ let run = function (os_param) {
     console.log(`orientation = ${orientation}, bundles = ${bundles}`);
     let build_env = os_param["--build_env"];
     platorm = os_param["--platorm"] || platorm;
+    kb = os_param["--kb"] || false;
     if (bundles.length == 0) {
         process.exit(1);
     }
@@ -117,7 +119,7 @@ let run = function (os_param) {
             let md5 = os_param["--md5"] || true;
             // let orientation = { "port": 'portrait', 'land': 'landscape' }[os_param["--orientation"]] || 'auto';
             modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation);
-            modifyBuildTemplate(bundles[0]);
+            modifyBuildTemplate(bundles[0], orientation);
         } else if (step == 2) {
             backupApk(build_env, bundles[0]);
         }

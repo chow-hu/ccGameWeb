@@ -72,7 +72,7 @@ export type UserConfig = {
     game: string | number,
     hall_url: string,
     platform: string,
-    gameinfo: { fullscreen: number } & {},
+    gameinfo: { fullscreen: number, env: number } & {},
     session: string,
     currency: string,
     temp_uin: number,

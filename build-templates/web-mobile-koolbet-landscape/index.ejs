@@ -53,7 +53,7 @@
 
 		</div>	
 		
-		<div id="progressText" style="position: absolute; top: 220px;left: 0;right: 0;text-align: center; color: white; font-size: 40px; display: block;">
+		<div id="progressText" style="position: absolute; top: 220px;left: 0;right: 0;text-align: center; color: white; font-size: 40px; display: none;">
 		0%
 		</div>  
     </div>	  
@@ -86,7 +86,7 @@
 			splashcc.style.transform = 'translate(-50%, -50%) rotate(90deg) scale(0.5, 0.5)';
 		}
 		var animation = document.getElementById('animation');
-		animation.style.display = 'block';
+		animation.style.display = 'none';
 	})();
 	var ccgameprogress = 0;
 	var ccgameloading = setInterval(()=>{
@@ -103,7 +103,7 @@
 	},50);
 	setTimeout(()=>{
 		var progressText = document.getElementById('progressText');
-		progressText.style.display = 'block';
+		progressText.style.display = 'none';
 	}, 4000);
 	window.ccgameloading = ccgameloading;
 	
@@ -136,9 +136,12 @@
 		}
 	}
 	window.xmlhttpcheck = true;
-	_errorAjaxInit();
+	// _errorAjaxInit();
 		
 	window.addEventListener('error', (event)=>{ 
+		let target = event.target || event.srcElement;
+		let isElementTarget = target instanceof HTMLScriptElement || target instanceof HTMLLinkElement || target instanceof HTMLImageElement;
+		if (!isElementTarget) return false;
 		if (window.xmlhttpcheck && globalThis.confirm("Failed to download the game, Please try again.")) {
 			location.reload();
 		}

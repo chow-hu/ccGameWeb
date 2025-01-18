@@ -49,7 +49,15 @@ let rename = function (name) {
 
 let modifyBuildTemplate = function (name, orientation) {
     fs.emptyDirSync(`build-templates/${platorm}`);
-    let path = name == 'Crash' ? `build-templates/${platorm}-spribe${kb ? '-kb' : ''}/` : `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
+    // let path = name == 'Crash' ? `build-templates/${platorm}-spribe${kb ? '-kb' : ''}/` : `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
+    let path;
+    if (name == 'Crash') {
+        path = `build-templates/${platorm}-abCrash${kb ? '-kb' : ''}/`;
+    } else if (name == 'abJet') {
+        path = `build-templates/${platorm}-abJet${kb ? '-kb' : ''}/`;
+    } else {
+        path = `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
+    }
     console.log(path);
     fs.copySync(path, `build-templates/${platorm}`, { overwrite: true })
 }

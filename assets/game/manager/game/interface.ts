@@ -53,6 +53,8 @@ export const GameEvent = {
     /** 游戏-加入房间 */
     JOIN_ROOM: "gamebase-UserJoinTableResp",
 
+    /** 配桌-加入房间 */
+    REQUEST_ROOM_ERROR: "roomalloc_AllocTable_error",
     /** 游戏-加入房间 */
     JOIN_ROOM_ERROR: "GameEvent_game_Join_Room_Error",
 

@@ -62,7 +62,8 @@ declare namespace ccgame {
             SERVER_TYPE_AGENT_RANK = 53,
             SERVER_TYPE_AGENT_GET_RANK = 55,
             SERVER_TYPE_FLOATING = 56,
-            SERVER_TYPE_REPORT_SWITCH = 59
+            SERVER_TYPE_REPORT_SWITCH = 59,
+            SERVER_TYPE_GAMERECORD = 65
         }
 
         /** PROP_ID enum. */
@@ -1108,6 +1109,9 @@ declare namespace ccgame {
 
             /** GameLevelConfigReq game_id */
             game_id?: (number|null);
+
+            /** GameLevelConfigReq agency_id */
+            agency_id?: (number|null);
         }
 
         /** Represents a GameLevelConfigReq. */
@@ -1121,6 +1125,9 @@ declare namespace ccgame {
 
             /** GameLevelConfigReq game_id. */
             public game_id: number;
+
+            /** GameLevelConfigReq agency_id. */
+            public agency_id: number;
 
             /**
              * Creates a new GameLevelConfigReq instance using the specified properties.
@@ -2222,6 +2229,9 @@ declare namespace ccgame {
 
             /** UserJoinTableResp room_level */
             room_level?: (number|null);
+
+            /** UserJoinTableResp is_server_change */
+            is_server_change?: (boolean|null);
         }
 
         /** Represents a UserJoinTableResp. */
@@ -2253,6 +2263,9 @@ declare namespace ccgame {
 
             /** UserJoinTableResp room_level. */
             public room_level: number;
+
+            /** UserJoinTableResp is_server_change. */
+            public is_server_change: boolean;
 
             /**
              * Creates a new UserJoinTableResp instance using the specified properties.
@@ -3542,6 +3555,12 @@ declare namespace ccgame {
 
             /** UserJackReward timeStamp */
             timeStamp?: (number|null);
+
+            /** UserJackReward rewardType */
+            rewardType?: (number|null);
+
+            /** UserJackReward rewardValue */
+            rewardValue?: (number|Long|null);
         }
 
         /** Represents a UserJackReward. */
@@ -3561,6 +3580,12 @@ declare namespace ccgame {
 
             /** UserJackReward timeStamp. */
             public timeStamp: number;
+
+            /** UserJackReward rewardType. */
+            public rewardType: number;
+
+            /** UserJackReward rewardValue. */
+            public rewardValue: (number|Long);
 
             /**
              * Creates a new UserJackReward instance using the specified properties.
@@ -3934,6 +3959,102 @@ declare namespace ccgame {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a JackCollect. */
+        interface IJackCollect {
+
+            /** JackCollect card_type */
+            card_type?: (number|null);
+
+            /** JackCollect count */
+            count?: (number|null);
+        }
+
+        /** Represents a JackCollect. */
+        class JackCollect implements IJackCollect {
+
+            /**
+             * Constructs a new JackCollect.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IJackCollect);
+
+            /** JackCollect card_type. */
+            public card_type: number;
+
+            /** JackCollect count. */
+            public count: number;
+
+            /**
+             * Creates a new JackCollect instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns JackCollect instance
+             */
+            public static create(properties?: gamebase.IJackCollect): gamebase.JackCollect;
+
+            /**
+             * Encodes the specified JackCollect message. Does not implicitly {@link gamebase.JackCollect.verify|verify} messages.
+             * @param message JackCollect message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IJackCollect, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified JackCollect message, length delimited. Does not implicitly {@link gamebase.JackCollect.verify|verify} messages.
+             * @param message JackCollect message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IJackCollect, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a JackCollect message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns JackCollect
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackCollect;
+
+            /**
+             * Decodes a JackCollect message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns JackCollect
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackCollect;
+
+            /**
+             * Verifies a JackCollect message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a JackCollect message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns JackCollect
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.JackCollect;
+
+            /**
+             * Creates a plain object from a JackCollect message. Also converts values to other types if specified.
+             * @param message JackCollect
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.JackCollect, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this JackCollect to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a JackpotGetRewardDetailResp. */
         interface IJackpotGetRewardDetailResp {
 
@@ -3951,6 +4072,12 @@ declare namespace ccgame {
 
             /** JackpotGetRewardDetailResp rewardList */
             rewardList?: (gamebase.IJackRward[]|null);
+
+            /** JackpotGetRewardDetailResp betList */
+            betList?: ((number|Long)[]|null);
+
+            /** JackpotGetRewardDetailResp cardList */
+            cardList?: (gamebase.IJackCollect[]|null);
         }
 
         /** Represents a JackpotGetRewardDetailResp. */
@@ -3976,6 +4103,12 @@ declare namespace ccgame {
 
             /** JackpotGetRewardDetailResp rewardList. */
             public rewardList: gamebase.IJackRward[];
+
+            /** JackpotGetRewardDetailResp betList. */
+            public betList: (number|Long)[];
+
+            /** JackpotGetRewardDetailResp cardList. */
+            public cardList: gamebase.IJackCollect[];
 
             /**
              * Creates a new JackpotGetRewardDetailResp instance using the specified properties.
@@ -4080,6 +4213,12 @@ declare namespace ccgame {
 
             /** JackpotUserDataDB last_win_count */
             last_win_count?: (number|null);
+
+            /** JackpotUserDataDB betList */
+            betList?: ((number|Long)[]|null);
+
+            /** JackpotUserDataDB cardList */
+            cardList?: (gamebase.IJackCollect[]|null);
         }
 
         /** Represents a JackpotUserDataDB. */
@@ -4120,6 +4259,12 @@ declare namespace ccgame {
 
             /** JackpotUserDataDB last_win_count. */
             public last_win_count: number;
+
+            /** JackpotUserDataDB betList. */
+            public betList: (number|Long)[];
+
+            /** JackpotUserDataDB cardList. */
+            public cardList: gamebase.IJackCollect[];
 
             /**
              * Creates a new JackpotUserDataDB instance using the specified properties.
@@ -4975,6 +5120,132 @@ declare namespace ccgame {
 
             /**
              * Converts this ResetUserBalanceResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a UserJackpotRecordDetail. */
+        interface IUserJackpotRecordDetail {
+
+            /** UserJackpotRecordDetail uid */
+            uid?: (number|null);
+
+            /** UserJackpotRecordDetail time */
+            time?: (number|null);
+
+            /** UserJackpotRecordDetail round_id */
+            round_id?: (number|null);
+
+            /** UserJackpotRecordDetail win */
+            win?: (number|Long|null);
+
+            /** UserJackpotRecordDetail reward_pool */
+            reward_pool?: (number|Long|null);
+
+            /** UserJackpotRecordDetail reward_type */
+            reward_type?: (number|null);
+
+            /** UserJackpotRecordDetail reward_value */
+            reward_value?: (number|Long|null);
+        }
+
+        /** Represents a UserJackpotRecordDetail. */
+        class UserJackpotRecordDetail implements IUserJackpotRecordDetail {
+
+            /**
+             * Constructs a new UserJackpotRecordDetail.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IUserJackpotRecordDetail);
+
+            /** UserJackpotRecordDetail uid. */
+            public uid: number;
+
+            /** UserJackpotRecordDetail time. */
+            public time: number;
+
+            /** UserJackpotRecordDetail round_id. */
+            public round_id: number;
+
+            /** UserJackpotRecordDetail win. */
+            public win: (number|Long);
+
+            /** UserJackpotRecordDetail reward_pool. */
+            public reward_pool: (number|Long);
+
+            /** UserJackpotRecordDetail reward_type. */
+            public reward_type: number;
+
+            /** UserJackpotRecordDetail reward_value. */
+            public reward_value: (number|Long);
+
+            /**
+             * Creates a new UserJackpotRecordDetail instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UserJackpotRecordDetail instance
+             */
+            public static create(properties?: gamebase.IUserJackpotRecordDetail): gamebase.UserJackpotRecordDetail;
+
+            /**
+             * Encodes the specified UserJackpotRecordDetail message. Does not implicitly {@link gamebase.UserJackpotRecordDetail.verify|verify} messages.
+             * @param message UserJackpotRecordDetail message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IUserJackpotRecordDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified UserJackpotRecordDetail message, length delimited. Does not implicitly {@link gamebase.UserJackpotRecordDetail.verify|verify} messages.
+             * @param message UserJackpotRecordDetail message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IUserJackpotRecordDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a UserJackpotRecordDetail message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UserJackpotRecordDetail
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.UserJackpotRecordDetail;
+
+            /**
+             * Decodes a UserJackpotRecordDetail message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UserJackpotRecordDetail
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.UserJackpotRecordDetail;
+
+            /**
+             * Verifies a UserJackpotRecordDetail message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a UserJackpotRecordDetail message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UserJackpotRecordDetail
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.UserJackpotRecordDetail;
+
+            /**
+             * Creates a plain object from a UserJackpotRecordDetail message. Also converts values to other types if specified.
+             * @param message UserJackpotRecordDetail
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.UserJackpotRecordDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UserJackpotRecordDetail to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

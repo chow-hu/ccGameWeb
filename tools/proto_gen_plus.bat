@@ -23,7 +23,7 @@ echo %dir%
 echo %name%
 @REM cd ./Proto
 cd ./%dir%
-svn update
+@REM svn update
 if "%m%" == "game_common" (
     copy 3000_common.proto game_common\
 )

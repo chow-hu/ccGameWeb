@@ -79,6 +79,8 @@ export type UserConfig = {
     ingame_info: string,
     avatar: string,
     nick: string,
+    currency_unit_multi: number,
+    currency_label: string,
 }
 
 export type GameConfig = {
@@ -87,6 +89,7 @@ export type GameConfig = {
     agent: string[],
     gameId: string | number,
     displayMode: number,
+    lang: string,
 }
 
 // /**

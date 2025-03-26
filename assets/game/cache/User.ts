@@ -1,5 +1,5 @@
-import { log, warn } from 'cc';
-import { mixins, setValueByKey, sprintf, valueof, valueset } from '../../framework/ge';
+import { log } from 'cc';
+import { setValueByKey, sprintf } from '../../framework/ge';
 import { AppConst } from "../common/AppConst";
 import { Utils } from "../common/Utils";
 import { GameConfig, LoginEvent, UserConfig } from "../manager/account/interface";
@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { GameCache } from '../manager/game/GameCache';
 import { GiNetGameReconnData } from '../manager/subGameManager/interfaceGIApi';
 import ccgame from '../../shared/proto';
-import { RandomInt } from '../common/custom-general';
+import { SubGameCache } from '../manager/game/SubGameCache';
 
 /**
  * Name = User
@@ -147,14 +147,12 @@ export class User extends CacheBase {
     /**
      * @description 保存token和agent
      */
-    saveTokenAndAgent(data: any) {
+    saveTokenAndAgent(data: GameConfig) {
         if (!data) return;
         if (this._dataContinar == null) {
             this._dataContinar = {} as GameConfig;
         }
-        this._dataContinar.token = data.token;
-        this._dataContinar.agent = data.agent.split(",");
-        this._dataContinar.gameId = data.gameId;
+        this._dataContinar = _.cloneDeep(data);
     }
 
     /**
@@ -305,8 +303,20 @@ export class User extends CacheBase {
 
     setBalance(balance: number) {
         this._dataContinar.user.balance = balance || 0;
+        GameCache.game._set(SubGameCache.BALANCE, balance);
     }
 
+    getCurrency(): { currency: string, rate: number, sign: string } {
+        return {
+            currency: this._dataContinar?.user?.currency || 'INR',
+            rate: this._dataContinar.user.currency_unit_multi || 1000,
+            sign: this._dataContinar.user.currency_label || '₹',
+        };
+    }
+
+    getAgencyId(): number {
+        return this._dataContinar?.user?.agency_id || 0;
+    }
 
     /**
      * 获取第三方返回大厅的url

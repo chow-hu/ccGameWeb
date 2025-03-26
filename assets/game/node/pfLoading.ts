@@ -12,8 +12,8 @@ const Type = Enum({ LOGIN: 0, GAME: 1, SECONDHALL: 2, OTHER: 3 });
 const { ccclass, property } = _decorator;
 @ccclass('pfLoading')
 export class pfLoading extends UIBase {
-    // @property(Node)
-    // click!: Node;
+    @property(Node)
+    click!: Node;
 
     @property(Node)
     img!: Node;
@@ -29,66 +29,71 @@ export class pfLoading extends UIBase {
      *      ts: 10,          持续时间
      *      delay: 2 ,       延迟多少秒显示
      *      forever:boolean, 是否永久不关闭
-     *      type,            位置类型
-     *      notshow          不显示Loading 默认false 显示
+     *      block            blockInput
+     *      isSpine          动效
+     *      aniName          名字
      * }
      */
     init(parm: any) {
-        Tween.stopAllByTarget(this.img);
         if (!parm) {
-            // this.click.active = false;
+            this.showLoading(false);
+        } else {
+            this.showLoading(true, parm.isSpine, parm.aniName, parm.block, parm.forever, parm.delay, parm.ts);
+        }
+    }
+
+    showLoading(active: boolean = false, isSpine: boolean = false, aniName: string = '', block: boolean = false, forever = false, delay = 0, ts = 0) {
+        Tween.stopAllByTarget(this.img);
+        Tween.stopAllByTarget(this.spine);
+        if (!active) {
+            this.click.active = false;
             this.node.active = false
             this.img.active = false;
             this.spine.active = false;
         } else {
-            this.node.active = true
-            // this.click.active = parm.block == undefined ? this.click.active : parm.block;
-
-            let notshow = parm.notshow || false;
-
-            if (parm.type == Type.LOGIN || parm.type == Type.GAME || parm.type == Type.SECONDHALL) {
-                if (notshow) {
-                    this.img.active = false
-                    // this.spine.active = false;
-                } else {
-                    this.img.active = false
+            this.node.active = true;
+            this.click.active = block == null ? this.click.active : block;
+            if (forever) {
+                if (isSpine) {
+                    this.img.active = false;
                     this.spine.active = true;
-                    // this.spine.getComponent(sp.Skeleton).setAnimation(0, "zjh", true);
-                    //this.spine.getComponent(sp.Skeleton).timeScale = 0.9
+                    this.spine.getComponent(sp.Skeleton).setAnimation(3, aniName, true);
+                } else {
+                    this.img.active = true;
+                    this.spine.active = false;
+                    tween(this.img).by(1, { angle: -360 }).union().repeatForever().start();
                 }
             } else {
-                this.spine.active = false;
-                let forever = parm.forever || false  // 长久
-                if (forever) {
-                    if (notshow) {
+                if (isSpine) {
+                    this.img.active = false;
+                    this.spine.active = false;
+                    tween(this.spine).delay(delay).call(() => {
+                        this.spine.active = true;
+                        this.spine.getComponent(sp.Skeleton)?.setAnimation(3, aniName, true);
+                    }).delay(ts).call(() => {
                         this.img.active = false;
-                    } else {
+                        this.spine.active = false;
+                        this.click.active = false;
+                    }).start();
+                } else {
+                    this.spine.active = false;
+                    this.img.active = false;
+                    tween(this.img).delay(delay).call(() => {
                         this.img.active = true;
                         tween(this.img).by(1, { angle: -360 }).union().repeatForever().start()
-                    }
-                } else {
-                    let delay = parm.delay || 0  // 延迟
-                    let ts = parm.ts || 0        // 持续时长
-                    this.img.active = false;
-
-                    tween(this.img).delay(delay).call(() => {
-                        this.img.active = !notshow;
-                        tween(this.img).by(1, { angle: -360 }).union().repeatForever().start()
                     }).delay(ts).call(() => {
-                        Tween.stopAllByTarget(this.img);
-                        this.img.active = false
-                        // this.click.active = false;
+                        this.img.active = false;
+                        this.spine.active = false;
+                        this.click.active = false;
                     }).start();
                 }
             }
-
-
         }
     }
 
-    // protected onDisable(): void {
-    //     this.click.active = false
-    // }
+    protected onDisable(): void {
+        this.click.active = false
+    }
 
 }
 

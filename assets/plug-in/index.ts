@@ -9,14 +9,15 @@
 
 import { NATIVE } from 'cc/env';
 import { StorageData } from "../framework/storage/StorageData";
+import { config } from './config';
 
 export function game_start() {
-    let lanCode = StorageData.local.get('LAN_CODE', "") || 'en';
+    let lanCode = StorageData.local.get('LAN_CODE', "") || config.lanuage;
     globalThis.gutil_code = lanCode;
     //开启屏幕常亮
     if (NATIVE) {
         //@ts-ignore
         jsb.Device.setKeepScreenOn(true)
     }
-    console.log('>>>>>>>>>>>>>>>>>>>>>>_game_start_<<<<<<<<<<<<<<<<<<<<<',lanCode);
+    console.log('>>>>>>>>>>>>>>>>>>>>>>_game_start_<<<<<<<<<<<<<<<<<<<<<', lanCode);
 }

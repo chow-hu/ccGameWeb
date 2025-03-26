@@ -1251,7 +1251,8 @@ declare namespace ccgame {
             SERVER_TYPE_AGENT_RANK = 53,
             SERVER_TYPE_AGENT_GET_RANK = 55,
             SERVER_TYPE_FLOATING = 56,
-            SERVER_TYPE_REPORT_SWITCH = 59
+            SERVER_TYPE_REPORT_SWITCH = 59,
+            SERVER_TYPE_GAMERECORD = 65
         }
 
         /** PROP_ID enum. */
@@ -4695,6 +4696,12 @@ declare namespace ccgame {
 
             /** VerifyLoginTokenResp trans */
             trans?: (Uint8Array|null);
+
+            /** VerifyLoginTokenResp currency_unit_multi */
+            currency_unit_multi?: (number|Long|null);
+
+            /** VerifyLoginTokenResp currency_label */
+            currency_label?: (string|null);
         }
 
         /** Represents a VerifyLoginTokenResp. */
@@ -4750,6 +4757,12 @@ declare namespace ccgame {
 
             /** VerifyLoginTokenResp trans. */
             public trans: Uint8Array;
+
+            /** VerifyLoginTokenResp currency_unit_multi. */
+            public currency_unit_multi: (number|Long);
+
+            /** VerifyLoginTokenResp currency_label. */
+            public currency_label: string;
 
             /**
              * Creates a new VerifyLoginTokenResp instance using the specified properties.
@@ -4817,6 +4830,1166 @@ declare namespace ccgame {
 
             /**
              * Converts this VerifyLoginTokenResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Namespace gamerecord. */
+    namespace gamerecord {
+
+        /** ASSET_CMD enum. */
+        enum ASSET_CMD {
+            GAMERECORD_CMD_NONE = 0,
+            GAMERECORD_CMD_GET_RECORD_REQ = 2850,
+            GAMERECORD_CMD_GET_RECORD_RESP = 2851,
+            GAMERECORD_CMD_RECORD_PUSH = 2852,
+            GAMERECORD_CMD_RECORD_CACHE_PUSH = 2853,
+            GAMERECORD_CMD_GET_DETAIL_REQ = 2854,
+            GAMERECORD_CMD_GET_DETAIL_RESP = 2855
+        }
+
+        /** BET_ACT enum. */
+        enum BET_ACT {
+            BET_ACT_NONE = 0,
+            BET_ACT_NORMAL_BET = 1
+        }
+
+        /** WIN_ACT enum. */
+        enum WIN_ACT {
+            WIN_ACT_NONE = 0,
+            WIN_ACT_NORMAL_WIN = 1,
+            WIN_ACT_JACKPOT = 2,
+            WIN_ACT_DEALER = 3
+        }
+
+        /** Properties of a GameRecordReq. */
+        interface IGameRecordReq {
+
+            /** GameRecordReq uid */
+            uid?: (number|null);
+
+            /** GameRecordReq game */
+            game?: (number|null);
+
+            /** GameRecordReq pos */
+            pos?: (number|Long|null);
+
+            /** GameRecordReq size */
+            size?: (number|null);
+
+            /** GameRecordReq trans */
+            trans?: (Uint8Array|null);
+        }
+
+        /** Represents a GameRecordReq. */
+        class GameRecordReq implements IGameRecordReq {
+
+            /**
+             * Constructs a new GameRecordReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordReq);
+
+            /** GameRecordReq uid. */
+            public uid: number;
+
+            /** GameRecordReq game. */
+            public game: number;
+
+            /** GameRecordReq pos. */
+            public pos: (number|Long);
+
+            /** GameRecordReq size. */
+            public size: number;
+
+            /** GameRecordReq trans. */
+            public trans: Uint8Array;
+
+            /**
+             * Creates a new GameRecordReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordReq instance
+             */
+            public static create(properties?: gamerecord.IGameRecordReq): gamerecord.GameRecordReq;
+
+            /**
+             * Encodes the specified GameRecordReq message. Does not implicitly {@link gamerecord.GameRecordReq.verify|verify} messages.
+             * @param message GameRecordReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordReq message, length delimited. Does not implicitly {@link gamerecord.GameRecordReq.verify|verify} messages.
+             * @param message GameRecordReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordReq;
+
+            /**
+             * Decodes a GameRecordReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordReq;
+
+            /**
+             * Verifies a GameRecordReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordReq
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordReq;
+
+            /**
+             * Creates a plain object from a GameRecordReq message. Also converts values to other types if specified.
+             * @param message GameRecordReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a GameRecordResp. */
+        interface IGameRecordResp {
+
+            /** GameRecordResp uid */
+            uid?: (number|null);
+
+            /** GameRecordResp game */
+            game?: (number|null);
+
+            /** GameRecordResp result */
+            result?: (number|null);
+
+            /** GameRecordResp timezoneinmin */
+            timezoneinmin?: (number|null);
+
+            /** GameRecordResp endflag */
+            endflag?: (number|null);
+
+            /** GameRecordResp list */
+            list?: (gamerecord.GameRecordResp.IGameRecordItem[]|null);
+
+            /** GameRecordResp daylist */
+            daylist?: (gamerecord.GameRecordResp.IDayAmountItem[]|null);
+
+            /** GameRecordResp totalsize */
+            totalsize?: (number|null);
+
+            /** GameRecordResp trans */
+            trans?: (Uint8Array|null);
+        }
+
+        /** Represents a GameRecordResp. */
+        class GameRecordResp implements IGameRecordResp {
+
+            /**
+             * Constructs a new GameRecordResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordResp);
+
+            /** GameRecordResp uid. */
+            public uid: number;
+
+            /** GameRecordResp game. */
+            public game: number;
+
+            /** GameRecordResp result. */
+            public result: number;
+
+            /** GameRecordResp timezoneinmin. */
+            public timezoneinmin: number;
+
+            /** GameRecordResp endflag. */
+            public endflag: number;
+
+            /** GameRecordResp list. */
+            public list: gamerecord.GameRecordResp.IGameRecordItem[];
+
+            /** GameRecordResp daylist. */
+            public daylist: gamerecord.GameRecordResp.IDayAmountItem[];
+
+            /** GameRecordResp totalsize. */
+            public totalsize: number;
+
+            /** GameRecordResp trans. */
+            public trans: Uint8Array;
+
+            /**
+             * Creates a new GameRecordResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordResp instance
+             */
+            public static create(properties?: gamerecord.IGameRecordResp): gamerecord.GameRecordResp;
+
+            /**
+             * Encodes the specified GameRecordResp message. Does not implicitly {@link gamerecord.GameRecordResp.verify|verify} messages.
+             * @param message GameRecordResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordResp message, length delimited. Does not implicitly {@link gamerecord.GameRecordResp.verify|verify} messages.
+             * @param message GameRecordResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordResp;
+
+            /**
+             * Decodes a GameRecordResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordResp;
+
+            /**
+             * Verifies a GameRecordResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordResp
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordResp;
+
+            /**
+             * Creates a plain object from a GameRecordResp message. Also converts values to other types if specified.
+             * @param message GameRecordResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace GameRecordResp {
+
+            /** Properties of a GameRecordItem. */
+            interface IGameRecordItem {
+
+                /** GameRecordItem roundid */
+                roundid?: (string|null);
+
+                /** GameRecordItem bet */
+                bet?: (number|Long|null);
+
+                /** GameRecordItem betact */
+                betact?: (gamerecord.BET_ACT|null);
+
+                /** GameRecordItem win */
+                win?: (number|Long|null);
+
+                /** GameRecordItem winact */
+                winact?: (gamerecord.WIN_ACT|null);
+
+                /** GameRecordItem timestamp */
+                timestamp?: (number|Long|null);
+
+                /** GameRecordItem firstofdayflag */
+                firstofdayflag?: (number|null);
+
+                /** GameRecordItem detail */
+                detail?: (Uint8Array|null);
+
+                /** GameRecordItem id */
+                id?: (number|Long|null);
+            }
+
+            /** Represents a GameRecordItem. */
+            class GameRecordItem implements IGameRecordItem {
+
+                /**
+                 * Constructs a new GameRecordItem.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: gamerecord.GameRecordResp.IGameRecordItem);
+
+                /** GameRecordItem roundid. */
+                public roundid: string;
+
+                /** GameRecordItem bet. */
+                public bet: (number|Long);
+
+                /** GameRecordItem betact. */
+                public betact: gamerecord.BET_ACT;
+
+                /** GameRecordItem win. */
+                public win: (number|Long);
+
+                /** GameRecordItem winact. */
+                public winact: gamerecord.WIN_ACT;
+
+                /** GameRecordItem timestamp. */
+                public timestamp: (number|Long);
+
+                /** GameRecordItem firstofdayflag. */
+                public firstofdayflag: number;
+
+                /** GameRecordItem detail. */
+                public detail: Uint8Array;
+
+                /** GameRecordItem id. */
+                public id: (number|Long);
+
+                /**
+                 * Creates a new GameRecordItem instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns GameRecordItem instance
+                 */
+                public static create(properties?: gamerecord.GameRecordResp.IGameRecordItem): gamerecord.GameRecordResp.GameRecordItem;
+
+                /**
+                 * Encodes the specified GameRecordItem message. Does not implicitly {@link gamerecord.GameRecordResp.GameRecordItem.verify|verify} messages.
+                 * @param message GameRecordItem message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: gamerecord.GameRecordResp.IGameRecordItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified GameRecordItem message, length delimited. Does not implicitly {@link gamerecord.GameRecordResp.GameRecordItem.verify|verify} messages.
+                 * @param message GameRecordItem message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: gamerecord.GameRecordResp.IGameRecordItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a GameRecordItem message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns GameRecordItem
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordResp.GameRecordItem;
+
+                /**
+                 * Decodes a GameRecordItem message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns GameRecordItem
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordResp.GameRecordItem;
+
+                /**
+                 * Verifies a GameRecordItem message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GameRecordItem message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GameRecordItem
+                 */
+                public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordResp.GameRecordItem;
+
+                /**
+                 * Creates a plain object from a GameRecordItem message. Also converts values to other types if specified.
+                 * @param message GameRecordItem
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: gamerecord.GameRecordResp.GameRecordItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GameRecordItem to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DayAmountItem. */
+            interface IDayAmountItem {
+
+                /** DayAmountItem year */
+                year?: (number|null);
+
+                /** DayAmountItem month */
+                month?: (number|null);
+
+                /** DayAmountItem day */
+                day?: (number|null);
+
+                /** DayAmountItem betamount */
+                betamount?: (number|Long|null);
+
+                /** DayAmountItem winamount */
+                winamount?: (number|Long|null);
+            }
+
+            /** Represents a DayAmountItem. */
+            class DayAmountItem implements IDayAmountItem {
+
+                /**
+                 * Constructs a new DayAmountItem.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: gamerecord.GameRecordResp.IDayAmountItem);
+
+                /** DayAmountItem year. */
+                public year: number;
+
+                /** DayAmountItem month. */
+                public month: number;
+
+                /** DayAmountItem day. */
+                public day: number;
+
+                /** DayAmountItem betamount. */
+                public betamount: (number|Long);
+
+                /** DayAmountItem winamount. */
+                public winamount: (number|Long);
+
+                /**
+                 * Creates a new DayAmountItem instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns DayAmountItem instance
+                 */
+                public static create(properties?: gamerecord.GameRecordResp.IDayAmountItem): gamerecord.GameRecordResp.DayAmountItem;
+
+                /**
+                 * Encodes the specified DayAmountItem message. Does not implicitly {@link gamerecord.GameRecordResp.DayAmountItem.verify|verify} messages.
+                 * @param message DayAmountItem message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: gamerecord.GameRecordResp.IDayAmountItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified DayAmountItem message, length delimited. Does not implicitly {@link gamerecord.GameRecordResp.DayAmountItem.verify|verify} messages.
+                 * @param message DayAmountItem message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: gamerecord.GameRecordResp.IDayAmountItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a DayAmountItem message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns DayAmountItem
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordResp.DayAmountItem;
+
+                /**
+                 * Decodes a DayAmountItem message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns DayAmountItem
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordResp.DayAmountItem;
+
+                /**
+                 * Verifies a DayAmountItem message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DayAmountItem message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DayAmountItem
+                 */
+                public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordResp.DayAmountItem;
+
+                /**
+                 * Creates a plain object from a DayAmountItem message. Also converts values to other types if specified.
+                 * @param message DayAmountItem
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: gamerecord.GameRecordResp.DayAmountItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DayAmountItem to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
+        /** Properties of a GameRecordDetailReq. */
+        interface IGameRecordDetailReq {
+
+            /** GameRecordDetailReq uid */
+            uid?: (number|null);
+
+            /** GameRecordDetailReq game */
+            game?: (number|null);
+
+            /** GameRecordDetailReq id */
+            id?: (number|Long|null);
+        }
+
+        /** Represents a GameRecordDetailReq. */
+        class GameRecordDetailReq implements IGameRecordDetailReq {
+
+            /**
+             * Constructs a new GameRecordDetailReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordDetailReq);
+
+            /** GameRecordDetailReq uid. */
+            public uid: number;
+
+            /** GameRecordDetailReq game. */
+            public game: number;
+
+            /** GameRecordDetailReq id. */
+            public id: (number|Long);
+
+            /**
+             * Creates a new GameRecordDetailReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordDetailReq instance
+             */
+            public static create(properties?: gamerecord.IGameRecordDetailReq): gamerecord.GameRecordDetailReq;
+
+            /**
+             * Encodes the specified GameRecordDetailReq message. Does not implicitly {@link gamerecord.GameRecordDetailReq.verify|verify} messages.
+             * @param message GameRecordDetailReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordDetailReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordDetailReq message, length delimited. Does not implicitly {@link gamerecord.GameRecordDetailReq.verify|verify} messages.
+             * @param message GameRecordDetailReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordDetailReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordDetailReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordDetailReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordDetailReq;
+
+            /**
+             * Decodes a GameRecordDetailReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordDetailReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordDetailReq;
+
+            /**
+             * Verifies a GameRecordDetailReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordDetailReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordDetailReq
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordDetailReq;
+
+            /**
+             * Creates a plain object from a GameRecordDetailReq message. Also converts values to other types if specified.
+             * @param message GameRecordDetailReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordDetailReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordDetailReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a GameRecordDetailResp. */
+        interface IGameRecordDetailResp {
+
+            /** GameRecordDetailResp uid */
+            uid?: (number|null);
+
+            /** GameRecordDetailResp game */
+            game?: (number|null);
+
+            /** GameRecordDetailResp id */
+            id?: (number|Long|null);
+
+            /** GameRecordDetailResp result */
+            result?: (number|null);
+
+            /** GameRecordDetailResp detail */
+            detail?: (Uint8Array|null);
+        }
+
+        /** Represents a GameRecordDetailResp. */
+        class GameRecordDetailResp implements IGameRecordDetailResp {
+
+            /**
+             * Constructs a new GameRecordDetailResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordDetailResp);
+
+            /** GameRecordDetailResp uid. */
+            public uid: number;
+
+            /** GameRecordDetailResp game. */
+            public game: number;
+
+            /** GameRecordDetailResp id. */
+            public id: (number|Long);
+
+            /** GameRecordDetailResp result. */
+            public result: number;
+
+            /** GameRecordDetailResp detail. */
+            public detail: Uint8Array;
+
+            /**
+             * Creates a new GameRecordDetailResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordDetailResp instance
+             */
+            public static create(properties?: gamerecord.IGameRecordDetailResp): gamerecord.GameRecordDetailResp;
+
+            /**
+             * Encodes the specified GameRecordDetailResp message. Does not implicitly {@link gamerecord.GameRecordDetailResp.verify|verify} messages.
+             * @param message GameRecordDetailResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordDetailResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordDetailResp message, length delimited. Does not implicitly {@link gamerecord.GameRecordDetailResp.verify|verify} messages.
+             * @param message GameRecordDetailResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordDetailResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordDetailResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordDetailResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordDetailResp;
+
+            /**
+             * Decodes a GameRecordDetailResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordDetailResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordDetailResp;
+
+            /**
+             * Verifies a GameRecordDetailResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordDetailResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordDetailResp
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordDetailResp;
+
+            /**
+             * Creates a plain object from a GameRecordDetailResp message. Also converts values to other types if specified.
+             * @param message GameRecordDetailResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordDetailResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordDetailResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a GameRecordData. */
+        interface IGameRecordData {
+
+            /** GameRecordData uid */
+            uid?: (number|null);
+
+            /** GameRecordData game */
+            game?: (number|null);
+
+            /** GameRecordData roundid */
+            roundid?: (string|null);
+
+            /** GameRecordData bet */
+            bet?: (number|Long|null);
+
+            /** GameRecordData betact */
+            betact?: (gamerecord.BET_ACT|null);
+
+            /** GameRecordData win */
+            win?: (number|Long|null);
+
+            /** GameRecordData winact */
+            winact?: (gamerecord.WIN_ACT|null);
+
+            /** GameRecordData timestamp */
+            timestamp?: (number|Long|null);
+
+            /** GameRecordData detail */
+            detail?: (Uint8Array|null);
+
+            /** GameRecordData agencyid */
+            agencyid?: (number|null);
+        }
+
+        /** Represents a GameRecordData. */
+        class GameRecordData implements IGameRecordData {
+
+            /**
+             * Constructs a new GameRecordData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordData);
+
+            /** GameRecordData uid. */
+            public uid: number;
+
+            /** GameRecordData game. */
+            public game: number;
+
+            /** GameRecordData roundid. */
+            public roundid: string;
+
+            /** GameRecordData bet. */
+            public bet: (number|Long);
+
+            /** GameRecordData betact. */
+            public betact: gamerecord.BET_ACT;
+
+            /** GameRecordData win. */
+            public win: (number|Long);
+
+            /** GameRecordData winact. */
+            public winact: gamerecord.WIN_ACT;
+
+            /** GameRecordData timestamp. */
+            public timestamp: (number|Long);
+
+            /** GameRecordData detail. */
+            public detail: Uint8Array;
+
+            /** GameRecordData agencyid. */
+            public agencyid: number;
+
+            /**
+             * Creates a new GameRecordData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordData instance
+             */
+            public static create(properties?: gamerecord.IGameRecordData): gamerecord.GameRecordData;
+
+            /**
+             * Encodes the specified GameRecordData message. Does not implicitly {@link gamerecord.GameRecordData.verify|verify} messages.
+             * @param message GameRecordData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordData message, length delimited. Does not implicitly {@link gamerecord.GameRecordData.verify|verify} messages.
+             * @param message GameRecordData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordData, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordData;
+
+            /**
+             * Decodes a GameRecordData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordData;
+
+            /**
+             * Verifies a GameRecordData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordData
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordData;
+
+            /**
+             * Creates a plain object from a GameRecordData message. Also converts values to other types if specified.
+             * @param message GameRecordData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a GameRecordPush. */
+        interface IGameRecordPush {
+
+            /** GameRecordPush list */
+            list?: (gamerecord.IGameRecordData[]|null);
+        }
+
+        /** Represents a GameRecordPush. */
+        class GameRecordPush implements IGameRecordPush {
+
+            /**
+             * Constructs a new GameRecordPush.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordPush);
+
+            /** GameRecordPush list. */
+            public list: gamerecord.IGameRecordData[];
+
+            /**
+             * Creates a new GameRecordPush instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordPush instance
+             */
+            public static create(properties?: gamerecord.IGameRecordPush): gamerecord.GameRecordPush;
+
+            /**
+             * Encodes the specified GameRecordPush message. Does not implicitly {@link gamerecord.GameRecordPush.verify|verify} messages.
+             * @param message GameRecordPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordPush message, length delimited. Does not implicitly {@link gamerecord.GameRecordPush.verify|verify} messages.
+             * @param message GameRecordPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordPush message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordPush;
+
+            /**
+             * Decodes a GameRecordPush message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordPush;
+
+            /**
+             * Verifies a GameRecordPush message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordPush message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordPush
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordPush;
+
+            /**
+             * Creates a plain object from a GameRecordPush message. Also converts values to other types if specified.
+             * @param message GameRecordPush
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordPush to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a GameRecordDataCache. */
+        interface IGameRecordDataCache {
+
+            /** GameRecordDataCache uid */
+            uid?: (number|null);
+
+            /** GameRecordDataCache game */
+            game?: (number|null);
+
+            /** GameRecordDataCache roundid */
+            roundid?: (string|null);
+
+            /** GameRecordDataCache bet */
+            bet?: (number|Long|null);
+
+            /** GameRecordDataCache betact */
+            betact?: (gamerecord.BET_ACT|null);
+
+            /** GameRecordDataCache win */
+            win?: (number|Long|null);
+
+            /** GameRecordDataCache winact */
+            winact?: (gamerecord.WIN_ACT|null);
+
+            /** GameRecordDataCache timestamp */
+            timestamp?: (number|Long|null);
+
+            /** GameRecordDataCache detail */
+            detail?: (Uint8Array|null);
+
+            /** GameRecordDataCache daybetamount */
+            daybetamount?: (number|Long|null);
+
+            /** GameRecordDataCache daywinamount */
+            daywinamount?: (number|Long|null);
+
+            /** GameRecordDataCache timezoneinmin */
+            timezoneinmin?: (number|null);
+
+            /** GameRecordDataCache firstofdayflag */
+            firstofdayflag?: (number|null);
+
+            /** GameRecordDataCache recordcount */
+            recordcount?: (number|null);
+
+            /** GameRecordDataCache cacheindex */
+            cacheindex?: (number|Long|null);
+        }
+
+        /** Represents a GameRecordDataCache. */
+        class GameRecordDataCache implements IGameRecordDataCache {
+
+            /**
+             * Constructs a new GameRecordDataCache.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamerecord.IGameRecordDataCache);
+
+            /** GameRecordDataCache uid. */
+            public uid: number;
+
+            /** GameRecordDataCache game. */
+            public game: number;
+
+            /** GameRecordDataCache roundid. */
+            public roundid: string;
+
+            /** GameRecordDataCache bet. */
+            public bet: (number|Long);
+
+            /** GameRecordDataCache betact. */
+            public betact: gamerecord.BET_ACT;
+
+            /** GameRecordDataCache win. */
+            public win: (number|Long);
+
+            /** GameRecordDataCache winact. */
+            public winact: gamerecord.WIN_ACT;
+
+            /** GameRecordDataCache timestamp. */
+            public timestamp: (number|Long);
+
+            /** GameRecordDataCache detail. */
+            public detail: Uint8Array;
+
+            /** GameRecordDataCache daybetamount. */
+            public daybetamount: (number|Long);
+
+            /** GameRecordDataCache daywinamount. */
+            public daywinamount: (number|Long);
+
+            /** GameRecordDataCache timezoneinmin. */
+            public timezoneinmin: number;
+
+            /** GameRecordDataCache firstofdayflag. */
+            public firstofdayflag: number;
+
+            /** GameRecordDataCache recordcount. */
+            public recordcount: number;
+
+            /** GameRecordDataCache cacheindex. */
+            public cacheindex: (number|Long);
+
+            /**
+             * Creates a new GameRecordDataCache instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns GameRecordDataCache instance
+             */
+            public static create(properties?: gamerecord.IGameRecordDataCache): gamerecord.GameRecordDataCache;
+
+            /**
+             * Encodes the specified GameRecordDataCache message. Does not implicitly {@link gamerecord.GameRecordDataCache.verify|verify} messages.
+             * @param message GameRecordDataCache message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamerecord.IGameRecordDataCache, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified GameRecordDataCache message, length delimited. Does not implicitly {@link gamerecord.GameRecordDataCache.verify|verify} messages.
+             * @param message GameRecordDataCache message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamerecord.IGameRecordDataCache, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a GameRecordDataCache message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns GameRecordDataCache
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamerecord.GameRecordDataCache;
+
+            /**
+             * Decodes a GameRecordDataCache message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns GameRecordDataCache
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamerecord.GameRecordDataCache;
+
+            /**
+             * Verifies a GameRecordDataCache message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a GameRecordDataCache message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns GameRecordDataCache
+             */
+            public static fromObject(object: { [k: string]: any }): gamerecord.GameRecordDataCache;
+
+            /**
+             * Creates a plain object from a GameRecordDataCache message. Also converts values to other types if specified.
+             * @param message GameRecordDataCache
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamerecord.GameRecordDataCache, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this GameRecordDataCache to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

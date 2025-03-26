@@ -20,6 +20,9 @@ import { GameCache } from "./GameCache";
 import { SubGameCache } from "./SubGameCache";
 import { GameActionType, GameEvent, GameProto, GameReq, GameResp } from "./interface";
 import { GiNetGameReconnData } from "../subGameManager/interfaceGIApi";
+import { AppConst } from "../../common/AppConst";
+import { SubGameOrientation } from "../subGameManager/interface";
+import { jumpToExit } from "../subGameManager/utils";
 
 export class GameManager extends IManager {
 
@@ -367,7 +370,7 @@ export class GameManager extends IManager {
                     let table = rspData as gamebase.IUserJoinTableResp;
                     log("bobo---------------------------加入房间成功 ", table);
                     GameCache.game._set(SubGameCache.GAME_LEVEL, table.room_level);
-                    GameCache.game._set(SubGameCache.BALANCE, table.balance);
+                    Cache.User.setBalance(table.balance);
                     GameCache.game._set(SubGameCache.JACKPOT_USER_DATA, table.jackpotinfo);
 
                     let info = Utils.JsonDecode(table.userinfo);
@@ -407,6 +410,7 @@ export class GameManager extends IManager {
                         txt = gutil_char('GAME_ERROR_1');
                     }
                     gui.loading(false);
+                    this.emit(GameEvent.REQUEST_ROOM_ERROR);
                     this.detailExitGame(txt);
                 }
                 break;
@@ -446,6 +450,18 @@ export class GameManager extends IManager {
                         warn(">>>进入房间退休换桌机制，等待连回来===>");
                     } else if (rspData?.action == GameActionType.RETIRE_KICK) {
                         warn(">>>server踢人===>");
+                        let key = 'SERVER_LOSE';
+                        gui.alert({
+                            content: gutil_char(key)[0],
+                            enableClose: false,
+                            ok: {
+                                text: gutil_char('OK'),
+                                cb: () => {
+                                    jumpToExit(gutil_char(key)[1]);
+                                }
+                            }
+                        }, PRIORITY.ALERT, 'KICK');
+                        break;
                     }
                 }
                 this.emit(GameEvent.GAMENOTIFICATION_PUSH, rspData);
@@ -514,10 +530,12 @@ export class GameManager extends IManager {
         }
         this._curGameID = id;
 
+        let agency_id = Cache.User.getAgencyId();
         let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ROOMALLOC;
         let ctype = room_alloc_proto.ROOMALLOC_CMD.ROOMALLOC_CMD_LEVEL_CONFIG_REQ;
         let param = {
             game_id: id,
+            agency_id,
         }
         log(GameReq.GAME_CONFIG, stype + " | " + ctype);
         gnet.send(GameReq.GAME_CONFIG, stype, ctype, param);

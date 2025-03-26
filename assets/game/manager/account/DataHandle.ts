@@ -7,6 +7,8 @@ import { log } from "cc";
 import { Cache } from "../../cache/Cache";
 import EventDispatcher from "../../../framework/event/EventDispatcher";
 import { GameConfig, LoginEvent } from "./interface";
+import { config } from "db://assets/plug-in/config";
+import { StorageData } from "db://assets/framework/storage/StorageData";
 
 export class DataHandle {
     private static _instance: DataHandle = null;
@@ -23,8 +25,9 @@ export class DataHandle {
     scopeParam() {
         let data = this.getTekonAndAgent();
         // let data = this.getSomeData()
+        config.lanuage = this.testLanuage(data.lang);
         if (data) {
-            Cache.User.saveTokenAndAgent(data);
+            Cache.User.saveTokenAndAgent(data as GameConfig);
             // Cache.User.saveSomeData(data);
             log("bobo-----看看地址 " + Cache.User.getAgent());
             if (Cache.User.getAgent()) {
@@ -36,6 +39,15 @@ export class DataHandle {
             EventDispatcher.instance.dispatchEvent(LoginEvent.LOGIN_READY, false);
         }
 
+    }
+
+    testLanuage(lang: string): string {
+        if (/en/i.test(lang)) {
+            return 'en';
+        } else if (/in/i.test(lang)) {
+            return 'in';
+        }
+        return 'en';
     }
 
     /**
@@ -88,6 +100,7 @@ export class DataHandle {
     getTekonAndAgent() {
         // let aa = "?token=dXVpZD1aRjk2NGJfWTE6Njk1MTc1NDAmdWlkPTY3NjA2NDYyJnRva2VuPTY5NTE3NTQwJmJhbGFuY2U9MTAwMDAwMDAwJmdhbWU9MTAzJmdhbWVpbmZvPXsiZnVsbHNjcmVlbiI6MH0mZXhwaT0xNzMwNTk4MjMyJnNpZ249YzJiY2Y5NWE5NTU0NjhkMGM0MGU3MWJhMzY1ZWU1MDQ=&agent=d3NzOi8vZmRzZ2h1azM0OWRmc2Jqay5jY2FwaTIxOG9yYmprc2FwbTAzZmprZHMub3JnL3dzcw==&gameID=103";
         // let params = this.scopeUser(aa);
+        console.warn(`search = ${globalThis.location.search}`);
         let params = this.scopeUser(globalThis.location.search);
         let token = "";
         let agent = "";
@@ -114,7 +127,7 @@ export class DataHandle {
             gameId = Number(params["gameID"]);
         }
 
-        return { token: token, agent: agent, displayMode, gameId };
+        return { token: token, agent: agent.split(","), displayMode, gameId, lang: params ? params['lang'] : 'en' };
     }
 
 }

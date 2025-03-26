@@ -15,6 +15,8 @@ import { sdk } from '../sdk/sdk';
 import { AppEvent } from './AppEvent';
 import { Utils } from './Utils';
 import { BUILDER, GDKeys } from './interface';
+import { User } from '../cache/User';
+import { Cache } from '../cache/Cache';
 
 /**
  * link
@@ -1168,7 +1170,7 @@ export function formatWithCommas(number: number | string, dot: number = 2) {
  */
 export function formatMoneyCommas(number: number, dot: number = 2, isSymbol: boolean = false) {
     let n = Utils.formatRespMoney(number, dot);
-    let symbol = isSymbol ? gutil_char("CURRENCY_SYMBOL") : ""
+    let symbol = isSymbol ? Cache.User.getCurrency().sign : ""
     return symbol + formatWithCommas(n, dot);
 }
 
@@ -1180,7 +1182,7 @@ export function formatMoneyCommas(number: number, dot: number = 2, isSymbol: boo
  */
 export function formatMoneyUnion(number: number, dot: number = 2, isSymbol: boolean = false) {
     let n = Utils.formatRespMoney(number, dot);
-    let symbol = isSymbol ? gutil_char("CURRENCY_SYMBOL") : ""
+    let symbol = isSymbol ? Cache.User.getCurrency().sign : ""
     return symbol + Utils.formatMoneyUnion(n, dot);
 }
 
@@ -1202,7 +1204,7 @@ export function getIpAddress(cb: Function) {
  * console.log(date.format("yyyy-MM-dd"));
  * console.log(date.format("hh:mm:ss"));
  */
-export function dateFormat(timestamp: number, fmt: string): string {
+export function dateFormat(timestamp: number, fmt: string, isUtc: boolean = false): string {
     if (timestamp < 10000000000) timestamp *= 1000; // 转毫秒
     let date = new Date(timestamp);
     const re = /(y+)/;
@@ -1222,6 +1224,15 @@ export function dateFormat(timestamp: number, fmt: string): string {
         "q+": Math.floor((date.getMonth() + 3) / 3), // 季度
         S: date.getMilliseconds(), // 毫秒
     };
+    if (isUtc) {
+        o["h+"] = date.getUTCHours();
+        o["m+"] = date.getUTCMinutes();
+        o["s+"] = date.getUTCSeconds();
+        o["M+"] = date.getUTCMonth() + 1; // 月份
+        o["d+"] = date.getUTCDate(); // 日
+        o["q+"] = Math.floor((date.getUTCMonth() + 3) / 3); // 季度
+        o.S = date.getUTCMilliseconds(); // 毫秒
+    }
 
     if (timestamp < 1000000000000) {
         // if (timestamp < 1000000000000000) {

@@ -14,8 +14,8 @@ import { SubGameDetail, SubGameEventGame, SubGameOrientation } from "./interface
 import { GiAudioControl, GiGameDownLoadCb, GiUserInfo } from "./interfaceGIApi";
 import { LoginEvent } from "../account/interface";
 import { gameDownloadMgr } from "../gamedownload/GameDownloadManager";
-import { IReportClick, ReportEvent } from "../report/interface";
 import { EMgr } from "../interface";
+import { GameRecordEvent } from "../gameRecord/interface";
 
 const GameReqTemp = GameReq;
 const GameRespTemp = GameResp;
@@ -27,6 +27,7 @@ const EMgrTemp = EMgr;
 const LayerStackEventTemp = LayerStackEvent;
 const AlertStackEventTemp = AlertStackEvent;
 
+const GameRecordEventTemp = GameRecordEvent;
 export namespace gi {
     export const GameReq = GameReqTemp;
     export const GameResp = GameRespTemp;
@@ -37,6 +38,7 @@ export namespace gi {
     export const EMgr = EMgrTemp;
     export const LayerStackEvent = LayerStackEventTemp;
     export const AlertStackEvent = AlertStackEventTemp;
+    export const GameRecordEvent = GameRecordEventTemp;
     /**
      * 注册游戏Net转发事件(进出游戏都会重置)
      * @param cmdList 需要转发到游戏的命令数组 
@@ -188,10 +190,6 @@ export namespace gi {
         EventDispatcher.instance.dispatchEvent(SubGameEventGame.close);
     }
 
-    /** 点击上报 */
-    export function reportClick(param: IReportClick, isForce = false) {
-        EventDispatcher.instance.dispatchEvent(ReportEvent.REPORT_CLIENT_CLICK, param, isForce);
-    }
     /** 游戏资源包下载 */
     export function gameDownload(gameId: string, listener?: GiGameDownLoadCb) {
         gameDownloadMgr.downloadAbs(gameId, listener)

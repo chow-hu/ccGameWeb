@@ -1,6 +1,8 @@
 import { Color, ImageAsset, Layers, Node, Sprite, SpriteFrame, Texture2D, UITransform, Vec2, Vec3, v2 } from "cc";
 import { StorageData } from "../../framework/storage/StorageData";
 import { AppConst } from "./AppConst";
+import { DateTime } from "./DateTime";
+import { Cache } from "../cache/Cache";
 
 /**
  * Name = Utils
@@ -104,7 +106,7 @@ export namespace Utils {
     /**
      * 保留小数
      * @param num 要操作的数据 string | number | Decimal 
-     * @param dot 保留小数位数 默认0 不保留
+     * @param dot 保留小数位数 默认0 不保留 -1则不限制
      * @param isCompletion 是否补全小数位数 例如 1.00 默认false
      * @param isAdjust 是否四舍五入 默认false
      * @returns 
@@ -113,40 +115,61 @@ export namespace Utils {
         if (num == null || num == undefined) {
             return null
         }
-        if (num == 0) {
-            return "0";
-        }
-
-        if (num == "") {
-            return "";
-        }
-        let realNum: Decimal = null;
-        if (num instanceof Decimal) {
-            realNum = num;
-        } else {
-            realNum = new Decimal(String(num));
-        }
-        let str = realNum.toString();
-
-        if (isAdjust) {
-            str = realNum.toFixed(dot);
-        } else {
-            let newStr = str.split(".");
-            if (newStr.length > 1) {
-                let maxLen = newStr[1].length;
-                if (maxLen > dot) {
-                    maxLen = dot;
+        if (num == 0 || num == "") {
+            if (isCompletion && dot > 0) {
+                let newStr = "0";
+                let xiaoshuStr = "";
+                let zeroNum = dot;
+                while (zeroNum > 0) {
+                    xiaoshuStr = xiaoshuStr + "0";
+                    zeroNum = zeroNum - 1;
                 }
-                let minNum = newStr[1].substring(0, maxLen);
-                if (minNum.length > 0) {
-                    str = newStr[0] + "." + minNum;
-                } else {
-                    str = newStr[0];
-                }
+                newStr = newStr + "." + xiaoshuStr;
+                return newStr
+            } else {
+                return String(num);
             }
         }
 
-        if (isCompletion) {
+        let realNum: Decimal = null;
+        let realStr: string = "";
+        if (num instanceof Decimal) {
+            realNum = num;
+            realStr = realNum.toString();
+        } else {
+            realStr = String(num);
+            realNum = new Decimal(realStr);
+        }
+        let str = realStr;
+        if (isAdjust) {
+            if (dot == 0) {
+                str = realNum.toFixed(0);
+            } else if (dot > 0) {
+                str = realNum.toFixed(dot);
+            }
+        }
+
+        let newStr = str.split(".");
+        if (newStr.length > 1) {
+            let maxLen = newStr[1].length;
+            if (dot > -1) {
+                if (maxLen > dot) {
+                    maxLen = dot;
+                }
+            }
+            let minNum = newStr[1].substring(0, maxLen);
+            if (minNum.length > 0) {
+                str = newStr[0] + "." + minNum;
+                if (!isCompletion && new Decimal("0." + minNum).toNumber() == 0) {
+                    str = newStr[0];
+                }
+            } else {
+                str = newStr[0];
+            }
+        }
+
+
+        if (isCompletion && dot > 0) {
             let newStr = str.split(".");
             let xiaoshuStr = "";
             let zeroNum = dot;
@@ -270,6 +293,7 @@ export namespace Utils {
             let byteLenth = Utils.stringGetByteLength(param, encoding);
             let delByteLen = Utils.stringGetByteLength(del, encoding);
             if (byteLenth > maxlen) {
+
                 maxlen = maxlen - delByteLen;
                 // str = param.slice(0, maxlen)
                 let curStrTable = param.split("");
@@ -395,10 +419,13 @@ export namespace Utils {
             return "";
         }
         let realNum: Decimal = null;
+        let realStr: string = "";
         if (num instanceof Decimal) {
             realNum = num;
+            realStr = realNum.toString();
         } else {
-            realNum = new Decimal(String(num));
+            realStr = String(num);
+            realNum = new Decimal(realStr);
         }
         //正或负
         let PorN: boolean = (realNum.isPositive() || realNum.isZero());
@@ -407,9 +434,10 @@ export namespace Utils {
         let tempstr = "";
         let xiaoshuStr = "";
 
-        let biaodian_index = tempNum.toString().indexOf(".")
+
+        let biaodian_index = realStr.indexOf(".")
         if (biaodian_index > 0) {
-            xiaoshuStr = tempNum.toString().substring(biaodian_index, tempNum.toString().length);
+            xiaoshuStr = realStr.substring(biaodian_index, realStr.toString().length);
             tempNum = new Decimal(tempNum.toString().substring(0, biaodian_index));
         }
 
@@ -466,7 +494,9 @@ export namespace Utils {
         } else {
             _num = new Decimal(num);
         }
-        _num = _num.div(Union.Money);
+
+        let data = Cache.User.getCurrency();
+        _num = _num.div(data.rate);
         if (dot != null) {
             _num = new Decimal(Utils.numSubString(_num, dot));
         }
@@ -486,16 +516,21 @@ export namespace Utils {
             return num;
         }
 
-        return _num * Union.Money;
+        let data = Cache.User.getCurrency();
+        return _num * data.rate;
     }
 
     /**
-     * 格式化货币以单位形式显示(K M B T)
+     * 格式化货币以单位形式显示(K M B T) 支持千分位
      * @param param 
-     * @param dot 小数点后最多dot位 例如：(23458, 3, 2)->(2.35万, 2.35, 1)
+     * @param dot 小数点后最多dot位 例如：(23458, 3, 2)->(2.35万, 2.35, 1) -1则不限制
+     * @param isMatchBet 是否显示千分位 默认 false 不展示
+     * @param letter 显示千分位时用来填充的字符 默认,
+     * @param isCompletion 是否补全小数位数 例如 1.00 默认false
+     * @param isAdjust 是否四舍五入 默认false
      * @returns 
      */
-    export function formatMoneyUnion(param: number | string, dot: number = 2) {
+    export function formatMoneyUnion(param: number | string, dot: number = 2, isMatchBet = false, letter: string = ",", isCompletion: boolean = false, isAdjust: boolean = false) {
         //被除数
         let div_K = 1000 //K * 100
         let div_M = 1000000 //M * 10
@@ -531,13 +566,52 @@ export namespace Utils {
             }
         }
         /** 修正高精度数字不太精准问题 */
-        let s = __number.toString()
+        let s = __number.toString();
+        if (isAdjust) {
+            if (dot == 0) {
+                s = __number.toFixed(0);
+            } else if (dot > 0) {
+                s = __number.toFixed(dot);
+            }
+        }
+
         let biaodian_index = s.indexOf(".")
         if (biaodian_index > 0) {
-            if (dot <= 0) {
+
+            if (dot == 0) {
                 dot = -1;
+            } else if (dot < 0) {
+                dot = s.length;
             }
-            s = s.substring(0, biaodian_index + dot + 1)
+            let a = s.substring(0, biaodian_index);
+            let b: string = "";
+            if (dot > 0) {
+                b = s.substring(biaodian_index + 1, biaodian_index + dot + 1);
+            }
+            if (b.length > 0) {
+                if (isCompletion && b.length < dot) {
+                    for (let i = b.length; i < dot; i++) {
+                        b = b + "0";
+                    }
+                }
+                s = a + "." + b;
+                if (!isCompletion && new Decimal("0." + b).toNumber() == 0) {
+                    s = a;
+                }
+            } else {
+                s = a;
+            }
+        } else {
+            if (isCompletion && dot > 0) {
+                let b = ""
+                for (let i = 0; i < dot; i++) {
+                    b = b + "0";
+                }
+                s = s + "." + b;
+            }
+        }
+        if (isMatchBet && new Decimal(s).toNumber() != 0) {
+            s = Utils.stringMatchStr(s, letter, false);
         }
 
         switch (u) {
@@ -652,30 +726,15 @@ export namespace Utils {
      * @param num 
      * @returns object {year:?,month:?,day:?,hour:?,minutes:?,seconds:?}
      */
-    export function timeToDataArray(num: number) {
-        if (isNull(num)) {
-            return null
-        }
-        let size = num.toString().length
-
-        if (size != 10 && size != 13) {
-            return null
-        }
-        //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        if (size == 10) {
-            num = num * 1000
-        }
-        let date = new Date(num);
-
-        let array = {
-            year: date.getFullYear(),
-            month: date.getMonth() + 1,
-            day: date.getDate(),
-            hour: date.getHours(),
-            minutes: date.getMinutes(),
-            seconds: date.getSeconds()
-        }
-        return array;
+    export function timeToDataArray(num: number, toTimeZone = null): {
+        year: number,
+        month: number,
+        day: number,
+        hour: number,
+        minutes: number,
+        seconds: number
+    } {
+        return DateTime.timeToDateArray(num, toTimeZone);
     }
 
     /**

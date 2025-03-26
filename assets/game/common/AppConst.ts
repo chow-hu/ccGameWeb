@@ -78,6 +78,10 @@ export namespace AppConst {
         103: { name: "abJet", layer: "lyJetLoadingView", url: "", md5: "" },
         /** 游戏:UpDown */
         104: { name: "abUpDown", layer: "lyUpDownLoading", url: "", md5: "" },
+        /** 游戏:abMoneyCome */
+        105: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "" },
+        /** 游戏:abMines */
+        106: { name: "abMines", layer: "lyMinesLoadingView", url: "", md5: "" },
     }
     /** 附属包配置 */
     export const SubBundleConf: { [key: string | number]: IBundleOption } = {

@@ -29,4 +29,5 @@ export enum EMgr {
     EXCHANGECODE = "exchange_code",
     SUBGAMEMANAGER = 'SubGameManager',
     GAMEDOWNLOAD = 'gameDownload',
+    GAMERECORD = 'gameRecord',
 }

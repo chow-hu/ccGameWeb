@@ -86,7 +86,7 @@ export class SubGameManager extends IManager {
             this.initByEnterGame(detail);
             gui.openBundleLayer(detail.bundleConf.name, detail.bundleConf.layer, null, {
                 onAdded: () => {
-                    if (detail.gameID != 101 && detail.gameID != 103) {
+                    if (this.hasOwnLoading(detail.gameID)) {
                         this.emit(SubGameEventGame.start);
                     }
                     this.doSuccess(detail);
@@ -103,7 +103,7 @@ export class SubGameManager extends IManager {
                 this.doError(detail, 2);
                 return;
             }
-            if (detail.gameID != 101 && detail.gameID != 103) {
+            if (this.hasOwnLoading(detail.gameID)) {
                 AssetsLoader.instance.bundleLoad(bundleName, 'prefab/layer/' + detail.bundleConf.layer, Prefab, null, (err, prefab) => {
                     if (err) {
                         if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
@@ -130,6 +130,10 @@ export class SubGameManager extends IManager {
                 })
             }
         })
+    }
+
+    hasOwnLoading(gameID: number): boolean {
+        return gameID != 101 && gameID != 103;
     }
 
     /** 预加载包列表 */

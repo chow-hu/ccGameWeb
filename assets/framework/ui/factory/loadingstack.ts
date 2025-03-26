@@ -55,12 +55,16 @@ export class LoadingStack {
             }
             let delay = parm.delay || 0  // 延迟
             let ts = parm.ts || 0        // 持续时长
-            custom.active = false;
-            tween(custom).delay(delay).call(() => {
+            if (parm?.forever) {
                 custom.active = true;
-            }).delay(ts).call(() => {
+            } else {
                 custom.active = false;
-            }).removeSelf().start();
+                tween(custom).delay(delay).call(() => {
+                    custom.active = true;
+                }).delay(ts).call(() => {
+                    custom.active = false;
+                }).removeSelf().start();
+            }
             this._priority = priority;
         }
     }

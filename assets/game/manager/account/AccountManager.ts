@@ -21,6 +21,10 @@ import { AccountPB, AccountProto, LoginEvent, UserConfig } from "./interface";
 import { Utils } from "../../common/Utils";
 import { showTip } from "../../common/custom-general";
 import { gmgr } from "../gmgr";
+import { ReportManager } from "../report/ReportManager";
+import { jumpToExit } from "../subGameManager/utils";
+import { User } from "../../cache/User";
+import _ from "lodash";
 
 export class AccountManager extends IManager {
     private static _instance: AccountManager;
@@ -49,19 +53,29 @@ export class AccountManager extends IManager {
             case AccountPB.RESP.Login: {
                 this.respNetLogin(rsp);
             } break;
-            case AccountPB.PUSH.KickPush: {
-                // this._alertLogout("sameless_8", 0);
-                // 被踢了
-                let result = rsp?.data?.result || 0;
-                this.emit(LoginEvent.PUSH_KICKPUSH, result);
-            } break;
+            case AccountPB.PUSH.KickPush:
             case AccountPB.PUSH.ForbitPush: {
-                gnet.close();
-                // this._alertLogout("sameless_14", 1);
-                // 被封号了
-                this.emit(LoginEvent.PUSH_FORBITUSERPUSH);
-            }
-                break;
+                let key = 'TOKEN_LOSE';
+                gui.alert({
+                    content: gutil_char(key)[0],
+                    enableClose: false,
+                    ok: {
+                        text: gutil_char('OK'),
+                        cb: () => {
+                            jumpToExit(gutil_char(key)[1]);
+                        }
+                    }
+                }, PRIORITY.ALERT, 'KICK');
+                // let result = rsp?.data?.result || 0;
+                // this.emit(LoginEvent.PUSH_KICKPUSH, result);
+            } break;
+            /*  case AccountPB.PUSH.ForbitPush: {
+                 gnet.close();
+                 // this._alertLogout("sameless_14", 1);
+                 // 被封号了
+                 this.emit(LoginEvent.PUSH_FORBITUSERPUSH);
+             }
+                 break; */
             case AccountProto.USERBULLETIN: {
                 this._alertBulletin(rsp)
             } break;
@@ -219,7 +233,12 @@ export class AccountManager extends IManager {
         Cache.User.setLoginState(AppConst.UserLoginState.LoginSuccess);
         // 保存用户信息
         console.log("bobobobobo 看看数据-------------- ", receiveData?.data);
-        Cache.User.saveUser(receiveData?.data);
+        let data = _.cloneDeep(receiveData?.data) as UserConfig;
+        if (data) {
+            data.balance = this._isFirstLogin ? data.balance : Cache.User.getBalance();
+        }
+        Cache.User.saveUser(data);
+        // gmgr.get<ReportManager>(EMgr.REPORT).initTrack(Cache.User.getUser().game, Cache.User.getUser().uid);
         // 广播登录成功的事件
         this.emit(LoginEvent.LOGIN_SUCCESS);
         this._isFirstLogin = false;

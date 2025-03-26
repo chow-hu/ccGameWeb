@@ -22,6 +22,7 @@ export default class EventDispatcher {
             return this._instance;
         }
         this._instance = new EventDispatcher();
+        globalThis.EventDispatcher = this._instance;
         return this._instance;
     }
 

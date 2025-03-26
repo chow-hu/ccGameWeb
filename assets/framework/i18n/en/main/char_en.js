@@ -632,6 +632,9 @@ const mapping = {
     GAME_MATCH_TABLE_TIME_OUT: "Failed to match the game.",
 
     DOWNLOAD_GAME_ERROR: "Failed to download the game, Please try again.",
+    TOKEN_LOSE: ['Account login anomaly detected. You have been disconnected.', 'You have been logged out of the game. Please return to the lobby to log in again.'],
+    SERVER_LOSE: ['Server maintenance, you have been disconnected .', 'Server maintenance in progress. Sorry for the inconvenience.'],
+    TIME_LOSE: ['You have not placed a bet for {0} minutes and have been removed from the room.', 'Disconnected from server. Please return to lobby and reconnect.'],
 }
 
 

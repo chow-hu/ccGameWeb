@@ -1,6 +1,9 @@
 import { instantiate, isValid, Node, Prefab } from "cc";
 import { AssetsLoader, IBundleOption } from "../../../framework/asset/AssetsLoader";
-import { gui, UIBase } from "../../../framework/ge";
+import { gui, gutil_char, UIBase } from "../../../framework/ge";
+import { AppConst } from "../../common/AppConst";
+import { SubGameOrientation } from "./interface";
+import { Cache } from "../../cache/Cache";
 
 export interface IWidgetParam {
     right?: number,
@@ -35,4 +38,11 @@ export function addJackPotNode(option: IBundleOption, layer: string = 'prefab/la
             gui.openBundleLayer(bundleName, layer, param);
         }
     })
+}
+
+export function jumpToExit(tip?: string) {
+    let gameId = Cache.User.getUser().game;
+    let pack = AppConst.GetGamePackageConfById(gameId);
+    let orientation = Cache.User.getDisplayMode() || pack?.orientation || SubGameOrientation.portrail;
+    gui.openLayer('lyGameExit', { orientation, tip: tip || gutil_char('TIME_LOSE')[1] })
 }

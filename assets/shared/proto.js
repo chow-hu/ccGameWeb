@@ -2884,6 +2884,7 @@ $root.client_proto = (function() {
      * @property {number} SERVER_TYPE_AGENT_GET_RANK=55 SERVER_TYPE_AGENT_GET_RANK value
      * @property {number} SERVER_TYPE_FLOATING=56 SERVER_TYPE_FLOATING value
      * @property {number} SERVER_TYPE_REPORT_SWITCH=59 SERVER_TYPE_REPORT_SWITCH value
+     * @property {number} SERVER_TYPE_GAMERECORD=65 SERVER_TYPE_GAMERECORD value
      */
     client_proto.SERVER_INNER_MSG_TYPE = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -2927,6 +2928,7 @@ $root.client_proto = (function() {
         values[valuesById[55] = "SERVER_TYPE_AGENT_GET_RANK"] = 55;
         values[valuesById[56] = "SERVER_TYPE_FLOATING"] = 56;
         values[valuesById[59] = "SERVER_TYPE_REPORT_SWITCH"] = 59;
+        values[valuesById[65] = "SERVER_TYPE_GAMERECORD"] = 65;
         return values;
     })();
 
@@ -11868,6 +11870,8 @@ $root.account_proto = (function() {
          * @property {number|null} [temp_uin] VerifyLoginTokenResp temp_uin
          * @property {account_proto.IInGameInfo|null} [ingame_info] VerifyLoginTokenResp ingame_info
          * @property {Uint8Array|null} [trans] VerifyLoginTokenResp trans
+         * @property {number|Long|null} [currency_unit_multi] VerifyLoginTokenResp currency_unit_multi
+         * @property {string|null} [currency_label] VerifyLoginTokenResp currency_label
          */
 
         /**
@@ -12006,6 +12010,22 @@ $root.account_proto = (function() {
         VerifyLoginTokenResp.prototype.trans = $util.newBuffer([]);
 
         /**
+         * VerifyLoginTokenResp currency_unit_multi.
+         * @member {number|Long} currency_unit_multi
+         * @memberof account_proto.VerifyLoginTokenResp
+         * @instance
+         */
+        VerifyLoginTokenResp.prototype.currency_unit_multi = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * VerifyLoginTokenResp currency_label.
+         * @member {string} currency_label
+         * @memberof account_proto.VerifyLoginTokenResp
+         * @instance
+         */
+        VerifyLoginTokenResp.prototype.currency_label = "";
+
+        /**
          * Creates a new VerifyLoginTokenResp instance using the specified properties.
          * @function create
          * @memberof account_proto.VerifyLoginTokenResp
@@ -12059,6 +12079,10 @@ $root.account_proto = (function() {
                 $root.account_proto.InGameInfo.encode(message.ingame_info, writer.uint32(/* id 14, wireType 2 =*/114).fork()).ldelim();
             if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
                 writer.uint32(/* id 15, wireType 2 =*/122).bytes(message.trans);
+            if (message.currency_unit_multi != null && Object.hasOwnProperty.call(message, "currency_unit_multi"))
+                writer.uint32(/* id 16, wireType 0 =*/128).int64(message.currency_unit_multi);
+            if (message.currency_label != null && Object.hasOwnProperty.call(message, "currency_label"))
+                writer.uint32(/* id 17, wireType 2 =*/138).string(message.currency_label);
             return writer;
         };
 
@@ -12137,6 +12161,12 @@ $root.account_proto = (function() {
                     break;
                 case 15:
                     message.trans = reader.bytes();
+                    break;
+                case 16:
+                    message.currency_unit_multi = reader.int64();
+                    break;
+                case 17:
+                    message.currency_label = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -12220,6 +12250,12 @@ $root.account_proto = (function() {
             if (message.trans != null && message.hasOwnProperty("trans"))
                 if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
                     return "trans: buffer expected";
+            if (message.currency_unit_multi != null && message.hasOwnProperty("currency_unit_multi"))
+                if (!$util.isInteger(message.currency_unit_multi) && !(message.currency_unit_multi && $util.isInteger(message.currency_unit_multi.low) && $util.isInteger(message.currency_unit_multi.high)))
+                    return "currency_unit_multi: integer|Long expected";
+            if (message.currency_label != null && message.hasOwnProperty("currency_label"))
+                if (!$util.isString(message.currency_label))
+                    return "currency_label: string expected";
             return null;
         };
 
@@ -12278,6 +12314,17 @@ $root.account_proto = (function() {
                     $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
                 else if (object.trans.length)
                     message.trans = object.trans;
+            if (object.currency_unit_multi != null)
+                if ($util.Long)
+                    (message.currency_unit_multi = $util.Long.fromValue(object.currency_unit_multi)).unsigned = false;
+                else if (typeof object.currency_unit_multi === "string")
+                    message.currency_unit_multi = parseInt(object.currency_unit_multi, 10);
+                else if (typeof object.currency_unit_multi === "number")
+                    message.currency_unit_multi = object.currency_unit_multi;
+                else if (typeof object.currency_unit_multi === "object")
+                    message.currency_unit_multi = new $util.LongBits(object.currency_unit_multi.low >>> 0, object.currency_unit_multi.high >>> 0).toNumber();
+            if (object.currency_label != null)
+                message.currency_label = String(object.currency_label);
             return message;
         };
 
@@ -12320,6 +12367,12 @@ $root.account_proto = (function() {
                     if (options.bytes !== Array)
                         object.trans = $util.newBuffer(object.trans);
                 }
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.currency_unit_multi = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.currency_unit_multi = options.longs === String ? "0" : 0;
+                object.currency_label = "";
             }
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = message.result;
@@ -12354,6 +12407,13 @@ $root.account_proto = (function() {
                 object.ingame_info = $root.account_proto.InGameInfo.toObject(message.ingame_info, options);
             if (message.trans != null && message.hasOwnProperty("trans"))
                 object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            if (message.currency_unit_multi != null && message.hasOwnProperty("currency_unit_multi"))
+                if (typeof message.currency_unit_multi === "number")
+                    object.currency_unit_multi = options.longs === String ? String(message.currency_unit_multi) : message.currency_unit_multi;
+                else
+                    object.currency_unit_multi = options.longs === String ? $util.Long.prototype.toString.call(message.currency_unit_multi) : options.longs === Number ? new $util.LongBits(message.currency_unit_multi.low >>> 0, message.currency_unit_multi.high >>> 0).toNumber() : message.currency_unit_multi;
+            if (message.currency_label != null && message.hasOwnProperty("currency_label"))
+                object.currency_label = message.currency_label;
             return object;
         };
 
@@ -12372,6 +12432,3410 @@ $root.account_proto = (function() {
     })();
 
     return account_proto;
+})();
+
+$root.gamerecord = (function() {
+
+    /**
+     * Namespace gamerecord.
+     * @exports gamerecord
+     * @namespace
+     */
+    var gamerecord = {};
+
+    /**
+     * ASSET_CMD enum.
+     * @name gamerecord.ASSET_CMD
+     * @enum {number}
+     * @property {number} GAMERECORD_CMD_NONE=0 GAMERECORD_CMD_NONE value
+     * @property {number} GAMERECORD_CMD_GET_RECORD_REQ=2850 GAMERECORD_CMD_GET_RECORD_REQ value
+     * @property {number} GAMERECORD_CMD_GET_RECORD_RESP=2851 GAMERECORD_CMD_GET_RECORD_RESP value
+     * @property {number} GAMERECORD_CMD_RECORD_PUSH=2852 GAMERECORD_CMD_RECORD_PUSH value
+     * @property {number} GAMERECORD_CMD_RECORD_CACHE_PUSH=2853 GAMERECORD_CMD_RECORD_CACHE_PUSH value
+     * @property {number} GAMERECORD_CMD_GET_DETAIL_REQ=2854 GAMERECORD_CMD_GET_DETAIL_REQ value
+     * @property {number} GAMERECORD_CMD_GET_DETAIL_RESP=2855 GAMERECORD_CMD_GET_DETAIL_RESP value
+     */
+    gamerecord.ASSET_CMD = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "GAMERECORD_CMD_NONE"] = 0;
+        values[valuesById[2850] = "GAMERECORD_CMD_GET_RECORD_REQ"] = 2850;
+        values[valuesById[2851] = "GAMERECORD_CMD_GET_RECORD_RESP"] = 2851;
+        values[valuesById[2852] = "GAMERECORD_CMD_RECORD_PUSH"] = 2852;
+        values[valuesById[2853] = "GAMERECORD_CMD_RECORD_CACHE_PUSH"] = 2853;
+        values[valuesById[2854] = "GAMERECORD_CMD_GET_DETAIL_REQ"] = 2854;
+        values[valuesById[2855] = "GAMERECORD_CMD_GET_DETAIL_RESP"] = 2855;
+        return values;
+    })();
+
+    /**
+     * BET_ACT enum.
+     * @name gamerecord.BET_ACT
+     * @enum {number}
+     * @property {number} BET_ACT_NONE=0 BET_ACT_NONE value
+     * @property {number} BET_ACT_NORMAL_BET=1 BET_ACT_NORMAL_BET value
+     */
+    gamerecord.BET_ACT = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "BET_ACT_NONE"] = 0;
+        values[valuesById[1] = "BET_ACT_NORMAL_BET"] = 1;
+        return values;
+    })();
+
+    /**
+     * WIN_ACT enum.
+     * @name gamerecord.WIN_ACT
+     * @enum {number}
+     * @property {number} WIN_ACT_NONE=0 WIN_ACT_NONE value
+     * @property {number} WIN_ACT_NORMAL_WIN=1 WIN_ACT_NORMAL_WIN value
+     * @property {number} WIN_ACT_JACKPOT=2 WIN_ACT_JACKPOT value
+     * @property {number} WIN_ACT_DEALER=3 WIN_ACT_DEALER value
+     */
+    gamerecord.WIN_ACT = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "WIN_ACT_NONE"] = 0;
+        values[valuesById[1] = "WIN_ACT_NORMAL_WIN"] = 1;
+        values[valuesById[2] = "WIN_ACT_JACKPOT"] = 2;
+        values[valuesById[3] = "WIN_ACT_DEALER"] = 3;
+        return values;
+    })();
+
+    gamerecord.GameRecordReq = (function() {
+
+        /**
+         * Properties of a GameRecordReq.
+         * @memberof gamerecord
+         * @interface IGameRecordReq
+         * @property {number|null} [uid] GameRecordReq uid
+         * @property {number|null} [game] GameRecordReq game
+         * @property {number|Long|null} [pos] GameRecordReq pos
+         * @property {number|null} [size] GameRecordReq size
+         * @property {Uint8Array|null} [trans] GameRecordReq trans
+         */
+
+        /**
+         * Constructs a new GameRecordReq.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordReq.
+         * @implements IGameRecordReq
+         * @constructor
+         * @param {gamerecord.IGameRecordReq=} [properties] Properties to set
+         */
+        function GameRecordReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordReq uid.
+         * @member {number} uid
+         * @memberof gamerecord.GameRecordReq
+         * @instance
+         */
+        GameRecordReq.prototype.uid = 0;
+
+        /**
+         * GameRecordReq game.
+         * @member {number} game
+         * @memberof gamerecord.GameRecordReq
+         * @instance
+         */
+        GameRecordReq.prototype.game = 0;
+
+        /**
+         * GameRecordReq pos.
+         * @member {number|Long} pos
+         * @memberof gamerecord.GameRecordReq
+         * @instance
+         */
+        GameRecordReq.prototype.pos = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * GameRecordReq size.
+         * @member {number} size
+         * @memberof gamerecord.GameRecordReq
+         * @instance
+         */
+        GameRecordReq.prototype.size = 0;
+
+        /**
+         * GameRecordReq trans.
+         * @member {Uint8Array} trans
+         * @memberof gamerecord.GameRecordReq
+         * @instance
+         */
+        GameRecordReq.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * Creates a new GameRecordReq instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {gamerecord.IGameRecordReq=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordReq} GameRecordReq instance
+         */
+        GameRecordReq.create = function create(properties) {
+            return new GameRecordReq(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordReq message. Does not implicitly {@link gamerecord.GameRecordReq.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {gamerecord.IGameRecordReq} message GameRecordReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game != null && Object.hasOwnProperty.call(message, "game"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game);
+            if (message.pos != null && Object.hasOwnProperty.call(message, "pos"))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.pos);
+            if (message.size != null && Object.hasOwnProperty.call(message, "size"))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint32(message.size);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.trans);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordReq message, length delimited. Does not implicitly {@link gamerecord.GameRecordReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {gamerecord.IGameRecordReq} message GameRecordReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordReq} GameRecordReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game = reader.uint32();
+                    break;
+                case 3:
+                    message.pos = reader.uint64();
+                    break;
+                case 4:
+                    message.size = reader.uint32();
+                    break;
+                case 5:
+                    message.trans = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordReq} GameRecordReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordReq message.
+         * @function verify
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game != null && message.hasOwnProperty("game"))
+                if (!$util.isInteger(message.game))
+                    return "game: integer expected";
+            if (message.pos != null && message.hasOwnProperty("pos"))
+                if (!$util.isInteger(message.pos) && !(message.pos && $util.isInteger(message.pos.low) && $util.isInteger(message.pos.high)))
+                    return "pos: integer|Long expected";
+            if (message.size != null && message.hasOwnProperty("size"))
+                if (!$util.isInteger(message.size))
+                    return "size: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordReq} GameRecordReq
+         */
+        GameRecordReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordReq)
+                return object;
+            var message = new $root.gamerecord.GameRecordReq();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game != null)
+                message.game = object.game >>> 0;
+            if (object.pos != null)
+                if ($util.Long)
+                    (message.pos = $util.Long.fromValue(object.pos)).unsigned = true;
+                else if (typeof object.pos === "string")
+                    message.pos = parseInt(object.pos, 10);
+                else if (typeof object.pos === "number")
+                    message.pos = object.pos;
+                else if (typeof object.pos === "object")
+                    message.pos = new $util.LongBits(object.pos.low >>> 0, object.pos.high >>> 0).toNumber(true);
+            if (object.size != null)
+                message.size = object.size >>> 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordReq
+         * @static
+         * @param {gamerecord.GameRecordReq} message GameRecordReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.pos = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.pos = options.longs === String ? "0" : 0;
+                object.size = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game != null && message.hasOwnProperty("game"))
+                object.game = message.game;
+            if (message.pos != null && message.hasOwnProperty("pos"))
+                if (typeof message.pos === "number")
+                    object.pos = options.longs === String ? String(message.pos) : message.pos;
+                else
+                    object.pos = options.longs === String ? $util.Long.prototype.toString.call(message.pos) : options.longs === Number ? new $util.LongBits(message.pos.low >>> 0, message.pos.high >>> 0).toNumber(true) : message.pos;
+            if (message.size != null && message.hasOwnProperty("size"))
+                object.size = message.size;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordReq to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GameRecordReq;
+    })();
+
+    gamerecord.GameRecordResp = (function() {
+
+        /**
+         * Properties of a GameRecordResp.
+         * @memberof gamerecord
+         * @interface IGameRecordResp
+         * @property {number|null} [uid] GameRecordResp uid
+         * @property {number|null} [game] GameRecordResp game
+         * @property {number|null} [result] GameRecordResp result
+         * @property {number|null} [timezoneinmin] GameRecordResp timezoneinmin
+         * @property {number|null} [endflag] GameRecordResp endflag
+         * @property {Array.<gamerecord.GameRecordResp.IGameRecordItem>|null} [list] GameRecordResp list
+         * @property {Array.<gamerecord.GameRecordResp.IDayAmountItem>|null} [daylist] GameRecordResp daylist
+         * @property {number|null} [totalsize] GameRecordResp totalsize
+         * @property {Uint8Array|null} [trans] GameRecordResp trans
+         */
+
+        /**
+         * Constructs a new GameRecordResp.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordResp.
+         * @implements IGameRecordResp
+         * @constructor
+         * @param {gamerecord.IGameRecordResp=} [properties] Properties to set
+         */
+        function GameRecordResp(properties) {
+            this.list = [];
+            this.daylist = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordResp uid.
+         * @member {number} uid
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.uid = 0;
+
+        /**
+         * GameRecordResp game.
+         * @member {number} game
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.game = 0;
+
+        /**
+         * GameRecordResp result.
+         * @member {number} result
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.result = 0;
+
+        /**
+         * GameRecordResp timezoneinmin.
+         * @member {number} timezoneinmin
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.timezoneinmin = 0;
+
+        /**
+         * GameRecordResp endflag.
+         * @member {number} endflag
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.endflag = 0;
+
+        /**
+         * GameRecordResp list.
+         * @member {Array.<gamerecord.GameRecordResp.IGameRecordItem>} list
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.list = $util.emptyArray;
+
+        /**
+         * GameRecordResp daylist.
+         * @member {Array.<gamerecord.GameRecordResp.IDayAmountItem>} daylist
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.daylist = $util.emptyArray;
+
+        /**
+         * GameRecordResp totalsize.
+         * @member {number} totalsize
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.totalsize = 0;
+
+        /**
+         * GameRecordResp trans.
+         * @member {Uint8Array} trans
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         */
+        GameRecordResp.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * Creates a new GameRecordResp instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {gamerecord.IGameRecordResp=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordResp} GameRecordResp instance
+         */
+        GameRecordResp.create = function create(properties) {
+            return new GameRecordResp(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordResp message. Does not implicitly {@link gamerecord.GameRecordResp.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {gamerecord.IGameRecordResp} message GameRecordResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game != null && Object.hasOwnProperty.call(message, "game"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game);
+            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.result);
+            if (message.timezoneinmin != null && Object.hasOwnProperty.call(message, "timezoneinmin"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.timezoneinmin);
+            if (message.endflag != null && Object.hasOwnProperty.call(message, "endflag"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.endflag);
+            if (message.list != null && message.list.length)
+                for (var i = 0; i < message.list.length; ++i)
+                    $root.gamerecord.GameRecordResp.GameRecordItem.encode(message.list[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+            if (message.daylist != null && message.daylist.length)
+                for (var i = 0; i < message.daylist.length; ++i)
+                    $root.gamerecord.GameRecordResp.DayAmountItem.encode(message.daylist[i], writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
+            if (message.totalsize != null && Object.hasOwnProperty.call(message, "totalsize"))
+                writer.uint32(/* id 8, wireType 0 =*/64).uint32(message.totalsize);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 9, wireType 2 =*/74).bytes(message.trans);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordResp message, length delimited. Does not implicitly {@link gamerecord.GameRecordResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {gamerecord.IGameRecordResp} message GameRecordResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordResp} GameRecordResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game = reader.uint32();
+                    break;
+                case 3:
+                    message.result = reader.int32();
+                    break;
+                case 4:
+                    message.timezoneinmin = reader.int32();
+                    break;
+                case 5:
+                    message.endflag = reader.int32();
+                    break;
+                case 6:
+                    if (!(message.list && message.list.length))
+                        message.list = [];
+                    message.list.push($root.gamerecord.GameRecordResp.GameRecordItem.decode(reader, reader.uint32()));
+                    break;
+                case 7:
+                    if (!(message.daylist && message.daylist.length))
+                        message.daylist = [];
+                    message.daylist.push($root.gamerecord.GameRecordResp.DayAmountItem.decode(reader, reader.uint32()));
+                    break;
+                case 8:
+                    message.totalsize = reader.uint32();
+                    break;
+                case 9:
+                    message.trans = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordResp} GameRecordResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordResp message.
+         * @function verify
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game != null && message.hasOwnProperty("game"))
+                if (!$util.isInteger(message.game))
+                    return "game: integer expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                if (!$util.isInteger(message.result))
+                    return "result: integer expected";
+            if (message.timezoneinmin != null && message.hasOwnProperty("timezoneinmin"))
+                if (!$util.isInteger(message.timezoneinmin))
+                    return "timezoneinmin: integer expected";
+            if (message.endflag != null && message.hasOwnProperty("endflag"))
+                if (!$util.isInteger(message.endflag))
+                    return "endflag: integer expected";
+            if (message.list != null && message.hasOwnProperty("list")) {
+                if (!Array.isArray(message.list))
+                    return "list: array expected";
+                for (var i = 0; i < message.list.length; ++i) {
+                    var error = $root.gamerecord.GameRecordResp.GameRecordItem.verify(message.list[i]);
+                    if (error)
+                        return "list." + error;
+                }
+            }
+            if (message.daylist != null && message.hasOwnProperty("daylist")) {
+                if (!Array.isArray(message.daylist))
+                    return "daylist: array expected";
+                for (var i = 0; i < message.daylist.length; ++i) {
+                    var error = $root.gamerecord.GameRecordResp.DayAmountItem.verify(message.daylist[i]);
+                    if (error)
+                        return "daylist." + error;
+                }
+            }
+            if (message.totalsize != null && message.hasOwnProperty("totalsize"))
+                if (!$util.isInteger(message.totalsize))
+                    return "totalsize: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordResp} GameRecordResp
+         */
+        GameRecordResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordResp)
+                return object;
+            var message = new $root.gamerecord.GameRecordResp();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game != null)
+                message.game = object.game >>> 0;
+            if (object.result != null)
+                message.result = object.result | 0;
+            if (object.timezoneinmin != null)
+                message.timezoneinmin = object.timezoneinmin | 0;
+            if (object.endflag != null)
+                message.endflag = object.endflag | 0;
+            if (object.list) {
+                if (!Array.isArray(object.list))
+                    throw TypeError(".gamerecord.GameRecordResp.list: array expected");
+                message.list = [];
+                for (var i = 0; i < object.list.length; ++i) {
+                    if (typeof object.list[i] !== "object")
+                        throw TypeError(".gamerecord.GameRecordResp.list: object expected");
+                    message.list[i] = $root.gamerecord.GameRecordResp.GameRecordItem.fromObject(object.list[i]);
+                }
+            }
+            if (object.daylist) {
+                if (!Array.isArray(object.daylist))
+                    throw TypeError(".gamerecord.GameRecordResp.daylist: array expected");
+                message.daylist = [];
+                for (var i = 0; i < object.daylist.length; ++i) {
+                    if (typeof object.daylist[i] !== "object")
+                        throw TypeError(".gamerecord.GameRecordResp.daylist: object expected");
+                    message.daylist[i] = $root.gamerecord.GameRecordResp.DayAmountItem.fromObject(object.daylist[i]);
+                }
+            }
+            if (object.totalsize != null)
+                message.totalsize = object.totalsize >>> 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordResp
+         * @static
+         * @param {gamerecord.GameRecordResp} message GameRecordResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults) {
+                object.list = [];
+                object.daylist = [];
+            }
+            if (options.defaults) {
+                object.uid = 0;
+                object.game = 0;
+                object.result = 0;
+                object.timezoneinmin = 0;
+                object.endflag = 0;
+                object.totalsize = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game != null && message.hasOwnProperty("game"))
+                object.game = message.game;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = message.result;
+            if (message.timezoneinmin != null && message.hasOwnProperty("timezoneinmin"))
+                object.timezoneinmin = message.timezoneinmin;
+            if (message.endflag != null && message.hasOwnProperty("endflag"))
+                object.endflag = message.endflag;
+            if (message.list && message.list.length) {
+                object.list = [];
+                for (var j = 0; j < message.list.length; ++j)
+                    object.list[j] = $root.gamerecord.GameRecordResp.GameRecordItem.toObject(message.list[j], options);
+            }
+            if (message.daylist && message.daylist.length) {
+                object.daylist = [];
+                for (var j = 0; j < message.daylist.length; ++j)
+                    object.daylist[j] = $root.gamerecord.GameRecordResp.DayAmountItem.toObject(message.daylist[j], options);
+            }
+            if (message.totalsize != null && message.hasOwnProperty("totalsize"))
+                object.totalsize = message.totalsize;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordResp to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        GameRecordResp.GameRecordItem = (function() {
+
+            /**
+             * Properties of a GameRecordItem.
+             * @memberof gamerecord.GameRecordResp
+             * @interface IGameRecordItem
+             * @property {string|null} [roundid] GameRecordItem roundid
+             * @property {number|Long|null} [bet] GameRecordItem bet
+             * @property {gamerecord.BET_ACT|null} [betact] GameRecordItem betact
+             * @property {number|Long|null} [win] GameRecordItem win
+             * @property {gamerecord.WIN_ACT|null} [winact] GameRecordItem winact
+             * @property {number|Long|null} [timestamp] GameRecordItem timestamp
+             * @property {number|null} [firstofdayflag] GameRecordItem firstofdayflag
+             * @property {Uint8Array|null} [detail] GameRecordItem detail
+             * @property {number|Long|null} [id] GameRecordItem id
+             */
+
+            /**
+             * Constructs a new GameRecordItem.
+             * @memberof gamerecord.GameRecordResp
+             * @classdesc Represents a GameRecordItem.
+             * @implements IGameRecordItem
+             * @constructor
+             * @param {gamerecord.GameRecordResp.IGameRecordItem=} [properties] Properties to set
+             */
+            function GameRecordItem(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * GameRecordItem roundid.
+             * @member {string} roundid
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.roundid = "";
+
+            /**
+             * GameRecordItem bet.
+             * @member {number|Long} bet
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.bet = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * GameRecordItem betact.
+             * @member {gamerecord.BET_ACT} betact
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.betact = 0;
+
+            /**
+             * GameRecordItem win.
+             * @member {number|Long} win
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.win = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * GameRecordItem winact.
+             * @member {gamerecord.WIN_ACT} winact
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.winact = 0;
+
+            /**
+             * GameRecordItem timestamp.
+             * @member {number|Long} timestamp
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * GameRecordItem firstofdayflag.
+             * @member {number} firstofdayflag
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.firstofdayflag = 0;
+
+            /**
+             * GameRecordItem detail.
+             * @member {Uint8Array} detail
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.detail = $util.newBuffer([]);
+
+            /**
+             * GameRecordItem id.
+             * @member {number|Long} id
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+            /**
+             * Creates a new GameRecordItem instance using the specified properties.
+             * @function create
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {gamerecord.GameRecordResp.IGameRecordItem=} [properties] Properties to set
+             * @returns {gamerecord.GameRecordResp.GameRecordItem} GameRecordItem instance
+             */
+            GameRecordItem.create = function create(properties) {
+                return new GameRecordItem(properties);
+            };
+
+            /**
+             * Encodes the specified GameRecordItem message. Does not implicitly {@link gamerecord.GameRecordResp.GameRecordItem.verify|verify} messages.
+             * @function encode
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {gamerecord.GameRecordResp.IGameRecordItem} message GameRecordItem message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GameRecordItem.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.roundid != null && Object.hasOwnProperty.call(message, "roundid"))
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.roundid);
+                if (message.bet != null && Object.hasOwnProperty.call(message, "bet"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int64(message.bet);
+                if (message.betact != null && Object.hasOwnProperty.call(message, "betact"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.betact);
+                if (message.win != null && Object.hasOwnProperty.call(message, "win"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int64(message.win);
+                if (message.winact != null && Object.hasOwnProperty.call(message, "winact"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int32(message.winact);
+                if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
+                    writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.timestamp);
+                if (message.firstofdayflag != null && Object.hasOwnProperty.call(message, "firstofdayflag"))
+                    writer.uint32(/* id 7, wireType 0 =*/56).int32(message.firstofdayflag);
+                if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
+                    writer.uint32(/* id 8, wireType 2 =*/66).bytes(message.detail);
+                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                    writer.uint32(/* id 9, wireType 0 =*/72).uint64(message.id);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified GameRecordItem message, length delimited. Does not implicitly {@link gamerecord.GameRecordResp.GameRecordItem.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {gamerecord.GameRecordResp.IGameRecordItem} message GameRecordItem message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            GameRecordItem.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a GameRecordItem message from the specified reader or buffer.
+             * @function decode
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {gamerecord.GameRecordResp.GameRecordItem} GameRecordItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GameRecordItem.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordResp.GameRecordItem();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.roundid = reader.string();
+                        break;
+                    case 2:
+                        message.bet = reader.int64();
+                        break;
+                    case 3:
+                        message.betact = reader.int32();
+                        break;
+                    case 4:
+                        message.win = reader.int64();
+                        break;
+                    case 5:
+                        message.winact = reader.int32();
+                        break;
+                    case 6:
+                        message.timestamp = reader.uint64();
+                        break;
+                    case 7:
+                        message.firstofdayflag = reader.int32();
+                        break;
+                    case 8:
+                        message.detail = reader.bytes();
+                        break;
+                    case 9:
+                        message.id = reader.uint64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a GameRecordItem message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {gamerecord.GameRecordResp.GameRecordItem} GameRecordItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GameRecordItem.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a GameRecordItem message.
+             * @function verify
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            GameRecordItem.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.roundid != null && message.hasOwnProperty("roundid"))
+                    if (!$util.isString(message.roundid))
+                        return "roundid: string expected";
+                if (message.bet != null && message.hasOwnProperty("bet"))
+                    if (!$util.isInteger(message.bet) && !(message.bet && $util.isInteger(message.bet.low) && $util.isInteger(message.bet.high)))
+                        return "bet: integer|Long expected";
+                if (message.betact != null && message.hasOwnProperty("betact"))
+                    switch (message.betact) {
+                    default:
+                        return "betact: enum value expected";
+                    case 0:
+                    case 1:
+                        break;
+                    }
+                if (message.win != null && message.hasOwnProperty("win"))
+                    if (!$util.isInteger(message.win) && !(message.win && $util.isInteger(message.win.low) && $util.isInteger(message.win.high)))
+                        return "win: integer|Long expected";
+                if (message.winact != null && message.hasOwnProperty("winact"))
+                    switch (message.winact) {
+                    default:
+                        return "winact: enum value expected";
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        break;
+                    }
+                if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                    if (!$util.isInteger(message.timestamp) && !(message.timestamp && $util.isInteger(message.timestamp.low) && $util.isInteger(message.timestamp.high)))
+                        return "timestamp: integer|Long expected";
+                if (message.firstofdayflag != null && message.hasOwnProperty("firstofdayflag"))
+                    if (!$util.isInteger(message.firstofdayflag))
+                        return "firstofdayflag: integer expected";
+                if (message.detail != null && message.hasOwnProperty("detail"))
+                    if (!(message.detail && typeof message.detail.length === "number" || $util.isString(message.detail)))
+                        return "detail: buffer expected";
+                if (message.id != null && message.hasOwnProperty("id"))
+                    if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                        return "id: integer|Long expected";
+                return null;
+            };
+
+            /**
+             * Creates a GameRecordItem message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {gamerecord.GameRecordResp.GameRecordItem} GameRecordItem
+             */
+            GameRecordItem.fromObject = function fromObject(object) {
+                if (object instanceof $root.gamerecord.GameRecordResp.GameRecordItem)
+                    return object;
+                var message = new $root.gamerecord.GameRecordResp.GameRecordItem();
+                if (object.roundid != null)
+                    message.roundid = String(object.roundid);
+                if (object.bet != null)
+                    if ($util.Long)
+                        (message.bet = $util.Long.fromValue(object.bet)).unsigned = false;
+                    else if (typeof object.bet === "string")
+                        message.bet = parseInt(object.bet, 10);
+                    else if (typeof object.bet === "number")
+                        message.bet = object.bet;
+                    else if (typeof object.bet === "object")
+                        message.bet = new $util.LongBits(object.bet.low >>> 0, object.bet.high >>> 0).toNumber();
+                switch (object.betact) {
+                case "BET_ACT_NONE":
+                case 0:
+                    message.betact = 0;
+                    break;
+                case "BET_ACT_NORMAL_BET":
+                case 1:
+                    message.betact = 1;
+                    break;
+                }
+                if (object.win != null)
+                    if ($util.Long)
+                        (message.win = $util.Long.fromValue(object.win)).unsigned = false;
+                    else if (typeof object.win === "string")
+                        message.win = parseInt(object.win, 10);
+                    else if (typeof object.win === "number")
+                        message.win = object.win;
+                    else if (typeof object.win === "object")
+                        message.win = new $util.LongBits(object.win.low >>> 0, object.win.high >>> 0).toNumber();
+                switch (object.winact) {
+                case "WIN_ACT_NONE":
+                case 0:
+                    message.winact = 0;
+                    break;
+                case "WIN_ACT_NORMAL_WIN":
+                case 1:
+                    message.winact = 1;
+                    break;
+                case "WIN_ACT_JACKPOT":
+                case 2:
+                    message.winact = 2;
+                    break;
+                case "WIN_ACT_DEALER":
+                case 3:
+                    message.winact = 3;
+                    break;
+                }
+                if (object.timestamp != null)
+                    if ($util.Long)
+                        (message.timestamp = $util.Long.fromValue(object.timestamp)).unsigned = true;
+                    else if (typeof object.timestamp === "string")
+                        message.timestamp = parseInt(object.timestamp, 10);
+                    else if (typeof object.timestamp === "number")
+                        message.timestamp = object.timestamp;
+                    else if (typeof object.timestamp === "object")
+                        message.timestamp = new $util.LongBits(object.timestamp.low >>> 0, object.timestamp.high >>> 0).toNumber(true);
+                if (object.firstofdayflag != null)
+                    message.firstofdayflag = object.firstofdayflag | 0;
+                if (object.detail != null)
+                    if (typeof object.detail === "string")
+                        $util.base64.decode(object.detail, message.detail = $util.newBuffer($util.base64.length(object.detail)), 0);
+                    else if (object.detail.length)
+                        message.detail = object.detail;
+                if (object.id != null)
+                    if ($util.Long)
+                        (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                    else if (typeof object.id === "string")
+                        message.id = parseInt(object.id, 10);
+                    else if (typeof object.id === "number")
+                        message.id = object.id;
+                    else if (typeof object.id === "object")
+                        message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a GameRecordItem message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @static
+             * @param {gamerecord.GameRecordResp.GameRecordItem} message GameRecordItem
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GameRecordItem.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.roundid = "";
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.bet = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.bet = options.longs === String ? "0" : 0;
+                    object.betact = options.enums === String ? "BET_ACT_NONE" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.win = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.win = options.longs === String ? "0" : 0;
+                    object.winact = options.enums === String ? "WIN_ACT_NONE" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.timestamp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.timestamp = options.longs === String ? "0" : 0;
+                    object.firstofdayflag = 0;
+                    if (options.bytes === String)
+                        object.detail = "";
+                    else {
+                        object.detail = [];
+                        if (options.bytes !== Array)
+                            object.detail = $util.newBuffer(object.detail);
+                    }
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, true);
+                        object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.id = options.longs === String ? "0" : 0;
+                }
+                if (message.roundid != null && message.hasOwnProperty("roundid"))
+                    object.roundid = message.roundid;
+                if (message.bet != null && message.hasOwnProperty("bet"))
+                    if (typeof message.bet === "number")
+                        object.bet = options.longs === String ? String(message.bet) : message.bet;
+                    else
+                        object.bet = options.longs === String ? $util.Long.prototype.toString.call(message.bet) : options.longs === Number ? new $util.LongBits(message.bet.low >>> 0, message.bet.high >>> 0).toNumber() : message.bet;
+                if (message.betact != null && message.hasOwnProperty("betact"))
+                    object.betact = options.enums === String ? $root.gamerecord.BET_ACT[message.betact] : message.betact;
+                if (message.win != null && message.hasOwnProperty("win"))
+                    if (typeof message.win === "number")
+                        object.win = options.longs === String ? String(message.win) : message.win;
+                    else
+                        object.win = options.longs === String ? $util.Long.prototype.toString.call(message.win) : options.longs === Number ? new $util.LongBits(message.win.low >>> 0, message.win.high >>> 0).toNumber() : message.win;
+                if (message.winact != null && message.hasOwnProperty("winact"))
+                    object.winact = options.enums === String ? $root.gamerecord.WIN_ACT[message.winact] : message.winact;
+                if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                    if (typeof message.timestamp === "number")
+                        object.timestamp = options.longs === String ? String(message.timestamp) : message.timestamp;
+                    else
+                        object.timestamp = options.longs === String ? $util.Long.prototype.toString.call(message.timestamp) : options.longs === Number ? new $util.LongBits(message.timestamp.low >>> 0, message.timestamp.high >>> 0).toNumber(true) : message.timestamp;
+                if (message.firstofdayflag != null && message.hasOwnProperty("firstofdayflag"))
+                    object.firstofdayflag = message.firstofdayflag;
+                if (message.detail != null && message.hasOwnProperty("detail"))
+                    object.detail = options.bytes === String ? $util.base64.encode(message.detail, 0, message.detail.length) : options.bytes === Array ? Array.prototype.slice.call(message.detail) : message.detail;
+                if (message.id != null && message.hasOwnProperty("id"))
+                    if (typeof message.id === "number")
+                        object.id = options.longs === String ? String(message.id) : message.id;
+                    else
+                        object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                return object;
+            };
+
+            /**
+             * Converts this GameRecordItem to JSON.
+             * @function toJSON
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GameRecordItem.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return GameRecordItem;
+        })();
+
+        GameRecordResp.DayAmountItem = (function() {
+
+            /**
+             * Properties of a DayAmountItem.
+             * @memberof gamerecord.GameRecordResp
+             * @interface IDayAmountItem
+             * @property {number|null} [year] DayAmountItem year
+             * @property {number|null} [month] DayAmountItem month
+             * @property {number|null} [day] DayAmountItem day
+             * @property {number|Long|null} [betamount] DayAmountItem betamount
+             * @property {number|Long|null} [winamount] DayAmountItem winamount
+             */
+
+            /**
+             * Constructs a new DayAmountItem.
+             * @memberof gamerecord.GameRecordResp
+             * @classdesc Represents a DayAmountItem.
+             * @implements IDayAmountItem
+             * @constructor
+             * @param {gamerecord.GameRecordResp.IDayAmountItem=} [properties] Properties to set
+             */
+            function DayAmountItem(properties) {
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * DayAmountItem year.
+             * @member {number} year
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @instance
+             */
+            DayAmountItem.prototype.year = 0;
+
+            /**
+             * DayAmountItem month.
+             * @member {number} month
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @instance
+             */
+            DayAmountItem.prototype.month = 0;
+
+            /**
+             * DayAmountItem day.
+             * @member {number} day
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @instance
+             */
+            DayAmountItem.prototype.day = 0;
+
+            /**
+             * DayAmountItem betamount.
+             * @member {number|Long} betamount
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @instance
+             */
+            DayAmountItem.prototype.betamount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * DayAmountItem winamount.
+             * @member {number|Long} winamount
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @instance
+             */
+            DayAmountItem.prototype.winamount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+            /**
+             * Creates a new DayAmountItem instance using the specified properties.
+             * @function create
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {gamerecord.GameRecordResp.IDayAmountItem=} [properties] Properties to set
+             * @returns {gamerecord.GameRecordResp.DayAmountItem} DayAmountItem instance
+             */
+            DayAmountItem.create = function create(properties) {
+                return new DayAmountItem(properties);
+            };
+
+            /**
+             * Encodes the specified DayAmountItem message. Does not implicitly {@link gamerecord.GameRecordResp.DayAmountItem.verify|verify} messages.
+             * @function encode
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {gamerecord.GameRecordResp.IDayAmountItem} message DayAmountItem message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            DayAmountItem.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.year != null && Object.hasOwnProperty.call(message, "year"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.year);
+                if (message.month != null && Object.hasOwnProperty.call(message, "month"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.month);
+                if (message.day != null && Object.hasOwnProperty.call(message, "day"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).uint32(message.day);
+                if (message.betamount != null && Object.hasOwnProperty.call(message, "betamount"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int64(message.betamount);
+                if (message.winamount != null && Object.hasOwnProperty.call(message, "winamount"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int64(message.winamount);
+                return writer;
+            };
+
+            /**
+             * Encodes the specified DayAmountItem message, length delimited. Does not implicitly {@link gamerecord.GameRecordResp.DayAmountItem.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {gamerecord.GameRecordResp.IDayAmountItem} message DayAmountItem message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            DayAmountItem.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a DayAmountItem message from the specified reader or buffer.
+             * @function decode
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {gamerecord.GameRecordResp.DayAmountItem} DayAmountItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            DayAmountItem.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordResp.DayAmountItem();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.year = reader.uint32();
+                        break;
+                    case 2:
+                        message.month = reader.uint32();
+                        break;
+                    case 3:
+                        message.day = reader.uint32();
+                        break;
+                    case 4:
+                        message.betamount = reader.int64();
+                        break;
+                    case 5:
+                        message.winamount = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a DayAmountItem message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {gamerecord.GameRecordResp.DayAmountItem} DayAmountItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            DayAmountItem.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a DayAmountItem message.
+             * @function verify
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            DayAmountItem.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.year != null && message.hasOwnProperty("year"))
+                    if (!$util.isInteger(message.year))
+                        return "year: integer expected";
+                if (message.month != null && message.hasOwnProperty("month"))
+                    if (!$util.isInteger(message.month))
+                        return "month: integer expected";
+                if (message.day != null && message.hasOwnProperty("day"))
+                    if (!$util.isInteger(message.day))
+                        return "day: integer expected";
+                if (message.betamount != null && message.hasOwnProperty("betamount"))
+                    if (!$util.isInteger(message.betamount) && !(message.betamount && $util.isInteger(message.betamount.low) && $util.isInteger(message.betamount.high)))
+                        return "betamount: integer|Long expected";
+                if (message.winamount != null && message.hasOwnProperty("winamount"))
+                    if (!$util.isInteger(message.winamount) && !(message.winamount && $util.isInteger(message.winamount.low) && $util.isInteger(message.winamount.high)))
+                        return "winamount: integer|Long expected";
+                return null;
+            };
+
+            /**
+             * Creates a DayAmountItem message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {gamerecord.GameRecordResp.DayAmountItem} DayAmountItem
+             */
+            DayAmountItem.fromObject = function fromObject(object) {
+                if (object instanceof $root.gamerecord.GameRecordResp.DayAmountItem)
+                    return object;
+                var message = new $root.gamerecord.GameRecordResp.DayAmountItem();
+                if (object.year != null)
+                    message.year = object.year >>> 0;
+                if (object.month != null)
+                    message.month = object.month >>> 0;
+                if (object.day != null)
+                    message.day = object.day >>> 0;
+                if (object.betamount != null)
+                    if ($util.Long)
+                        (message.betamount = $util.Long.fromValue(object.betamount)).unsigned = false;
+                    else if (typeof object.betamount === "string")
+                        message.betamount = parseInt(object.betamount, 10);
+                    else if (typeof object.betamount === "number")
+                        message.betamount = object.betamount;
+                    else if (typeof object.betamount === "object")
+                        message.betamount = new $util.LongBits(object.betamount.low >>> 0, object.betamount.high >>> 0).toNumber();
+                if (object.winamount != null)
+                    if ($util.Long)
+                        (message.winamount = $util.Long.fromValue(object.winamount)).unsigned = false;
+                    else if (typeof object.winamount === "string")
+                        message.winamount = parseInt(object.winamount, 10);
+                    else if (typeof object.winamount === "number")
+                        message.winamount = object.winamount;
+                    else if (typeof object.winamount === "object")
+                        message.winamount = new $util.LongBits(object.winamount.low >>> 0, object.winamount.high >>> 0).toNumber();
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a DayAmountItem message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @static
+             * @param {gamerecord.GameRecordResp.DayAmountItem} message DayAmountItem
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            DayAmountItem.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.defaults) {
+                    object.year = 0;
+                    object.month = 0;
+                    object.day = 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.betamount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.betamount = options.longs === String ? "0" : 0;
+                    if ($util.Long) {
+                        var long = new $util.Long(0, 0, false);
+                        object.winamount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.winamount = options.longs === String ? "0" : 0;
+                }
+                if (message.year != null && message.hasOwnProperty("year"))
+                    object.year = message.year;
+                if (message.month != null && message.hasOwnProperty("month"))
+                    object.month = message.month;
+                if (message.day != null && message.hasOwnProperty("day"))
+                    object.day = message.day;
+                if (message.betamount != null && message.hasOwnProperty("betamount"))
+                    if (typeof message.betamount === "number")
+                        object.betamount = options.longs === String ? String(message.betamount) : message.betamount;
+                    else
+                        object.betamount = options.longs === String ? $util.Long.prototype.toString.call(message.betamount) : options.longs === Number ? new $util.LongBits(message.betamount.low >>> 0, message.betamount.high >>> 0).toNumber() : message.betamount;
+                if (message.winamount != null && message.hasOwnProperty("winamount"))
+                    if (typeof message.winamount === "number")
+                        object.winamount = options.longs === String ? String(message.winamount) : message.winamount;
+                    else
+                        object.winamount = options.longs === String ? $util.Long.prototype.toString.call(message.winamount) : options.longs === Number ? new $util.LongBits(message.winamount.low >>> 0, message.winamount.high >>> 0).toNumber() : message.winamount;
+                return object;
+            };
+
+            /**
+             * Converts this DayAmountItem to JSON.
+             * @function toJSON
+             * @memberof gamerecord.GameRecordResp.DayAmountItem
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            DayAmountItem.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return DayAmountItem;
+        })();
+
+        return GameRecordResp;
+    })();
+
+    gamerecord.GameRecordDetailReq = (function() {
+
+        /**
+         * Properties of a GameRecordDetailReq.
+         * @memberof gamerecord
+         * @interface IGameRecordDetailReq
+         * @property {number|null} [uid] GameRecordDetailReq uid
+         * @property {number|null} [game] GameRecordDetailReq game
+         * @property {number|Long|null} [id] GameRecordDetailReq id
+         */
+
+        /**
+         * Constructs a new GameRecordDetailReq.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordDetailReq.
+         * @implements IGameRecordDetailReq
+         * @constructor
+         * @param {gamerecord.IGameRecordDetailReq=} [properties] Properties to set
+         */
+        function GameRecordDetailReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordDetailReq uid.
+         * @member {number} uid
+         * @memberof gamerecord.GameRecordDetailReq
+         * @instance
+         */
+        GameRecordDetailReq.prototype.uid = 0;
+
+        /**
+         * GameRecordDetailReq game.
+         * @member {number} game
+         * @memberof gamerecord.GameRecordDetailReq
+         * @instance
+         */
+        GameRecordDetailReq.prototype.game = 0;
+
+        /**
+         * GameRecordDetailReq id.
+         * @member {number|Long} id
+         * @memberof gamerecord.GameRecordDetailReq
+         * @instance
+         */
+        GameRecordDetailReq.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new GameRecordDetailReq instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {gamerecord.IGameRecordDetailReq=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordDetailReq} GameRecordDetailReq instance
+         */
+        GameRecordDetailReq.create = function create(properties) {
+            return new GameRecordDetailReq(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordDetailReq message. Does not implicitly {@link gamerecord.GameRecordDetailReq.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {gamerecord.IGameRecordDetailReq} message GameRecordDetailReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordDetailReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game != null && Object.hasOwnProperty.call(message, "game"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game);
+            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.id);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordDetailReq message, length delimited. Does not implicitly {@link gamerecord.GameRecordDetailReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {gamerecord.IGameRecordDetailReq} message GameRecordDetailReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordDetailReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordDetailReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordDetailReq} GameRecordDetailReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordDetailReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordDetailReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game = reader.uint32();
+                    break;
+                case 3:
+                    message.id = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordDetailReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordDetailReq} GameRecordDetailReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordDetailReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordDetailReq message.
+         * @function verify
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordDetailReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game != null && message.hasOwnProperty("game"))
+                if (!$util.isInteger(message.game))
+                    return "game: integer expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                    return "id: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordDetailReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordDetailReq} GameRecordDetailReq
+         */
+        GameRecordDetailReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordDetailReq)
+                return object;
+            var message = new $root.gamerecord.GameRecordDetailReq();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game != null)
+                message.game = object.game >>> 0;
+            if (object.id != null)
+                if ($util.Long)
+                    (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                else if (typeof object.id === "string")
+                    message.id = parseInt(object.id, 10);
+                else if (typeof object.id === "number")
+                    message.id = object.id;
+                else if (typeof object.id === "object")
+                    message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordDetailReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordDetailReq
+         * @static
+         * @param {gamerecord.GameRecordDetailReq} message GameRecordDetailReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordDetailReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.id = options.longs === String ? "0" : 0;
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game != null && message.hasOwnProperty("game"))
+                object.game = message.game;
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (typeof message.id === "number")
+                    object.id = options.longs === String ? String(message.id) : message.id;
+                else
+                    object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordDetailReq to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordDetailReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordDetailReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GameRecordDetailReq;
+    })();
+
+    gamerecord.GameRecordDetailResp = (function() {
+
+        /**
+         * Properties of a GameRecordDetailResp.
+         * @memberof gamerecord
+         * @interface IGameRecordDetailResp
+         * @property {number|null} [uid] GameRecordDetailResp uid
+         * @property {number|null} [game] GameRecordDetailResp game
+         * @property {number|Long|null} [id] GameRecordDetailResp id
+         * @property {number|null} [result] GameRecordDetailResp result
+         * @property {Uint8Array|null} [detail] GameRecordDetailResp detail
+         */
+
+        /**
+         * Constructs a new GameRecordDetailResp.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordDetailResp.
+         * @implements IGameRecordDetailResp
+         * @constructor
+         * @param {gamerecord.IGameRecordDetailResp=} [properties] Properties to set
+         */
+        function GameRecordDetailResp(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordDetailResp uid.
+         * @member {number} uid
+         * @memberof gamerecord.GameRecordDetailResp
+         * @instance
+         */
+        GameRecordDetailResp.prototype.uid = 0;
+
+        /**
+         * GameRecordDetailResp game.
+         * @member {number} game
+         * @memberof gamerecord.GameRecordDetailResp
+         * @instance
+         */
+        GameRecordDetailResp.prototype.game = 0;
+
+        /**
+         * GameRecordDetailResp id.
+         * @member {number|Long} id
+         * @memberof gamerecord.GameRecordDetailResp
+         * @instance
+         */
+        GameRecordDetailResp.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * GameRecordDetailResp result.
+         * @member {number} result
+         * @memberof gamerecord.GameRecordDetailResp
+         * @instance
+         */
+        GameRecordDetailResp.prototype.result = 0;
+
+        /**
+         * GameRecordDetailResp detail.
+         * @member {Uint8Array} detail
+         * @memberof gamerecord.GameRecordDetailResp
+         * @instance
+         */
+        GameRecordDetailResp.prototype.detail = $util.newBuffer([]);
+
+        /**
+         * Creates a new GameRecordDetailResp instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {gamerecord.IGameRecordDetailResp=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordDetailResp} GameRecordDetailResp instance
+         */
+        GameRecordDetailResp.create = function create(properties) {
+            return new GameRecordDetailResp(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordDetailResp message. Does not implicitly {@link gamerecord.GameRecordDetailResp.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {gamerecord.IGameRecordDetailResp} message GameRecordDetailResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordDetailResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game != null && Object.hasOwnProperty.call(message, "game"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game);
+            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.id);
+            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.result);
+            if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
+                writer.uint32(/* id 5, wireType 2 =*/42).bytes(message.detail);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordDetailResp message, length delimited. Does not implicitly {@link gamerecord.GameRecordDetailResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {gamerecord.IGameRecordDetailResp} message GameRecordDetailResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordDetailResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordDetailResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordDetailResp} GameRecordDetailResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordDetailResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordDetailResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game = reader.uint32();
+                    break;
+                case 3:
+                    message.id = reader.uint64();
+                    break;
+                case 4:
+                    message.result = reader.int32();
+                    break;
+                case 5:
+                    message.detail = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordDetailResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordDetailResp} GameRecordDetailResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordDetailResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordDetailResp message.
+         * @function verify
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordDetailResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game != null && message.hasOwnProperty("game"))
+                if (!$util.isInteger(message.game))
+                    return "game: integer expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                    return "id: integer|Long expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                if (!$util.isInteger(message.result))
+                    return "result: integer expected";
+            if (message.detail != null && message.hasOwnProperty("detail"))
+                if (!(message.detail && typeof message.detail.length === "number" || $util.isString(message.detail)))
+                    return "detail: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordDetailResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordDetailResp} GameRecordDetailResp
+         */
+        GameRecordDetailResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordDetailResp)
+                return object;
+            var message = new $root.gamerecord.GameRecordDetailResp();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game != null)
+                message.game = object.game >>> 0;
+            if (object.id != null)
+                if ($util.Long)
+                    (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                else if (typeof object.id === "string")
+                    message.id = parseInt(object.id, 10);
+                else if (typeof object.id === "number")
+                    message.id = object.id;
+                else if (typeof object.id === "object")
+                    message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+            if (object.result != null)
+                message.result = object.result | 0;
+            if (object.detail != null)
+                if (typeof object.detail === "string")
+                    $util.base64.decode(object.detail, message.detail = $util.newBuffer($util.base64.length(object.detail)), 0);
+                else if (object.detail.length)
+                    message.detail = object.detail;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordDetailResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordDetailResp
+         * @static
+         * @param {gamerecord.GameRecordDetailResp} message GameRecordDetailResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordDetailResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.id = options.longs === String ? "0" : 0;
+                object.result = 0;
+                if (options.bytes === String)
+                    object.detail = "";
+                else {
+                    object.detail = [];
+                    if (options.bytes !== Array)
+                        object.detail = $util.newBuffer(object.detail);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game != null && message.hasOwnProperty("game"))
+                object.game = message.game;
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (typeof message.id === "number")
+                    object.id = options.longs === String ? String(message.id) : message.id;
+                else
+                    object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = message.result;
+            if (message.detail != null && message.hasOwnProperty("detail"))
+                object.detail = options.bytes === String ? $util.base64.encode(message.detail, 0, message.detail.length) : options.bytes === Array ? Array.prototype.slice.call(message.detail) : message.detail;
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordDetailResp to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordDetailResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordDetailResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GameRecordDetailResp;
+    })();
+
+    gamerecord.GameRecordData = (function() {
+
+        /**
+         * Properties of a GameRecordData.
+         * @memberof gamerecord
+         * @interface IGameRecordData
+         * @property {number|null} [uid] GameRecordData uid
+         * @property {number|null} [game] GameRecordData game
+         * @property {string|null} [roundid] GameRecordData roundid
+         * @property {number|Long|null} [bet] GameRecordData bet
+         * @property {gamerecord.BET_ACT|null} [betact] GameRecordData betact
+         * @property {number|Long|null} [win] GameRecordData win
+         * @property {gamerecord.WIN_ACT|null} [winact] GameRecordData winact
+         * @property {number|Long|null} [timestamp] GameRecordData timestamp
+         * @property {Uint8Array|null} [detail] GameRecordData detail
+         * @property {number|null} [agencyid] GameRecordData agencyid
+         */
+
+        /**
+         * Constructs a new GameRecordData.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordData.
+         * @implements IGameRecordData
+         * @constructor
+         * @param {gamerecord.IGameRecordData=} [properties] Properties to set
+         */
+        function GameRecordData(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordData uid.
+         * @member {number} uid
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.uid = 0;
+
+        /**
+         * GameRecordData game.
+         * @member {number} game
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.game = 0;
+
+        /**
+         * GameRecordData roundid.
+         * @member {string} roundid
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.roundid = "";
+
+        /**
+         * GameRecordData bet.
+         * @member {number|Long} bet
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.bet = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * GameRecordData betact.
+         * @member {gamerecord.BET_ACT} betact
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.betact = 0;
+
+        /**
+         * GameRecordData win.
+         * @member {number|Long} win
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.win = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * GameRecordData winact.
+         * @member {gamerecord.WIN_ACT} winact
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.winact = 0;
+
+        /**
+         * GameRecordData timestamp.
+         * @member {number|Long} timestamp
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * GameRecordData detail.
+         * @member {Uint8Array} detail
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.detail = $util.newBuffer([]);
+
+        /**
+         * GameRecordData agencyid.
+         * @member {number} agencyid
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.agencyid = 0;
+
+        /**
+         * Creates a new GameRecordData instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {gamerecord.IGameRecordData=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordData} GameRecordData instance
+         */
+        GameRecordData.create = function create(properties) {
+            return new GameRecordData(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordData message. Does not implicitly {@link gamerecord.GameRecordData.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {gamerecord.IGameRecordData} message GameRecordData message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordData.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game != null && Object.hasOwnProperty.call(message, "game"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game);
+            if (message.roundid != null && Object.hasOwnProperty.call(message, "roundid"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.roundid);
+            if (message.bet != null && Object.hasOwnProperty.call(message, "bet"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int64(message.bet);
+            if (message.betact != null && Object.hasOwnProperty.call(message, "betact"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.betact);
+            if (message.win != null && Object.hasOwnProperty.call(message, "win"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int64(message.win);
+            if (message.winact != null && Object.hasOwnProperty.call(message, "winact"))
+                writer.uint32(/* id 7, wireType 0 =*/56).int32(message.winact);
+            if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
+                writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.timestamp);
+            if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
+                writer.uint32(/* id 9, wireType 2 =*/74).bytes(message.detail);
+            if (message.agencyid != null && Object.hasOwnProperty.call(message, "agencyid"))
+                writer.uint32(/* id 10, wireType 0 =*/80).uint32(message.agencyid);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordData message, length delimited. Does not implicitly {@link gamerecord.GameRecordData.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {gamerecord.IGameRecordData} message GameRecordData message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordData.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordData message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordData} GameRecordData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordData.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordData();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game = reader.uint32();
+                    break;
+                case 3:
+                    message.roundid = reader.string();
+                    break;
+                case 4:
+                    message.bet = reader.int64();
+                    break;
+                case 5:
+                    message.betact = reader.int32();
+                    break;
+                case 6:
+                    message.win = reader.int64();
+                    break;
+                case 7:
+                    message.winact = reader.int32();
+                    break;
+                case 8:
+                    message.timestamp = reader.uint64();
+                    break;
+                case 9:
+                    message.detail = reader.bytes();
+                    break;
+                case 10:
+                    message.agencyid = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordData message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordData} GameRecordData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordData.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordData message.
+         * @function verify
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordData.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game != null && message.hasOwnProperty("game"))
+                if (!$util.isInteger(message.game))
+                    return "game: integer expected";
+            if (message.roundid != null && message.hasOwnProperty("roundid"))
+                if (!$util.isString(message.roundid))
+                    return "roundid: string expected";
+            if (message.bet != null && message.hasOwnProperty("bet"))
+                if (!$util.isInteger(message.bet) && !(message.bet && $util.isInteger(message.bet.low) && $util.isInteger(message.bet.high)))
+                    return "bet: integer|Long expected";
+            if (message.betact != null && message.hasOwnProperty("betact"))
+                switch (message.betact) {
+                default:
+                    return "betact: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (!$util.isInteger(message.win) && !(message.win && $util.isInteger(message.win.low) && $util.isInteger(message.win.high)))
+                    return "win: integer|Long expected";
+            if (message.winact != null && message.hasOwnProperty("winact"))
+                switch (message.winact) {
+                default:
+                    return "winact: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+            if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                if (!$util.isInteger(message.timestamp) && !(message.timestamp && $util.isInteger(message.timestamp.low) && $util.isInteger(message.timestamp.high)))
+                    return "timestamp: integer|Long expected";
+            if (message.detail != null && message.hasOwnProperty("detail"))
+                if (!(message.detail && typeof message.detail.length === "number" || $util.isString(message.detail)))
+                    return "detail: buffer expected";
+            if (message.agencyid != null && message.hasOwnProperty("agencyid"))
+                if (!$util.isInteger(message.agencyid))
+                    return "agencyid: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordData message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordData} GameRecordData
+         */
+        GameRecordData.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordData)
+                return object;
+            var message = new $root.gamerecord.GameRecordData();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game != null)
+                message.game = object.game >>> 0;
+            if (object.roundid != null)
+                message.roundid = String(object.roundid);
+            if (object.bet != null)
+                if ($util.Long)
+                    (message.bet = $util.Long.fromValue(object.bet)).unsigned = false;
+                else if (typeof object.bet === "string")
+                    message.bet = parseInt(object.bet, 10);
+                else if (typeof object.bet === "number")
+                    message.bet = object.bet;
+                else if (typeof object.bet === "object")
+                    message.bet = new $util.LongBits(object.bet.low >>> 0, object.bet.high >>> 0).toNumber();
+            switch (object.betact) {
+            case "BET_ACT_NONE":
+            case 0:
+                message.betact = 0;
+                break;
+            case "BET_ACT_NORMAL_BET":
+            case 1:
+                message.betact = 1;
+                break;
+            }
+            if (object.win != null)
+                if ($util.Long)
+                    (message.win = $util.Long.fromValue(object.win)).unsigned = false;
+                else if (typeof object.win === "string")
+                    message.win = parseInt(object.win, 10);
+                else if (typeof object.win === "number")
+                    message.win = object.win;
+                else if (typeof object.win === "object")
+                    message.win = new $util.LongBits(object.win.low >>> 0, object.win.high >>> 0).toNumber();
+            switch (object.winact) {
+            case "WIN_ACT_NONE":
+            case 0:
+                message.winact = 0;
+                break;
+            case "WIN_ACT_NORMAL_WIN":
+            case 1:
+                message.winact = 1;
+                break;
+            case "WIN_ACT_JACKPOT":
+            case 2:
+                message.winact = 2;
+                break;
+            case "WIN_ACT_DEALER":
+            case 3:
+                message.winact = 3;
+                break;
+            }
+            if (object.timestamp != null)
+                if ($util.Long)
+                    (message.timestamp = $util.Long.fromValue(object.timestamp)).unsigned = true;
+                else if (typeof object.timestamp === "string")
+                    message.timestamp = parseInt(object.timestamp, 10);
+                else if (typeof object.timestamp === "number")
+                    message.timestamp = object.timestamp;
+                else if (typeof object.timestamp === "object")
+                    message.timestamp = new $util.LongBits(object.timestamp.low >>> 0, object.timestamp.high >>> 0).toNumber(true);
+            if (object.detail != null)
+                if (typeof object.detail === "string")
+                    $util.base64.decode(object.detail, message.detail = $util.newBuffer($util.base64.length(object.detail)), 0);
+                else if (object.detail.length)
+                    message.detail = object.detail;
+            if (object.agencyid != null)
+                message.agencyid = object.agencyid >>> 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordData message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordData
+         * @static
+         * @param {gamerecord.GameRecordData} message GameRecordData
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordData.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game = 0;
+                object.roundid = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.bet = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.bet = options.longs === String ? "0" : 0;
+                object.betact = options.enums === String ? "BET_ACT_NONE" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.win = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.win = options.longs === String ? "0" : 0;
+                object.winact = options.enums === String ? "WIN_ACT_NONE" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.timestamp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.timestamp = options.longs === String ? "0" : 0;
+                if (options.bytes === String)
+                    object.detail = "";
+                else {
+                    object.detail = [];
+                    if (options.bytes !== Array)
+                        object.detail = $util.newBuffer(object.detail);
+                }
+                object.agencyid = 0;
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game != null && message.hasOwnProperty("game"))
+                object.game = message.game;
+            if (message.roundid != null && message.hasOwnProperty("roundid"))
+                object.roundid = message.roundid;
+            if (message.bet != null && message.hasOwnProperty("bet"))
+                if (typeof message.bet === "number")
+                    object.bet = options.longs === String ? String(message.bet) : message.bet;
+                else
+                    object.bet = options.longs === String ? $util.Long.prototype.toString.call(message.bet) : options.longs === Number ? new $util.LongBits(message.bet.low >>> 0, message.bet.high >>> 0).toNumber() : message.bet;
+            if (message.betact != null && message.hasOwnProperty("betact"))
+                object.betact = options.enums === String ? $root.gamerecord.BET_ACT[message.betact] : message.betact;
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (typeof message.win === "number")
+                    object.win = options.longs === String ? String(message.win) : message.win;
+                else
+                    object.win = options.longs === String ? $util.Long.prototype.toString.call(message.win) : options.longs === Number ? new $util.LongBits(message.win.low >>> 0, message.win.high >>> 0).toNumber() : message.win;
+            if (message.winact != null && message.hasOwnProperty("winact"))
+                object.winact = options.enums === String ? $root.gamerecord.WIN_ACT[message.winact] : message.winact;
+            if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                if (typeof message.timestamp === "number")
+                    object.timestamp = options.longs === String ? String(message.timestamp) : message.timestamp;
+                else
+                    object.timestamp = options.longs === String ? $util.Long.prototype.toString.call(message.timestamp) : options.longs === Number ? new $util.LongBits(message.timestamp.low >>> 0, message.timestamp.high >>> 0).toNumber(true) : message.timestamp;
+            if (message.detail != null && message.hasOwnProperty("detail"))
+                object.detail = options.bytes === String ? $util.base64.encode(message.detail, 0, message.detail.length) : options.bytes === Array ? Array.prototype.slice.call(message.detail) : message.detail;
+            if (message.agencyid != null && message.hasOwnProperty("agencyid"))
+                object.agencyid = message.agencyid;
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordData to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordData.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GameRecordData;
+    })();
+
+    gamerecord.GameRecordPush = (function() {
+
+        /**
+         * Properties of a GameRecordPush.
+         * @memberof gamerecord
+         * @interface IGameRecordPush
+         * @property {Array.<gamerecord.IGameRecordData>|null} [list] GameRecordPush list
+         */
+
+        /**
+         * Constructs a new GameRecordPush.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordPush.
+         * @implements IGameRecordPush
+         * @constructor
+         * @param {gamerecord.IGameRecordPush=} [properties] Properties to set
+         */
+        function GameRecordPush(properties) {
+            this.list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordPush list.
+         * @member {Array.<gamerecord.IGameRecordData>} list
+         * @memberof gamerecord.GameRecordPush
+         * @instance
+         */
+        GameRecordPush.prototype.list = $util.emptyArray;
+
+        /**
+         * Creates a new GameRecordPush instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {gamerecord.IGameRecordPush=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordPush} GameRecordPush instance
+         */
+        GameRecordPush.create = function create(properties) {
+            return new GameRecordPush(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordPush message. Does not implicitly {@link gamerecord.GameRecordPush.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {gamerecord.IGameRecordPush} message GameRecordPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordPush.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.list != null && message.list.length)
+                for (var i = 0; i < message.list.length; ++i)
+                    $root.gamerecord.GameRecordData.encode(message.list[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordPush message, length delimited. Does not implicitly {@link gamerecord.GameRecordPush.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {gamerecord.IGameRecordPush} message GameRecordPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordPush.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordPush message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordPush} GameRecordPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordPush.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordPush();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.list && message.list.length))
+                        message.list = [];
+                    message.list.push($root.gamerecord.GameRecordData.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordPush message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordPush} GameRecordPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordPush.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordPush message.
+         * @function verify
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordPush.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.list != null && message.hasOwnProperty("list")) {
+                if (!Array.isArray(message.list))
+                    return "list: array expected";
+                for (var i = 0; i < message.list.length; ++i) {
+                    var error = $root.gamerecord.GameRecordData.verify(message.list[i]);
+                    if (error)
+                        return "list." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordPush message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordPush} GameRecordPush
+         */
+        GameRecordPush.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordPush)
+                return object;
+            var message = new $root.gamerecord.GameRecordPush();
+            if (object.list) {
+                if (!Array.isArray(object.list))
+                    throw TypeError(".gamerecord.GameRecordPush.list: array expected");
+                message.list = [];
+                for (var i = 0; i < object.list.length; ++i) {
+                    if (typeof object.list[i] !== "object")
+                        throw TypeError(".gamerecord.GameRecordPush.list: object expected");
+                    message.list[i] = $root.gamerecord.GameRecordData.fromObject(object.list[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordPush message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordPush
+         * @static
+         * @param {gamerecord.GameRecordPush} message GameRecordPush
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordPush.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.list = [];
+            if (message.list && message.list.length) {
+                object.list = [];
+                for (var j = 0; j < message.list.length; ++j)
+                    object.list[j] = $root.gamerecord.GameRecordData.toObject(message.list[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordPush to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordPush
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordPush.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GameRecordPush;
+    })();
+
+    gamerecord.GameRecordDataCache = (function() {
+
+        /**
+         * Properties of a GameRecordDataCache.
+         * @memberof gamerecord
+         * @interface IGameRecordDataCache
+         * @property {number|null} [uid] GameRecordDataCache uid
+         * @property {number|null} [game] GameRecordDataCache game
+         * @property {string|null} [roundid] GameRecordDataCache roundid
+         * @property {number|Long|null} [bet] GameRecordDataCache bet
+         * @property {gamerecord.BET_ACT|null} [betact] GameRecordDataCache betact
+         * @property {number|Long|null} [win] GameRecordDataCache win
+         * @property {gamerecord.WIN_ACT|null} [winact] GameRecordDataCache winact
+         * @property {number|Long|null} [timestamp] GameRecordDataCache timestamp
+         * @property {Uint8Array|null} [detail] GameRecordDataCache detail
+         * @property {number|Long|null} [daybetamount] GameRecordDataCache daybetamount
+         * @property {number|Long|null} [daywinamount] GameRecordDataCache daywinamount
+         * @property {number|null} [timezoneinmin] GameRecordDataCache timezoneinmin
+         * @property {number|null} [firstofdayflag] GameRecordDataCache firstofdayflag
+         * @property {number|null} [recordcount] GameRecordDataCache recordcount
+         * @property {number|Long|null} [cacheindex] GameRecordDataCache cacheindex
+         */
+
+        /**
+         * Constructs a new GameRecordDataCache.
+         * @memberof gamerecord
+         * @classdesc Represents a GameRecordDataCache.
+         * @implements IGameRecordDataCache
+         * @constructor
+         * @param {gamerecord.IGameRecordDataCache=} [properties] Properties to set
+         */
+        function GameRecordDataCache(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GameRecordDataCache uid.
+         * @member {number} uid
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.uid = 0;
+
+        /**
+         * GameRecordDataCache game.
+         * @member {number} game
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.game = 0;
+
+        /**
+         * GameRecordDataCache roundid.
+         * @member {string} roundid
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.roundid = "";
+
+        /**
+         * GameRecordDataCache bet.
+         * @member {number|Long} bet
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.bet = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * GameRecordDataCache betact.
+         * @member {gamerecord.BET_ACT} betact
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.betact = 0;
+
+        /**
+         * GameRecordDataCache win.
+         * @member {number|Long} win
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.win = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * GameRecordDataCache winact.
+         * @member {gamerecord.WIN_ACT} winact
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.winact = 0;
+
+        /**
+         * GameRecordDataCache timestamp.
+         * @member {number|Long} timestamp
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * GameRecordDataCache detail.
+         * @member {Uint8Array} detail
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.detail = $util.newBuffer([]);
+
+        /**
+         * GameRecordDataCache daybetamount.
+         * @member {number|Long} daybetamount
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.daybetamount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * GameRecordDataCache daywinamount.
+         * @member {number|Long} daywinamount
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.daywinamount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * GameRecordDataCache timezoneinmin.
+         * @member {number} timezoneinmin
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.timezoneinmin = 0;
+
+        /**
+         * GameRecordDataCache firstofdayflag.
+         * @member {number} firstofdayflag
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.firstofdayflag = 0;
+
+        /**
+         * GameRecordDataCache recordcount.
+         * @member {number} recordcount
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.recordcount = 0;
+
+        /**
+         * GameRecordDataCache cacheindex.
+         * @member {number|Long} cacheindex
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.cacheindex = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new GameRecordDataCache instance using the specified properties.
+         * @function create
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {gamerecord.IGameRecordDataCache=} [properties] Properties to set
+         * @returns {gamerecord.GameRecordDataCache} GameRecordDataCache instance
+         */
+        GameRecordDataCache.create = function create(properties) {
+            return new GameRecordDataCache(properties);
+        };
+
+        /**
+         * Encodes the specified GameRecordDataCache message. Does not implicitly {@link gamerecord.GameRecordDataCache.verify|verify} messages.
+         * @function encode
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {gamerecord.IGameRecordDataCache} message GameRecordDataCache message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordDataCache.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game != null && Object.hasOwnProperty.call(message, "game"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game);
+            if (message.roundid != null && Object.hasOwnProperty.call(message, "roundid"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.roundid);
+            if (message.bet != null && Object.hasOwnProperty.call(message, "bet"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int64(message.bet);
+            if (message.betact != null && Object.hasOwnProperty.call(message, "betact"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.betact);
+            if (message.win != null && Object.hasOwnProperty.call(message, "win"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int64(message.win);
+            if (message.winact != null && Object.hasOwnProperty.call(message, "winact"))
+                writer.uint32(/* id 7, wireType 0 =*/56).int32(message.winact);
+            if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
+                writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.timestamp);
+            if (message.detail != null && Object.hasOwnProperty.call(message, "detail"))
+                writer.uint32(/* id 9, wireType 2 =*/74).bytes(message.detail);
+            if (message.daybetamount != null && Object.hasOwnProperty.call(message, "daybetamount"))
+                writer.uint32(/* id 10, wireType 0 =*/80).int64(message.daybetamount);
+            if (message.daywinamount != null && Object.hasOwnProperty.call(message, "daywinamount"))
+                writer.uint32(/* id 11, wireType 0 =*/88).int64(message.daywinamount);
+            if (message.timezoneinmin != null && Object.hasOwnProperty.call(message, "timezoneinmin"))
+                writer.uint32(/* id 12, wireType 0 =*/96).int32(message.timezoneinmin);
+            if (message.firstofdayflag != null && Object.hasOwnProperty.call(message, "firstofdayflag"))
+                writer.uint32(/* id 13, wireType 0 =*/104).int32(message.firstofdayflag);
+            if (message.recordcount != null && Object.hasOwnProperty.call(message, "recordcount"))
+                writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.recordcount);
+            if (message.cacheindex != null && Object.hasOwnProperty.call(message, "cacheindex"))
+                writer.uint32(/* id 15, wireType 0 =*/120).uint64(message.cacheindex);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified GameRecordDataCache message, length delimited. Does not implicitly {@link gamerecord.GameRecordDataCache.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {gamerecord.IGameRecordDataCache} message GameRecordDataCache message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GameRecordDataCache.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a GameRecordDataCache message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamerecord.GameRecordDataCache} GameRecordDataCache
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordDataCache.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamerecord.GameRecordDataCache();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game = reader.uint32();
+                    break;
+                case 3:
+                    message.roundid = reader.string();
+                    break;
+                case 4:
+                    message.bet = reader.int64();
+                    break;
+                case 5:
+                    message.betact = reader.int32();
+                    break;
+                case 6:
+                    message.win = reader.int64();
+                    break;
+                case 7:
+                    message.winact = reader.int32();
+                    break;
+                case 8:
+                    message.timestamp = reader.uint64();
+                    break;
+                case 9:
+                    message.detail = reader.bytes();
+                    break;
+                case 10:
+                    message.daybetamount = reader.int64();
+                    break;
+                case 11:
+                    message.daywinamount = reader.int64();
+                    break;
+                case 12:
+                    message.timezoneinmin = reader.int32();
+                    break;
+                case 13:
+                    message.firstofdayflag = reader.int32();
+                    break;
+                case 14:
+                    message.recordcount = reader.uint32();
+                    break;
+                case 15:
+                    message.cacheindex = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a GameRecordDataCache message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamerecord.GameRecordDataCache} GameRecordDataCache
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GameRecordDataCache.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a GameRecordDataCache message.
+         * @function verify
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GameRecordDataCache.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game != null && message.hasOwnProperty("game"))
+                if (!$util.isInteger(message.game))
+                    return "game: integer expected";
+            if (message.roundid != null && message.hasOwnProperty("roundid"))
+                if (!$util.isString(message.roundid))
+                    return "roundid: string expected";
+            if (message.bet != null && message.hasOwnProperty("bet"))
+                if (!$util.isInteger(message.bet) && !(message.bet && $util.isInteger(message.bet.low) && $util.isInteger(message.bet.high)))
+                    return "bet: integer|Long expected";
+            if (message.betact != null && message.hasOwnProperty("betact"))
+                switch (message.betact) {
+                default:
+                    return "betact: enum value expected";
+                case 0:
+                case 1:
+                    break;
+                }
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (!$util.isInteger(message.win) && !(message.win && $util.isInteger(message.win.low) && $util.isInteger(message.win.high)))
+                    return "win: integer|Long expected";
+            if (message.winact != null && message.hasOwnProperty("winact"))
+                switch (message.winact) {
+                default:
+                    return "winact: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+            if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                if (!$util.isInteger(message.timestamp) && !(message.timestamp && $util.isInteger(message.timestamp.low) && $util.isInteger(message.timestamp.high)))
+                    return "timestamp: integer|Long expected";
+            if (message.detail != null && message.hasOwnProperty("detail"))
+                if (!(message.detail && typeof message.detail.length === "number" || $util.isString(message.detail)))
+                    return "detail: buffer expected";
+            if (message.daybetamount != null && message.hasOwnProperty("daybetamount"))
+                if (!$util.isInteger(message.daybetamount) && !(message.daybetamount && $util.isInteger(message.daybetamount.low) && $util.isInteger(message.daybetamount.high)))
+                    return "daybetamount: integer|Long expected";
+            if (message.daywinamount != null && message.hasOwnProperty("daywinamount"))
+                if (!$util.isInteger(message.daywinamount) && !(message.daywinamount && $util.isInteger(message.daywinamount.low) && $util.isInteger(message.daywinamount.high)))
+                    return "daywinamount: integer|Long expected";
+            if (message.timezoneinmin != null && message.hasOwnProperty("timezoneinmin"))
+                if (!$util.isInteger(message.timezoneinmin))
+                    return "timezoneinmin: integer expected";
+            if (message.firstofdayflag != null && message.hasOwnProperty("firstofdayflag"))
+                if (!$util.isInteger(message.firstofdayflag))
+                    return "firstofdayflag: integer expected";
+            if (message.recordcount != null && message.hasOwnProperty("recordcount"))
+                if (!$util.isInteger(message.recordcount))
+                    return "recordcount: integer expected";
+            if (message.cacheindex != null && message.hasOwnProperty("cacheindex"))
+                if (!$util.isInteger(message.cacheindex) && !(message.cacheindex && $util.isInteger(message.cacheindex.low) && $util.isInteger(message.cacheindex.high)))
+                    return "cacheindex: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a GameRecordDataCache message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamerecord.GameRecordDataCache} GameRecordDataCache
+         */
+        GameRecordDataCache.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamerecord.GameRecordDataCache)
+                return object;
+            var message = new $root.gamerecord.GameRecordDataCache();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game != null)
+                message.game = object.game >>> 0;
+            if (object.roundid != null)
+                message.roundid = String(object.roundid);
+            if (object.bet != null)
+                if ($util.Long)
+                    (message.bet = $util.Long.fromValue(object.bet)).unsigned = false;
+                else if (typeof object.bet === "string")
+                    message.bet = parseInt(object.bet, 10);
+                else if (typeof object.bet === "number")
+                    message.bet = object.bet;
+                else if (typeof object.bet === "object")
+                    message.bet = new $util.LongBits(object.bet.low >>> 0, object.bet.high >>> 0).toNumber();
+            switch (object.betact) {
+            case "BET_ACT_NONE":
+            case 0:
+                message.betact = 0;
+                break;
+            case "BET_ACT_NORMAL_BET":
+            case 1:
+                message.betact = 1;
+                break;
+            }
+            if (object.win != null)
+                if ($util.Long)
+                    (message.win = $util.Long.fromValue(object.win)).unsigned = false;
+                else if (typeof object.win === "string")
+                    message.win = parseInt(object.win, 10);
+                else if (typeof object.win === "number")
+                    message.win = object.win;
+                else if (typeof object.win === "object")
+                    message.win = new $util.LongBits(object.win.low >>> 0, object.win.high >>> 0).toNumber();
+            switch (object.winact) {
+            case "WIN_ACT_NONE":
+            case 0:
+                message.winact = 0;
+                break;
+            case "WIN_ACT_NORMAL_WIN":
+            case 1:
+                message.winact = 1;
+                break;
+            case "WIN_ACT_JACKPOT":
+            case 2:
+                message.winact = 2;
+                break;
+            case "WIN_ACT_DEALER":
+            case 3:
+                message.winact = 3;
+                break;
+            }
+            if (object.timestamp != null)
+                if ($util.Long)
+                    (message.timestamp = $util.Long.fromValue(object.timestamp)).unsigned = true;
+                else if (typeof object.timestamp === "string")
+                    message.timestamp = parseInt(object.timestamp, 10);
+                else if (typeof object.timestamp === "number")
+                    message.timestamp = object.timestamp;
+                else if (typeof object.timestamp === "object")
+                    message.timestamp = new $util.LongBits(object.timestamp.low >>> 0, object.timestamp.high >>> 0).toNumber(true);
+            if (object.detail != null)
+                if (typeof object.detail === "string")
+                    $util.base64.decode(object.detail, message.detail = $util.newBuffer($util.base64.length(object.detail)), 0);
+                else if (object.detail.length)
+                    message.detail = object.detail;
+            if (object.daybetamount != null)
+                if ($util.Long)
+                    (message.daybetamount = $util.Long.fromValue(object.daybetamount)).unsigned = false;
+                else if (typeof object.daybetamount === "string")
+                    message.daybetamount = parseInt(object.daybetamount, 10);
+                else if (typeof object.daybetamount === "number")
+                    message.daybetamount = object.daybetamount;
+                else if (typeof object.daybetamount === "object")
+                    message.daybetamount = new $util.LongBits(object.daybetamount.low >>> 0, object.daybetamount.high >>> 0).toNumber();
+            if (object.daywinamount != null)
+                if ($util.Long)
+                    (message.daywinamount = $util.Long.fromValue(object.daywinamount)).unsigned = false;
+                else if (typeof object.daywinamount === "string")
+                    message.daywinamount = parseInt(object.daywinamount, 10);
+                else if (typeof object.daywinamount === "number")
+                    message.daywinamount = object.daywinamount;
+                else if (typeof object.daywinamount === "object")
+                    message.daywinamount = new $util.LongBits(object.daywinamount.low >>> 0, object.daywinamount.high >>> 0).toNumber();
+            if (object.timezoneinmin != null)
+                message.timezoneinmin = object.timezoneinmin | 0;
+            if (object.firstofdayflag != null)
+                message.firstofdayflag = object.firstofdayflag | 0;
+            if (object.recordcount != null)
+                message.recordcount = object.recordcount >>> 0;
+            if (object.cacheindex != null)
+                if ($util.Long)
+                    (message.cacheindex = $util.Long.fromValue(object.cacheindex)).unsigned = true;
+                else if (typeof object.cacheindex === "string")
+                    message.cacheindex = parseInt(object.cacheindex, 10);
+                else if (typeof object.cacheindex === "number")
+                    message.cacheindex = object.cacheindex;
+                else if (typeof object.cacheindex === "object")
+                    message.cacheindex = new $util.LongBits(object.cacheindex.low >>> 0, object.cacheindex.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GameRecordDataCache message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamerecord.GameRecordDataCache
+         * @static
+         * @param {gamerecord.GameRecordDataCache} message GameRecordDataCache
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GameRecordDataCache.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game = 0;
+                object.roundid = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.bet = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.bet = options.longs === String ? "0" : 0;
+                object.betact = options.enums === String ? "BET_ACT_NONE" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.win = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.win = options.longs === String ? "0" : 0;
+                object.winact = options.enums === String ? "WIN_ACT_NONE" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.timestamp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.timestamp = options.longs === String ? "0" : 0;
+                if (options.bytes === String)
+                    object.detail = "";
+                else {
+                    object.detail = [];
+                    if (options.bytes !== Array)
+                        object.detail = $util.newBuffer(object.detail);
+                }
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.daybetamount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.daybetamount = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.daywinamount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.daywinamount = options.longs === String ? "0" : 0;
+                object.timezoneinmin = 0;
+                object.firstofdayflag = 0;
+                object.recordcount = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.cacheindex = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.cacheindex = options.longs === String ? "0" : 0;
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game != null && message.hasOwnProperty("game"))
+                object.game = message.game;
+            if (message.roundid != null && message.hasOwnProperty("roundid"))
+                object.roundid = message.roundid;
+            if (message.bet != null && message.hasOwnProperty("bet"))
+                if (typeof message.bet === "number")
+                    object.bet = options.longs === String ? String(message.bet) : message.bet;
+                else
+                    object.bet = options.longs === String ? $util.Long.prototype.toString.call(message.bet) : options.longs === Number ? new $util.LongBits(message.bet.low >>> 0, message.bet.high >>> 0).toNumber() : message.bet;
+            if (message.betact != null && message.hasOwnProperty("betact"))
+                object.betact = options.enums === String ? $root.gamerecord.BET_ACT[message.betact] : message.betact;
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (typeof message.win === "number")
+                    object.win = options.longs === String ? String(message.win) : message.win;
+                else
+                    object.win = options.longs === String ? $util.Long.prototype.toString.call(message.win) : options.longs === Number ? new $util.LongBits(message.win.low >>> 0, message.win.high >>> 0).toNumber() : message.win;
+            if (message.winact != null && message.hasOwnProperty("winact"))
+                object.winact = options.enums === String ? $root.gamerecord.WIN_ACT[message.winact] : message.winact;
+            if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                if (typeof message.timestamp === "number")
+                    object.timestamp = options.longs === String ? String(message.timestamp) : message.timestamp;
+                else
+                    object.timestamp = options.longs === String ? $util.Long.prototype.toString.call(message.timestamp) : options.longs === Number ? new $util.LongBits(message.timestamp.low >>> 0, message.timestamp.high >>> 0).toNumber(true) : message.timestamp;
+            if (message.detail != null && message.hasOwnProperty("detail"))
+                object.detail = options.bytes === String ? $util.base64.encode(message.detail, 0, message.detail.length) : options.bytes === Array ? Array.prototype.slice.call(message.detail) : message.detail;
+            if (message.daybetamount != null && message.hasOwnProperty("daybetamount"))
+                if (typeof message.daybetamount === "number")
+                    object.daybetamount = options.longs === String ? String(message.daybetamount) : message.daybetamount;
+                else
+                    object.daybetamount = options.longs === String ? $util.Long.prototype.toString.call(message.daybetamount) : options.longs === Number ? new $util.LongBits(message.daybetamount.low >>> 0, message.daybetamount.high >>> 0).toNumber() : message.daybetamount;
+            if (message.daywinamount != null && message.hasOwnProperty("daywinamount"))
+                if (typeof message.daywinamount === "number")
+                    object.daywinamount = options.longs === String ? String(message.daywinamount) : message.daywinamount;
+                else
+                    object.daywinamount = options.longs === String ? $util.Long.prototype.toString.call(message.daywinamount) : options.longs === Number ? new $util.LongBits(message.daywinamount.low >>> 0, message.daywinamount.high >>> 0).toNumber() : message.daywinamount;
+            if (message.timezoneinmin != null && message.hasOwnProperty("timezoneinmin"))
+                object.timezoneinmin = message.timezoneinmin;
+            if (message.firstofdayflag != null && message.hasOwnProperty("firstofdayflag"))
+                object.firstofdayflag = message.firstofdayflag;
+            if (message.recordcount != null && message.hasOwnProperty("recordcount"))
+                object.recordcount = message.recordcount;
+            if (message.cacheindex != null && message.hasOwnProperty("cacheindex"))
+                if (typeof message.cacheindex === "number")
+                    object.cacheindex = options.longs === String ? String(message.cacheindex) : message.cacheindex;
+                else
+                    object.cacheindex = options.longs === String ? $util.Long.prototype.toString.call(message.cacheindex) : options.longs === Number ? new $util.LongBits(message.cacheindex.low >>> 0, message.cacheindex.high >>> 0).toNumber(true) : message.cacheindex;
+            return object;
+        };
+
+        /**
+         * Converts this GameRecordDataCache to JSON.
+         * @function toJSON
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GameRecordDataCache.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GameRecordDataCache;
+    })();
+
+    return gamerecord;
 })();
 
 module.exports = $root;

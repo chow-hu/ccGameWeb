@@ -59,7 +59,6 @@ class GameConfig {
         dis['lanuage'] = lanuage
         dev['lanuage'] = lanuage
         globalThis['gutil_code'] = lanuage;
-        StorageData.local.set('LAN_CODE', lanuage)
     }
 
     /** 是否显示dev */

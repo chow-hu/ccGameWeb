@@ -28,7 +28,7 @@ export namespace DateTime {
      */
     function getTargetTimeZoneOffset(timeZone: string | number): number {
         let min = 0;
-        if (typeof(timeZone) === 'number') {
+        if (typeof (timeZone) === 'number') {
             min = timeZone;
         } else {
             timeZone = String(timeZone);
@@ -44,7 +44,7 @@ export namespace DateTime {
         let targetOffset = 0 - min;
         let diff = offset - targetOffset;
         let value = diff * 60 * 1000;
-        
+
         return value;
     }
 
@@ -121,7 +121,7 @@ export namespace DateTime {
             minutes: date.getMinutes(),
             seconds: date.getSeconds()
         }
-        warn('[DateTime:timeToDataArray]时间戳转换：', ts, `${array.year}年${array.month}月${array.day}日${array.hour}时${array.minutes}分${array.seconds}秒`)
+        // warn('[DateTime:timeToDataArray]时间戳转换：', ts, `${array.year}年${array.month}月${array.day}日${array.hour}时${array.minutes}分${array.seconds}秒`)
         return array;
     }
     /**

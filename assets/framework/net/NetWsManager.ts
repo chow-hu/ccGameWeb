@@ -403,11 +403,15 @@ export default class NetWsManager {
     public _protodecode(route: string, data: ArrayBuffer): any {
         let Resp = _.get(protoRoot, route) || _.get(protoRoot, route + 'Resp');
         if (data instanceof ArrayBuffer) {
-            let res = Resp.decode(out.Buffer.from(data));
-            // console.log("老数据", res.toJSON());
-            this._modifyDefaultBody(res);
-            // console.log("新数据", res);
-            return res;
+            try {
+                let res = Resp.decode(out.Buffer.from(data));
+                // console.log("老数据", res.toJSON());
+                this._modifyDefaultBody(res);
+                // console.log("新数据", res);
+                return res;
+            } catch (error) {
+                return null;
+            }
         };
         return data;
     };

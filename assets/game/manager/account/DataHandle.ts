@@ -8,7 +8,6 @@ import { Cache } from "../../cache/Cache";
 import EventDispatcher from "../../../framework/event/EventDispatcher";
 import { GameConfig, LoginEvent } from "./interface";
 import { config } from "db://assets/plug-in/config";
-import { StorageData } from "db://assets/framework/storage/StorageData";
 
 export class DataHandle {
     private static _instance: DataHandle = null;
@@ -20,8 +19,8 @@ export class DataHandle {
     }
 
     /**
- * @description 处理前置数据
- */
+    * @description 处理前置数据
+    */
     scopeParam() {
         let data = this.getTekonAndAgent();
         // let data = this.getSomeData()
@@ -42,11 +41,15 @@ export class DataHandle {
     }
 
     testLanuage(lang: string): string {
-        if (/en/i.test(lang)) {
-            return 'en';
-        } else if (/in/i.test(lang)) {
-            return 'in';
-        }
+        // if (/en/i.test(lang)) {
+        //     return 'en';
+        // } else if (/in/i.test(lang)) {
+        //     return 'in';
+        // } else if (/pt/i.test(lang)) {
+        //     return 'pt'
+        // } else if (/zh/i.test(lang)) {
+        //     return 'zh'
+        // }
         return 'en';
     }
 
@@ -90,8 +93,6 @@ export class DataHandle {
         log("bobo --- 参数是 ", JSON.stringify(data));
         return data;
     }
-
-
 
     /**
      * @description: 获取token 和 agent

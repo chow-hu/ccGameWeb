@@ -2229,9 +2229,6 @@ declare namespace ccgame {
 
             /** UserJoinTableResp room_level */
             room_level?: (number|null);
-
-            /** UserJoinTableResp is_server_change */
-            is_server_change?: (boolean|null);
         }
 
         /** Represents a UserJoinTableResp. */
@@ -2263,9 +2260,6 @@ declare namespace ccgame {
 
             /** UserJoinTableResp room_level. */
             public room_level: number;
-
-            /** UserJoinTableResp is_server_change. */
-            public is_server_change: boolean;
 
             /**
              * Creates a new UserJoinTableResp instance using the specified properties.
@@ -2748,6 +2742,12 @@ declare namespace ccgame {
 
             /** JackpotUserData isReward */
             isReward?: (boolean|null);
+
+            /** JackpotUserData collects */
+            collects?: (number[]|null);
+
+            /** JackpotUserData rewardDetail */
+            rewardDetail?: (gamebase.JackpotUserData.IRewardItem[]|null);
         }
 
         /** Represents a JackpotUserData. */
@@ -2776,6 +2776,12 @@ declare namespace ccgame {
 
             /** JackpotUserData isReward. */
             public isReward: boolean;
+
+            /** JackpotUserData collects. */
+            public collects: number[];
+
+            /** JackpotUserData rewardDetail. */
+            public rewardDetail: gamebase.JackpotUserData.IRewardItem[];
 
             /**
              * Creates a new JackpotUserData instance using the specified properties.
@@ -2848,11 +2854,113 @@ declare namespace ccgame {
             public toJSON(): { [k: string]: any };
         }
 
+        namespace JackpotUserData {
+
+            /** Properties of a RewardItem. */
+            interface IRewardItem {
+
+                /** RewardItem totalReward */
+                totalReward?: (number|Long|null);
+
+                /** RewardItem shareReward */
+                shareReward?: (number|Long|null);
+            }
+
+            /** Represents a RewardItem. */
+            class RewardItem implements IRewardItem {
+
+                /**
+                 * Constructs a new RewardItem.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: gamebase.JackpotUserData.IRewardItem);
+
+                /** RewardItem totalReward. */
+                public totalReward: (number|Long);
+
+                /** RewardItem shareReward. */
+                public shareReward: (number|Long);
+
+                /**
+                 * Creates a new RewardItem instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns RewardItem instance
+                 */
+                public static create(properties?: gamebase.JackpotUserData.IRewardItem): gamebase.JackpotUserData.RewardItem;
+
+                /**
+                 * Encodes the specified RewardItem message. Does not implicitly {@link gamebase.JackpotUserData.RewardItem.verify|verify} messages.
+                 * @param message RewardItem message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: gamebase.JackpotUserData.IRewardItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified RewardItem message, length delimited. Does not implicitly {@link gamebase.JackpotUserData.RewardItem.verify|verify} messages.
+                 * @param message RewardItem message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: gamebase.JackpotUserData.IRewardItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a RewardItem message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns RewardItem
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackpotUserData.RewardItem;
+
+                /**
+                 * Decodes a RewardItem message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns RewardItem
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackpotUserData.RewardItem;
+
+                /**
+                 * Verifies a RewardItem message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RewardItem message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RewardItem
+                 */
+                public static fromObject(object: { [k: string]: any }): gamebase.JackpotUserData.RewardItem;
+
+                /**
+                 * Creates a plain object from a RewardItem message. Also converts values to other types if specified.
+                 * @param message RewardItem
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: gamebase.JackpotUserData.RewardItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RewardItem to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+
         /** Properties of a JackpotGetRewardReq. */
         interface IJackpotGetRewardReq {
 
             /** JackpotGetRewardReq rewardId */
             rewardId?: (number|null);
+
+            /** JackpotGetRewardReq isShared */
+            isShared?: (boolean|null);
         }
 
         /** Represents a JackpotGetRewardReq. */
@@ -2866,6 +2974,9 @@ declare namespace ccgame {
 
             /** JackpotGetRewardReq rewardId. */
             public rewardId: number;
+
+            /** JackpotGetRewardReq isShared. */
+            public isShared: boolean;
 
             /**
              * Creates a new JackpotGetRewardReq instance using the specified properties.
@@ -2958,6 +3069,9 @@ declare namespace ccgame {
 
             /** JackpotGetRewardResp balance */
             balance?: (number|Long|null);
+
+            /** JackpotGetRewardResp isShared */
+            isShared?: (boolean|null);
         }
 
         /** Represents a JackpotGetRewardResp. */
@@ -2986,6 +3100,9 @@ declare namespace ccgame {
 
             /** JackpotGetRewardResp balance. */
             public balance: (number|Long);
+
+            /** JackpotGetRewardResp isShared. */
+            public isShared: boolean;
 
             /**
              * Creates a new JackpotGetRewardResp instance using the specified properties.
@@ -3273,6 +3390,9 @@ declare namespace ccgame {
 
             /** RewardRecord reward */
             reward?: (number|Long|null);
+
+            /** RewardRecord shareReward */
+            shareReward?: (number|Long|null);
         }
 
         /** Represents a RewardRecord. */
@@ -3298,6 +3418,9 @@ declare namespace ccgame {
 
             /** RewardRecord reward. */
             public reward: (number|Long);
+
+            /** RewardRecord shareReward. */
+            public shareReward: (number|Long);
 
             /**
              * Creates a new RewardRecord instance using the specified properties.
@@ -3561,6 +3684,9 @@ declare namespace ccgame {
 
             /** UserJackReward rewardValue */
             rewardValue?: (number|Long|null);
+
+            /** UserJackReward shareReward */
+            shareReward?: (number|Long|null);
         }
 
         /** Represents a UserJackReward. */
@@ -3586,6 +3712,9 @@ declare namespace ccgame {
 
             /** UserJackReward rewardValue. */
             public rewardValue: (number|Long);
+
+            /** UserJackReward shareReward. */
+            public shareReward: (number|Long);
 
             /**
              * Creates a new UserJackReward instance using the specified properties.
@@ -4078,6 +4207,9 @@ declare namespace ccgame {
 
             /** JackpotGetRewardDetailResp cardList */
             cardList?: (gamebase.IJackCollect[]|null);
+
+            /** JackpotGetRewardDetailResp share_ratio */
+            share_ratio?: (number|null);
         }
 
         /** Represents a JackpotGetRewardDetailResp. */
@@ -4109,6 +4241,9 @@ declare namespace ccgame {
 
             /** JackpotGetRewardDetailResp cardList. */
             public cardList: gamebase.IJackCollect[];
+
+            /** JackpotGetRewardDetailResp share_ratio. */
+            public share_ratio: number;
 
             /**
              * Creates a new JackpotGetRewardDetailResp instance using the specified properties.
@@ -4219,6 +4354,9 @@ declare namespace ccgame {
 
             /** JackpotUserDataDB cardList */
             cardList?: (gamebase.IJackCollect[]|null);
+
+            /** JackpotUserDataDB betNum */
+            betNum?: (number|null);
         }
 
         /** Represents a JackpotUserDataDB. */
@@ -4265,6 +4403,9 @@ declare namespace ccgame {
 
             /** JackpotUserDataDB cardList. */
             public cardList: gamebase.IJackCollect[];
+
+            /** JackpotUserDataDB betNum. */
+            public betNum: number;
 
             /**
              * Creates a new JackpotUserDataDB instance using the specified properties.
@@ -4947,7 +5088,9 @@ declare namespace ccgame {
                 ACTION_TIMEOUT_TIPS = 0,
                 ACTION_TIMEOUT_KICK = 1,
                 ACTION_RETIRE_ALLOC = 2,
-                ACTION_RETIRE_KICK = 3
+                ACTION_RETIRE_KICK = 3,
+                ACTION_OPTIMEOUT_TIPS = 4,
+                ACTION_OPTIMEOUT_KICK = 5
             }
         }
 

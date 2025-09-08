@@ -41,15 +41,11 @@ export class DataHandle {
     }
 
     testLanuage(lang: string): string {
-        // if (/en/i.test(lang)) {
-        //     return 'en';
-        // } else if (/in/i.test(lang)) {
-        //     return 'in';
-        // } else if (/pt/i.test(lang)) {
-        //     return 'pt'
-        // } else if (/zh/i.test(lang)) {
-        //     return 'zh'
-        // }
+        if (/en/i.test(lang)) {
+            return 'en';
+        } else if (/pt/i.test(lang)) {
+            return 'pt'
+        }
         return 'en';
     }
 
@@ -99,8 +95,9 @@ export class DataHandle {
      * @returns 
      */
     getTekonAndAgent() {
+        // let a = "?token=dXVpZD1tbXlfdGVzdDo2MjIwMTE3NSZ1aWQ9MzE2OTI5MzAmdG9rZW49MGRiN2RmODc0ZDNiZDEwMzM1MjIzYjc2MmJmMDFjYmUzMzAzNjVkZGRhNmY5NTA0ZTVkYjZjNDk1ZWJhZjExNTg4ZDExZTJhNWFmMzhmNmMxMzVmY2JhMGRiMzMwYTA2JmJhbGFuY2U9ODAwMDAwMDAmZ2FtZT0xMDYmZ2FtZWluZm89eyJleHRlcm5fanNvbiI6IiIsImZ1bGxzY3JlZW4iOjAsImxhbmciOiJlbi1VUyJ9JmV4cGk9MTc1NzA1MTk3OCZzaWduPTkzOTFmOGE1NzEwODRlOTUxYzViNjU3YTNlOGM0MjAw&agent=d3NzOi8vZmRzZ2h1azM0OWRmc2Jqay5jY2FwaTIxOG9yYmprc2FwbTAzZmprZHMuY29tL3dzcw==&gameID=106&DisplayMode=0&lang=en-US&uid=31692930"
         // let aa = "?token=dXVpZD1aRjk2NGJfWTE6Njk1MTc1NDAmdWlkPTY3NjA2NDYyJnRva2VuPTY5NTE3NTQwJmJhbGFuY2U9MTAwMDAwMDAwJmdhbWU9MTAzJmdhbWVpbmZvPXsiZnVsbHNjcmVlbiI6MH0mZXhwaT0xNzMwNTk4MjMyJnNpZ249YzJiY2Y5NWE5NTU0NjhkMGM0MGU3MWJhMzY1ZWU1MDQ=&agent=d3NzOi8vZmRzZ2h1azM0OWRmc2Jqay5jY2FwaTIxOG9yYmprc2FwbTAzZmprZHMub3JnL3dzcw==&gameID=103";
-        // let params = this.scopeUser(aa);
+
         console.warn(`search = ${globalThis.location.search}`);
         let params = this.scopeUser(globalThis.location.search);
         let token = "";

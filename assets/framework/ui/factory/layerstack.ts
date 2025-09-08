@@ -16,7 +16,7 @@ import EventDispatcher from '../../event/EventDispatcher'
 import { UIBase, UIType } from '../component/UIBase'
 import { IUICallFunc } from '../component/UIComponentBase'
 import { loadingStack } from './loadingstack'
-import { siblingChildByPriority } from './utils'
+import { siblingChildByPriority, transGuiPath } from './utils'
 
 export enum LayerStackEvent {
     UI_PRE_OPEN = 'EVENT_UI_PRE_OPEN',
@@ -145,7 +145,8 @@ export class LayerStack extends EventContract {
     }
 
     public bundleOpen(bundlename: string, layerPath: string, parm?: any, uiCallFun?: IUICallFunc, aniFunc?: Function, isStatic?: boolean): void {
-        let name = this.transPath(layerPath);
+        const trans = transGuiPath(layerPath);
+        let name = trans.name;
         if (!isValid(this._panel, true)) {
             log('parent node cannot be null,when open layer:' + name);
             return;
@@ -174,7 +175,7 @@ export class LayerStack extends EventContract {
 
         this._loadingLayer.add(name, { ts: Date.now() + 10000, valid: true });
         this.showLoading({ ts: 5, delay: 2 });
-        AssetsLoader.instance.bundleLoad(bundlename, 'prefab/layer/' + layerPath, Prefab, null, (err, prefab) => {
+        AssetsLoader.instance.bundleLoad(bundlename, trans.path, Prefab, null, (err, prefab) => {
             if (err) {
                 log(err);
                 this.showLoading(false);
@@ -235,7 +236,8 @@ export class LayerStack extends EventContract {
     }
 
     public open(layerPath: string, parm?: any, uiCallFun?: IUICallFunc, aniFunc?: Function, isStatic?: boolean): void {
-        let name = this.transPath(layerPath);
+        const trans = transGuiPath(layerPath);
+        let name = trans.name;
         if (!isValid(this._panel, true)) {
             log('parent node cannot be null,when open layer:' + name);
             return;
@@ -268,7 +270,7 @@ export class LayerStack extends EventContract {
         this.showLoading({ ts: 5, delay: 2 });
 
         let self = this;
-        AssetsLoader.instance.load('prefab/layer/' + layerPath, Prefab, null, (err, prefab) => {
+        AssetsLoader.instance.load(trans.path, Prefab, null, (err, prefab) => {
             if (err) {
                 log(err);
                 this.showLoading(false);

@@ -194,7 +194,7 @@ export class User extends CacheBase {
 
     /** 获取登录的Token */
     getToken() {
-        let info = this._dataContinar.token;
+        let info = this._dataContinar?.token;
         if (info) {
             return info || null;
         }
@@ -203,7 +203,7 @@ export class User extends CacheBase {
 
     /** 获取登录的agent */
     getAgent() {
-        let info = this._dataContinar.agent;
+        let info = this._dataContinar?.agent;
         if (info) {
             return info || null;
         }
@@ -211,7 +211,7 @@ export class User extends CacheBase {
     }
 
     getDisplayMode() {
-        let info = this._dataContinar.displayMode;
+        let info = this._dataContinar?.displayMode;
         if (info) {
             return info || null;
         }
@@ -219,7 +219,7 @@ export class User extends CacheBase {
     }
 
     getUser(): UserConfig {
-        let user = this._dataContinar.user;
+        let user = this._dataContinar?.user;
 
         if (user) {
             return user || null;
@@ -256,7 +256,7 @@ export class User extends CacheBase {
      * 获取session
      */
     getSession() {
-        let info = this._dataContinar.user.session;
+        let info = this._dataContinar?.user?.session;
         if (info) {
             return info || null;
         }
@@ -268,7 +268,7 @@ export class User extends CacheBase {
      * 获取重连用的 InGameInfo
      */
     getInGameInfo() {
-        let info = this._dataContinar.user.ingame_info;
+        let info = this._dataContinar?.user?.ingame_info;
         if (info) {
             return info || null;
         }
@@ -281,7 +281,7 @@ export class User extends CacheBase {
      * @returns number
      */
     getUID(): number | null {
-        let info = this._dataContinar.user.uid;
+        let info = this._dataContinar?.user?.uid;
         log("bobo 获取用户真实Uid ===== ", info);
         if (info) {
             return Number(info) || 0;
@@ -294,7 +294,7 @@ export class User extends CacheBase {
      * @returns 
      */
     getBalance(): number {
-        let info = this._dataContinar.user.balance;
+        let info = this._dataContinar?.user?.balance;
         if (info) {
             return Number(info) || 0;
         }
@@ -309,8 +309,8 @@ export class User extends CacheBase {
     getCurrency(): { currency: string, rate: number, sign: string } {
         return {
             currency: this._dataContinar?.user?.currency || 'INR',
-            rate: this._dataContinar.user.currency_unit_multi || 1000,
-            sign: this._dataContinar.user.currency_label || '₹',
+            rate: this._dataContinar?.user?.currency_unit_multi || 1000,
+            sign: this._dataContinar?.user?.currency_label || '₹',
         };
     }
 
@@ -322,7 +322,7 @@ export class User extends CacheBase {
      * 获取第三方返回大厅的url
      */
     getHallUrl() {
-        let info = this._dataContinar.user.hall_url;
+        let info = this._dataContinar?.user?.hall_url;
         if (info) {
             return info || null;
         }

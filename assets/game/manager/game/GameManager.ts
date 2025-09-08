@@ -7,9 +7,9 @@
  * 游戏相关服务
  */
 
-import { game, isValid, log, warn } from "cc";
+import { isValid, log, warn } from "cc";
 import _ from "lodash";
-import { PRIORITY, game_base_proto, gnet, gui, gutil_char, room_alloc_proto } from "../../../framework/ge";
+import { PRIORITY, game_base_proto, game_userinfo_proto, gnet, gui, gutil_char, room_alloc_proto } from "../../../framework/ge";
 import { gamebase } from "../../../shared/game_common/game_common_proto.js";
 import { Cache } from "../../cache/Cache";
 import { AppEvent } from "../../common/AppEvent";
@@ -18,10 +18,8 @@ import { IManager } from "../IManager";
 import { EMgr } from "../interface";
 import { GameCache } from "./GameCache";
 import { SubGameCache } from "./SubGameCache";
-import { GameActionType, GameEvent, GameProto, GameReq, GameResp } from "./interface";
+import { EUserField, GameActionType, GameEvent, GameProto, GameReq, GameResp, IUpdateGameUserInfoData } from "./interface";
 import { GiNetGameReconnData } from "../subGameManager/interfaceGIApi";
-import { AppConst } from "../../common/AppConst";
-import { SubGameOrientation } from "../subGameManager/interface";
 import { jumpToExit } from "../subGameManager/utils";
 
 export class GameManager extends IManager {
@@ -85,6 +83,8 @@ export class GameManager extends IManager {
         svid: null
     }
 
+    /** 修改玩家信息列表 */
+    private _fieldUserInfoList: Array<IUpdateGameUserInfoData> = [];
 
     constructor() {
         super(EMgr.GAME);
@@ -108,6 +108,10 @@ export class GameManager extends IManager {
             GameResp.SHARE_POSTER,
             GameResp.REQUEST_USER_BALANCE,
             GameProto.GetPropPush,
+            GameResp.LEVEL_TABLE_INFO,
+            GameResp.GET_USER_INFO,
+            GameResp.GET_USER_INFO_BY_FIELD,
+            GameResp.UPDATE_USER_INFO,
         ];
         this._eventList = [
             AppEvent.SYS_NET_CLOSED,
@@ -377,9 +381,9 @@ export class GameManager extends IManager {
                     GameCache.game._set(SubGameCache.USER_INFO, Utils.tableVerify(info));
 
                     let roomInfo: gamebase.IUserJoinTableResp = _.cloneDeep(table);
-                    let msgBuf: Uint8Array = new Uint8Array(table.tableinfo, 0, table.tableinfo.length);
+                    let msgBuf: Uint8Array = new Uint8Array(table.tableinfo as unknown as ArrayBufferLike, 0, table.tableinfo.length);
 
-                    roomInfo.tableinfo = gnet._protodecode(table.msgname, msgBuf.buffer);
+                    roomInfo.tableinfo = gnet._protodecode(table.msgname, msgBuf.buffer as ArrayBuffer);
                     console.log("roomInfo", roomInfo);
 
                     this.emit(GameEvent.JOIN_ROOM, roomInfo);
@@ -433,6 +437,7 @@ export class GameManager extends IManager {
                         txt = gutil_char('GAME_ERROR_1');
                     }
                     gui.showTips(txt);
+                    this.emit(GameEvent.LEAVE_ROOM_ERROR);
                 }
                 // gui.showTips('退出房间：' + GameCache.game._get(SubGameCache.GAME_TABLEID));
                 break;
@@ -491,6 +496,44 @@ export class GameManager extends IManager {
                 break;
             case GameProto.GetPropPush:
                 // this.notifyGetProps(rspData as ccgame.client_proto.GetPropPush);
+                break;
+            case GameResp.LEVEL_TABLE_INFO:
+                this.emit(GameEvent.LEVEL_TABLE_INFO, rspData);
+                break;
+            case GameResp.GET_USER_INFO:
+            case GameResp.GET_USER_INFO_BY_FIELD:
+                if (rspData && rspData.result == 0 && rspData.uid == Cache.User.getUID()) {
+                    let arr = rspData.field_value_list || [];
+                    let user = GameCache.game._get(SubGameCache.USER_INFO);
+                    for (let i = 0; i < arr.length; i++) {
+                        let field = arr[i].field;
+                        if (field == EUserField.AVATAR) {
+                            user.avatar = arr[i].str_val != null ? arr[i].str_val : user.avatar;
+                        } else if (field == EUserField.NICKNAME) {
+                            user.nick = arr[i].str_val != null ? arr[i].str_val : user.nick;
+                        } else if (field == EUserField.GENDER) {
+                            user.sex = arr[i].int_val != null ? arr[i].str_val : user.sex;
+                        }
+                    }
+                }
+
+                this.emit(GameEvent.UPDATE_USER_INFO);
+                break;
+            case GameResp.UPDATE_USER_INFO:
+                this.emit(GameEvent.FIELD_USER_INFO, rspData);
+                if (rspData && rspData.result == 0 && rspData.uid == Cache.User.getUID()) {
+                    for (let i = 0; i < this._fieldUserInfoList.length; i++) {
+                        let field = this._fieldUserInfoList[i].field;
+                        if (field == EUserField.AVATAR) {
+                            this.emit(GameEvent.UPDATE_USER_AVATAR);
+                        } else if (field == EUserField.NICKNAME) {
+                            this.emit(GameEvent.UPDATE_USER_NICKNAME);
+                        } else if (field == EUserField.GENDER) {
+                            this.emit(GameEvent.UPDATE_USER_GENDER);
+                        }
+                    }
+                }
+                this._fieldUserInfoList = [];
                 break;
             default:
                 break;
@@ -575,6 +618,7 @@ export class GameManager extends IManager {
             userinfo: Utils.JsonEncode(userinfo),
             except_tid: data.except_tid,        // 排除的桌子ID （换桌）
             target_tid: data.target_tid,        // 目标桌子ID   （选桌）
+            reason: data.reason,
         }
         log(GameReq.REQUEST_ROOM, stype + " | " + ctype);
         gnet.send(GameReq.REQUEST_ROOM, stype, ctype, param);
@@ -701,6 +745,62 @@ export class GameManager extends IManager {
         gnet.send(GameReq.REQUEST_USER_BALANCE, stype, ctype, {
             dstid: GameCache.game._get(SubGameCache.GAME_DEST),
         });
+    }
+
+    /** 请求场次桌子列表 */
+    requestLevelTableInfo(game_id: number, level: number, record_num: number, self_tid?: number) {
+        let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ROOMALLOC;
+        let ctype = room_alloc_proto.ROOMALLOC_CMD.ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ;
+        let param = {
+            uid: Cache.User.getUID(),
+            game_id,
+            level,
+            self_tid,
+            record_num,
+            self_svid: this._curJoinRoomData.svid,
+        }
+
+        gnet.send(GameReq.LEVEL_TABLE_INFO, stype, ctype, param);
+    }
+
+    /** 获取玩家游戏信息   已弃用 */
+    requestUserInfo(game_id: number) {
+        let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_GAME_USERINFO;
+        let ctype = game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_GET_USERINFO_REQ;
+        let param = {
+            uid: Cache.User.getUID(),
+            game_id,
+        }
+
+        gnet.send(GameReq.GET_USER_INFO, stype, ctype, param);
+    }
+
+    /** 获取玩家游戏部分信息   field_list可不传  不传就是请求所有用户信息 */
+    requestUserInfoByField(game_id: number, field_list?: EUserField[]) {
+        let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_GAME_USERINFO;
+        let ctype = game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_REQ;
+        let param = {
+            uid: Cache.User.getUID(),
+            game_id,
+            field_list,
+        }
+
+        gnet.send(GameReq.GET_USER_INFO_BY_FIELD, stype, ctype, param);
+    }
+
+    /** 更新玩家游戏信息 */
+    requestUpdateUserInfo(game_id: number, field_value_list: Array<IUpdateGameUserInfoData>) {
+        this._fieldUserInfoList = field_value_list || [];
+        let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_GAME_USERINFO;
+        let ctype = game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_UPDATE_USERINFO_REQ;
+        let param = {
+            uid: Cache.User.getUID(),
+            game_id,
+            field_value_list,
+            svid: this._curJoinRoomData.svid,
+        }
+
+        gnet.send(GameReq.UPDATE_USER_INFO, stype, ctype, param);
     }
 }
 

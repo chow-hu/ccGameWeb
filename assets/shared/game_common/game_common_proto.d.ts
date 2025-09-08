@@ -4,6 +4,877 @@ export = ccgame;
 declare namespace ccgame {
 
 
+    /** Namespace game_userinfo. */
+    namespace game_userinfo {
+
+        /** GAME_USERINFO_CMD enum. */
+        enum GAME_USERINFO_CMD {
+            GAME_USERINFO_CMD_NONE = 0,
+            GAME_USERINFO_CMD_GET_USERINFO_REQ = 2200,
+            GAME_USERINFO_CMD_GET_USERINFO_RESP = 2201,
+            GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_REQ = 2202,
+            GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_RESP = 2203,
+            GAME_USERINFO_CMD_UPDATE_USERINFO_REQ = 2204,
+            GAME_USERINFO_CMD_UPDATE_USERINFO_RESP = 2205
+        }
+
+        /** ErrorCode enum. */
+        enum ErrorCode {
+            Success = 0,
+            ParsePbErr = 1,
+            UidZero = 2,
+            ServerErr = 3,
+            SendErr = 4,
+            GameIdZero = 5,
+            GetUserInfoErr = 6
+        }
+
+        /** USER_FIELD enum. */
+        enum USER_FIELD {
+            FIELD_NONE = 0,
+            FIELD_HEADER = 1,
+            FIELD_NICKNAME = 2,
+            FIELD_GENDER = 3
+        }
+
+        /** Properties of a FieldValue. */
+        interface IFieldValue {
+
+            /** FieldValue field */
+            field?: (game_userinfo.USER_FIELD|null);
+
+            /** FieldValue int_val */
+            int_val?: (number|null);
+
+            /** FieldValue str_val */
+            str_val?: (string|null);
+        }
+
+        /** Represents a FieldValue. */
+        class FieldValue implements IFieldValue {
+
+            /**
+             * Constructs a new FieldValue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IFieldValue);
+
+            /** FieldValue field. */
+            public field: game_userinfo.USER_FIELD;
+
+            /** FieldValue int_val. */
+            public int_val?: (number|null);
+
+            /** FieldValue str_val. */
+            public str_val?: (string|null);
+
+            /** FieldValue value. */
+            public value?: ("int_val"|"str_val");
+
+            /**
+             * Creates a new FieldValue instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns FieldValue instance
+             */
+            public static create(properties?: game_userinfo.IFieldValue): game_userinfo.FieldValue;
+
+            /**
+             * Encodes the specified FieldValue message. Does not implicitly {@link game_userinfo.FieldValue.verify|verify} messages.
+             * @param message FieldValue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IFieldValue, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified FieldValue message, length delimited. Does not implicitly {@link game_userinfo.FieldValue.verify|verify} messages.
+             * @param message FieldValue message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IFieldValue, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a FieldValue message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns FieldValue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.FieldValue;
+
+            /**
+             * Decodes a FieldValue message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns FieldValue
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.FieldValue;
+
+            /**
+             * Verifies a FieldValue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a FieldValue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns FieldValue
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.FieldValue;
+
+            /**
+             * Creates a plain object from a FieldValue message. Also converts values to other types if specified.
+             * @param message FieldValue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.FieldValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this FieldValue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a getUserinfoReq. */
+        interface IgetUserinfoReq {
+
+            /** getUserinfoReq uid */
+            uid?: (number|null);
+
+            /** getUserinfoReq game_id */
+            game_id?: (number|null);
+
+            /** getUserinfoReq trans */
+            trans?: (Uint8Array|null);
+        }
+
+        /** Represents a getUserinfoReq. */
+        class getUserinfoReq implements IgetUserinfoReq {
+
+            /**
+             * Constructs a new getUserinfoReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IgetUserinfoReq);
+
+            /** getUserinfoReq uid. */
+            public uid: number;
+
+            /** getUserinfoReq game_id. */
+            public game_id: number;
+
+            /** getUserinfoReq trans. */
+            public trans: Uint8Array;
+
+            /**
+             * Creates a new getUserinfoReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns getUserinfoReq instance
+             */
+            public static create(properties?: game_userinfo.IgetUserinfoReq): game_userinfo.getUserinfoReq;
+
+            /**
+             * Encodes the specified getUserinfoReq message. Does not implicitly {@link game_userinfo.getUserinfoReq.verify|verify} messages.
+             * @param message getUserinfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IgetUserinfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified getUserinfoReq message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoReq.verify|verify} messages.
+             * @param message getUserinfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IgetUserinfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a getUserinfoReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns getUserinfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.getUserinfoReq;
+
+            /**
+             * Decodes a getUserinfoReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns getUserinfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.getUserinfoReq;
+
+            /**
+             * Verifies a getUserinfoReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a getUserinfoReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns getUserinfoReq
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.getUserinfoReq;
+
+            /**
+             * Creates a plain object from a getUserinfoReq message. Also converts values to other types if specified.
+             * @param message getUserinfoReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.getUserinfoReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this getUserinfoReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a getUserinfoResp. */
+        interface IgetUserinfoResp {
+
+            /** getUserinfoResp uid */
+            uid?: (number|null);
+
+            /** getUserinfoResp result */
+            result?: (number|null);
+
+            /** getUserinfoResp trans */
+            trans?: (Uint8Array|null);
+
+            /** getUserinfoResp field_value_list */
+            field_value_list?: (game_userinfo.IFieldValue[]|null);
+        }
+
+        /** Represents a getUserinfoResp. */
+        class getUserinfoResp implements IgetUserinfoResp {
+
+            /**
+             * Constructs a new getUserinfoResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IgetUserinfoResp);
+
+            /** getUserinfoResp uid. */
+            public uid: number;
+
+            /** getUserinfoResp result. */
+            public result: number;
+
+            /** getUserinfoResp trans. */
+            public trans: Uint8Array;
+
+            /** getUserinfoResp field_value_list. */
+            public field_value_list: game_userinfo.IFieldValue[];
+
+            /**
+             * Creates a new getUserinfoResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns getUserinfoResp instance
+             */
+            public static create(properties?: game_userinfo.IgetUserinfoResp): game_userinfo.getUserinfoResp;
+
+            /**
+             * Encodes the specified getUserinfoResp message. Does not implicitly {@link game_userinfo.getUserinfoResp.verify|verify} messages.
+             * @param message getUserinfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IgetUserinfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified getUserinfoResp message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoResp.verify|verify} messages.
+             * @param message getUserinfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IgetUserinfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a getUserinfoResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns getUserinfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.getUserinfoResp;
+
+            /**
+             * Decodes a getUserinfoResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns getUserinfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.getUserinfoResp;
+
+            /**
+             * Verifies a getUserinfoResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a getUserinfoResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns getUserinfoResp
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.getUserinfoResp;
+
+            /**
+             * Creates a plain object from a getUserinfoResp message. Also converts values to other types if specified.
+             * @param message getUserinfoResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.getUserinfoResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this getUserinfoResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a getUserinfoByfieldReq. */
+        interface IgetUserinfoByfieldReq {
+
+            /** getUserinfoByfieldReq uid */
+            uid?: (number|null);
+
+            /** getUserinfoByfieldReq game_id */
+            game_id?: (number|null);
+
+            /** getUserinfoByfieldReq trans */
+            trans?: (Uint8Array|null);
+
+            /** getUserinfoByfieldReq field_list */
+            field_list?: (game_userinfo.USER_FIELD[]|null);
+        }
+
+        /** Represents a getUserinfoByfieldReq. */
+        class getUserinfoByfieldReq implements IgetUserinfoByfieldReq {
+
+            /**
+             * Constructs a new getUserinfoByfieldReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IgetUserinfoByfieldReq);
+
+            /** getUserinfoByfieldReq uid. */
+            public uid: number;
+
+            /** getUserinfoByfieldReq game_id. */
+            public game_id: number;
+
+            /** getUserinfoByfieldReq trans. */
+            public trans: Uint8Array;
+
+            /** getUserinfoByfieldReq field_list. */
+            public field_list: game_userinfo.USER_FIELD[];
+
+            /**
+             * Creates a new getUserinfoByfieldReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns getUserinfoByfieldReq instance
+             */
+            public static create(properties?: game_userinfo.IgetUserinfoByfieldReq): game_userinfo.getUserinfoByfieldReq;
+
+            /**
+             * Encodes the specified getUserinfoByfieldReq message. Does not implicitly {@link game_userinfo.getUserinfoByfieldReq.verify|verify} messages.
+             * @param message getUserinfoByfieldReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IgetUserinfoByfieldReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified getUserinfoByfieldReq message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoByfieldReq.verify|verify} messages.
+             * @param message getUserinfoByfieldReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IgetUserinfoByfieldReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a getUserinfoByfieldReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns getUserinfoByfieldReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.getUserinfoByfieldReq;
+
+            /**
+             * Decodes a getUserinfoByfieldReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns getUserinfoByfieldReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.getUserinfoByfieldReq;
+
+            /**
+             * Verifies a getUserinfoByfieldReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a getUserinfoByfieldReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns getUserinfoByfieldReq
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.getUserinfoByfieldReq;
+
+            /**
+             * Creates a plain object from a getUserinfoByfieldReq message. Also converts values to other types if specified.
+             * @param message getUserinfoByfieldReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.getUserinfoByfieldReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this getUserinfoByfieldReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a getUserinfoByfieldResp. */
+        interface IgetUserinfoByfieldResp {
+
+            /** getUserinfoByfieldResp uid */
+            uid?: (number|null);
+
+            /** getUserinfoByfieldResp result */
+            result?: (number|null);
+
+            /** getUserinfoByfieldResp trans */
+            trans?: (Uint8Array|null);
+
+            /** getUserinfoByfieldResp field_value_list */
+            field_value_list?: (game_userinfo.IFieldValue[]|null);
+        }
+
+        /** Represents a getUserinfoByfieldResp. */
+        class getUserinfoByfieldResp implements IgetUserinfoByfieldResp {
+
+            /**
+             * Constructs a new getUserinfoByfieldResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IgetUserinfoByfieldResp);
+
+            /** getUserinfoByfieldResp uid. */
+            public uid: number;
+
+            /** getUserinfoByfieldResp result. */
+            public result: number;
+
+            /** getUserinfoByfieldResp trans. */
+            public trans: Uint8Array;
+
+            /** getUserinfoByfieldResp field_value_list. */
+            public field_value_list: game_userinfo.IFieldValue[];
+
+            /**
+             * Creates a new getUserinfoByfieldResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns getUserinfoByfieldResp instance
+             */
+            public static create(properties?: game_userinfo.IgetUserinfoByfieldResp): game_userinfo.getUserinfoByfieldResp;
+
+            /**
+             * Encodes the specified getUserinfoByfieldResp message. Does not implicitly {@link game_userinfo.getUserinfoByfieldResp.verify|verify} messages.
+             * @param message getUserinfoByfieldResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IgetUserinfoByfieldResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified getUserinfoByfieldResp message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoByfieldResp.verify|verify} messages.
+             * @param message getUserinfoByfieldResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IgetUserinfoByfieldResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a getUserinfoByfieldResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns getUserinfoByfieldResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.getUserinfoByfieldResp;
+
+            /**
+             * Decodes a getUserinfoByfieldResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns getUserinfoByfieldResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.getUserinfoByfieldResp;
+
+            /**
+             * Verifies a getUserinfoByfieldResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a getUserinfoByfieldResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns getUserinfoByfieldResp
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.getUserinfoByfieldResp;
+
+            /**
+             * Creates a plain object from a getUserinfoByfieldResp message. Also converts values to other types if specified.
+             * @param message getUserinfoByfieldResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.getUserinfoByfieldResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this getUserinfoByfieldResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an updateUserinfoReq. */
+        interface IupdateUserinfoReq {
+
+            /** updateUserinfoReq uid */
+            uid?: (number|null);
+
+            /** updateUserinfoReq game_id */
+            game_id?: (number|null);
+
+            /** updateUserinfoReq trans */
+            trans?: (Uint8Array|null);
+
+            /** updateUserinfoReq field_value_list */
+            field_value_list?: (game_userinfo.IFieldValue[]|null);
+
+            /** updateUserinfoReq svid */
+            svid?: (number|null);
+        }
+
+        /** Represents an updateUserinfoReq. */
+        class updateUserinfoReq implements IupdateUserinfoReq {
+
+            /**
+             * Constructs a new updateUserinfoReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IupdateUserinfoReq);
+
+            /** updateUserinfoReq uid. */
+            public uid: number;
+
+            /** updateUserinfoReq game_id. */
+            public game_id: number;
+
+            /** updateUserinfoReq trans. */
+            public trans: Uint8Array;
+
+            /** updateUserinfoReq field_value_list. */
+            public field_value_list: game_userinfo.IFieldValue[];
+
+            /** updateUserinfoReq svid. */
+            public svid: number;
+
+            /**
+             * Creates a new updateUserinfoReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns updateUserinfoReq instance
+             */
+            public static create(properties?: game_userinfo.IupdateUserinfoReq): game_userinfo.updateUserinfoReq;
+
+            /**
+             * Encodes the specified updateUserinfoReq message. Does not implicitly {@link game_userinfo.updateUserinfoReq.verify|verify} messages.
+             * @param message updateUserinfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IupdateUserinfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified updateUserinfoReq message, length delimited. Does not implicitly {@link game_userinfo.updateUserinfoReq.verify|verify} messages.
+             * @param message updateUserinfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IupdateUserinfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an updateUserinfoReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns updateUserinfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.updateUserinfoReq;
+
+            /**
+             * Decodes an updateUserinfoReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns updateUserinfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.updateUserinfoReq;
+
+            /**
+             * Verifies an updateUserinfoReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an updateUserinfoReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns updateUserinfoReq
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.updateUserinfoReq;
+
+            /**
+             * Creates a plain object from an updateUserinfoReq message. Also converts values to other types if specified.
+             * @param message updateUserinfoReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.updateUserinfoReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this updateUserinfoReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an updateUserinfoResp. */
+        interface IupdateUserinfoResp {
+
+            /** updateUserinfoResp uid */
+            uid?: (number|null);
+
+            /** updateUserinfoResp result */
+            result?: (number|null);
+
+            /** updateUserinfoResp trans */
+            trans?: (Uint8Array|null);
+        }
+
+        /** Represents an updateUserinfoResp. */
+        class updateUserinfoResp implements IupdateUserinfoResp {
+
+            /**
+             * Constructs a new updateUserinfoResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IupdateUserinfoResp);
+
+            /** updateUserinfoResp uid. */
+            public uid: number;
+
+            /** updateUserinfoResp result. */
+            public result: number;
+
+            /** updateUserinfoResp trans. */
+            public trans: Uint8Array;
+
+            /**
+             * Creates a new updateUserinfoResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns updateUserinfoResp instance
+             */
+            public static create(properties?: game_userinfo.IupdateUserinfoResp): game_userinfo.updateUserinfoResp;
+
+            /**
+             * Encodes the specified updateUserinfoResp message. Does not implicitly {@link game_userinfo.updateUserinfoResp.verify|verify} messages.
+             * @param message updateUserinfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IupdateUserinfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified updateUserinfoResp message, length delimited. Does not implicitly {@link game_userinfo.updateUserinfoResp.verify|verify} messages.
+             * @param message updateUserinfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IupdateUserinfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes an updateUserinfoResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns updateUserinfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.updateUserinfoResp;
+
+            /**
+             * Decodes an updateUserinfoResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns updateUserinfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.updateUserinfoResp;
+
+            /**
+             * Verifies an updateUserinfoResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an updateUserinfoResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns updateUserinfoResp
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.updateUserinfoResp;
+
+            /**
+             * Creates a plain object from an updateUserinfoResp message. Also converts values to other types if specified.
+             * @param message updateUserinfoResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.updateUserinfoResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this updateUserinfoResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a userinfoDataDb. */
+        interface IuserinfoDataDb {
+
+            /** userinfoDataDb field_value_list */
+            field_value_list?: (game_userinfo.IFieldValue[]|null);
+        }
+
+        /** Represents a userinfoDataDb. */
+        class userinfoDataDb implements IuserinfoDataDb {
+
+            /**
+             * Constructs a new userinfoDataDb.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: game_userinfo.IuserinfoDataDb);
+
+            /** userinfoDataDb field_value_list. */
+            public field_value_list: game_userinfo.IFieldValue[];
+
+            /**
+             * Creates a new userinfoDataDb instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns userinfoDataDb instance
+             */
+            public static create(properties?: game_userinfo.IuserinfoDataDb): game_userinfo.userinfoDataDb;
+
+            /**
+             * Encodes the specified userinfoDataDb message. Does not implicitly {@link game_userinfo.userinfoDataDb.verify|verify} messages.
+             * @param message userinfoDataDb message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: game_userinfo.IuserinfoDataDb, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified userinfoDataDb message, length delimited. Does not implicitly {@link game_userinfo.userinfoDataDb.verify|verify} messages.
+             * @param message userinfoDataDb message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: game_userinfo.IuserinfoDataDb, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a userinfoDataDb message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns userinfoDataDb
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): game_userinfo.userinfoDataDb;
+
+            /**
+             * Decodes a userinfoDataDb message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns userinfoDataDb
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): game_userinfo.userinfoDataDb;
+
+            /**
+             * Verifies a userinfoDataDb message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a userinfoDataDb message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns userinfoDataDb
+             */
+            public static fromObject(object: { [k: string]: any }): game_userinfo.userinfoDataDb;
+
+            /**
+             * Creates a plain object from a userinfoDataDb message. Also converts values to other types if specified.
+             * @param message userinfoDataDb
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: game_userinfo.userinfoDataDb, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this userinfoDataDb to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Namespace client_proto. */
     namespace client_proto {
 
@@ -891,7 +1762,9 @@ declare namespace ccgame {
             ROOMALLOC_CMD_ALLOC_TABLE_REQ = 4702,
             ROOMALLOC_CMD_ALLOC_TABLE_RESP = 4703,
             ROOMALLOC_CMD_LEVEL_CONFIG_REQ = 4704,
-            ROOMALLOC_CMD_LEVEL_CONFIG_RESP = 4705
+            ROOMALLOC_CMD_LEVEL_CONFIG_RESP = 4705,
+            ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ = 4706,
+            ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP = 4707
         }
 
         /** Properties of an AllocTableReq. */
@@ -914,6 +1787,12 @@ declare namespace ccgame {
 
             /** AllocTableReq userinfo */
             userinfo?: (string|null);
+
+            /** AllocTableReq is_force_alloc */
+            is_force_alloc?: (boolean|null);
+
+            /** AllocTableReq reason */
+            reason?: (number|null);
         }
 
         /** Represents an AllocTableReq. */
@@ -942,6 +1821,12 @@ declare namespace ccgame {
 
             /** AllocTableReq userinfo. */
             public userinfo: string;
+
+            /** AllocTableReq is_force_alloc. */
+            public is_force_alloc: boolean;
+
+            /** AllocTableReq reason. */
+            public reason: number;
 
             /**
              * Creates a new AllocTableReq instance using the specified properties.
@@ -1466,6 +2351,429 @@ declare namespace ccgame {
                 public toJSON(): { [k: string]: any };
             }
         }
+
+        /** Properties of a LevelTableInfoReq. */
+        interface ILevelTableInfoReq {
+
+            /** LevelTableInfoReq uid */
+            uid?: (number|null);
+
+            /** LevelTableInfoReq game_id */
+            game_id?: (number|null);
+
+            /** LevelTableInfoReq level */
+            level?: (number|Long|null);
+
+            /** LevelTableInfoReq self_tid */
+            self_tid?: (number|null);
+
+            /** LevelTableInfoReq record_num */
+            record_num?: (number|null);
+
+            /** LevelTableInfoReq self_svid */
+            self_svid?: (number|null);
+        }
+
+        /** Represents a LevelTableInfoReq. */
+        class LevelTableInfoReq implements ILevelTableInfoReq {
+
+            /**
+             * Constructs a new LevelTableInfoReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: roomalloc.ILevelTableInfoReq);
+
+            /** LevelTableInfoReq uid. */
+            public uid: number;
+
+            /** LevelTableInfoReq game_id. */
+            public game_id: number;
+
+            /** LevelTableInfoReq level. */
+            public level: (number|Long);
+
+            /** LevelTableInfoReq self_tid. */
+            public self_tid: number;
+
+            /** LevelTableInfoReq record_num. */
+            public record_num: number;
+
+            /** LevelTableInfoReq self_svid. */
+            public self_svid: number;
+
+            /**
+             * Creates a new LevelTableInfoReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns LevelTableInfoReq instance
+             */
+            public static create(properties?: roomalloc.ILevelTableInfoReq): roomalloc.LevelTableInfoReq;
+
+            /**
+             * Encodes the specified LevelTableInfoReq message. Does not implicitly {@link roomalloc.LevelTableInfoReq.verify|verify} messages.
+             * @param message LevelTableInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: roomalloc.ILevelTableInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified LevelTableInfoReq message, length delimited. Does not implicitly {@link roomalloc.LevelTableInfoReq.verify|verify} messages.
+             * @param message LevelTableInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: roomalloc.ILevelTableInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a LevelTableInfoReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns LevelTableInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): roomalloc.LevelTableInfoReq;
+
+            /**
+             * Decodes a LevelTableInfoReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns LevelTableInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): roomalloc.LevelTableInfoReq;
+
+            /**
+             * Verifies a LevelTableInfoReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a LevelTableInfoReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns LevelTableInfoReq
+             */
+            public static fromObject(object: { [k: string]: any }): roomalloc.LevelTableInfoReq;
+
+            /**
+             * Creates a plain object from a LevelTableInfoReq message. Also converts values to other types if specified.
+             * @param message LevelTableInfoReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: roomalloc.LevelTableInfoReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this LevelTableInfoReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a WinInfo. */
+        interface IWinInfo {
+
+            /** WinInfo win_result */
+            win_result?: (number|null);
+        }
+
+        /** Represents a WinInfo. */
+        class WinInfo implements IWinInfo {
+
+            /**
+             * Constructs a new WinInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: roomalloc.IWinInfo);
+
+            /** WinInfo win_result. */
+            public win_result: number;
+
+            /**
+             * Creates a new WinInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WinInfo instance
+             */
+            public static create(properties?: roomalloc.IWinInfo): roomalloc.WinInfo;
+
+            /**
+             * Encodes the specified WinInfo message. Does not implicitly {@link roomalloc.WinInfo.verify|verify} messages.
+             * @param message WinInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: roomalloc.IWinInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified WinInfo message, length delimited. Does not implicitly {@link roomalloc.WinInfo.verify|verify} messages.
+             * @param message WinInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: roomalloc.IWinInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a WinInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WinInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): roomalloc.WinInfo;
+
+            /**
+             * Decodes a WinInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WinInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): roomalloc.WinInfo;
+
+            /**
+             * Verifies a WinInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WinInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WinInfo
+             */
+            public static fromObject(object: { [k: string]: any }): roomalloc.WinInfo;
+
+            /**
+             * Creates a plain object from a WinInfo message. Also converts values to other types if specified.
+             * @param message WinInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: roomalloc.WinInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WinInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a LevelTableInfoResp. */
+        interface ILevelTableInfoResp {
+
+            /** LevelTableInfoResp tableList */
+            tableList?: (roomalloc.LevelTableInfoResp.ITableInfo[]|null);
+        }
+
+        /** Represents a LevelTableInfoResp. */
+        class LevelTableInfoResp implements ILevelTableInfoResp {
+
+            /**
+             * Constructs a new LevelTableInfoResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: roomalloc.ILevelTableInfoResp);
+
+            /** LevelTableInfoResp tableList. */
+            public tableList: roomalloc.LevelTableInfoResp.ITableInfo[];
+
+            /**
+             * Creates a new LevelTableInfoResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns LevelTableInfoResp instance
+             */
+            public static create(properties?: roomalloc.ILevelTableInfoResp): roomalloc.LevelTableInfoResp;
+
+            /**
+             * Encodes the specified LevelTableInfoResp message. Does not implicitly {@link roomalloc.LevelTableInfoResp.verify|verify} messages.
+             * @param message LevelTableInfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: roomalloc.ILevelTableInfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified LevelTableInfoResp message, length delimited. Does not implicitly {@link roomalloc.LevelTableInfoResp.verify|verify} messages.
+             * @param message LevelTableInfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: roomalloc.ILevelTableInfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a LevelTableInfoResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns LevelTableInfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): roomalloc.LevelTableInfoResp;
+
+            /**
+             * Decodes a LevelTableInfoResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns LevelTableInfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): roomalloc.LevelTableInfoResp;
+
+            /**
+             * Verifies a LevelTableInfoResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a LevelTableInfoResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns LevelTableInfoResp
+             */
+            public static fromObject(object: { [k: string]: any }): roomalloc.LevelTableInfoResp;
+
+            /**
+             * Creates a plain object from a LevelTableInfoResp message. Also converts values to other types if specified.
+             * @param message LevelTableInfoResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: roomalloc.LevelTableInfoResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this LevelTableInfoResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace LevelTableInfoResp {
+
+            /** Properties of a TableInfo. */
+            interface ITableInfo {
+
+                /** TableInfo table_id */
+                table_id?: (number|null);
+
+                /** TableInfo player_num */
+                player_num?: (number|null);
+
+                /** TableInfo status */
+                status?: (number|null);
+
+                /** TableInfo change_time */
+                change_time?: (number|null);
+
+                /** TableInfo index */
+                index?: (number|null);
+
+                /** TableInfo winInfoList */
+                winInfoList?: (roomalloc.IWinInfo[]|null);
+            }
+
+            /** Represents a TableInfo. */
+            class TableInfo implements ITableInfo {
+
+                /**
+                 * Constructs a new TableInfo.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: roomalloc.LevelTableInfoResp.ITableInfo);
+
+                /** TableInfo table_id. */
+                public table_id: number;
+
+                /** TableInfo player_num. */
+                public player_num: number;
+
+                /** TableInfo status. */
+                public status: number;
+
+                /** TableInfo change_time. */
+                public change_time: number;
+
+                /** TableInfo index. */
+                public index: number;
+
+                /** TableInfo winInfoList. */
+                public winInfoList: roomalloc.IWinInfo[];
+
+                /**
+                 * Creates a new TableInfo instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns TableInfo instance
+                 */
+                public static create(properties?: roomalloc.LevelTableInfoResp.ITableInfo): roomalloc.LevelTableInfoResp.TableInfo;
+
+                /**
+                 * Encodes the specified TableInfo message. Does not implicitly {@link roomalloc.LevelTableInfoResp.TableInfo.verify|verify} messages.
+                 * @param message TableInfo message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: roomalloc.LevelTableInfoResp.ITableInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Encodes the specified TableInfo message, length delimited. Does not implicitly {@link roomalloc.LevelTableInfoResp.TableInfo.verify|verify} messages.
+                 * @param message TableInfo message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: roomalloc.LevelTableInfoResp.ITableInfo, writer?: $protobuf.Writer): $protobuf.Writer;
+
+                /**
+                 * Decodes a TableInfo message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns TableInfo
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): roomalloc.LevelTableInfoResp.TableInfo;
+
+                /**
+                 * Decodes a TableInfo message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns TableInfo
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): roomalloc.LevelTableInfoResp.TableInfo;
+
+                /**
+                 * Verifies a TableInfo message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TableInfo message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TableInfo
+                 */
+                public static fromObject(object: { [k: string]: any }): roomalloc.LevelTableInfoResp.TableInfo;
+
+                /**
+                 * Creates a plain object from a TableInfo message. Also converts values to other types if specified.
+                 * @param message TableInfo
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: roomalloc.LevelTableInfoResp.TableInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TableInfo to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
     }
 
     /** Namespace gamebase. */
@@ -1477,7 +2785,8 @@ declare namespace ccgame {
             SERVER_TYPE_GAME_PLAYER = 1,
             SERVER_TYPE_ROOMSERVER = 5,
             SERVER_TYPE_GAME_MANAGE = 20,
-            SERVER_TYPE_ROOMALLOC = 47
+            SERVER_TYPE_ROOMALLOC = 47,
+            SERVER_TYPE_GAME_USERINFO = 120
         }
 
         /** CCGAME_ID enum. */

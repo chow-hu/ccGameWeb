@@ -38,7 +38,7 @@ const gamerecord = protoRoot.gamerecord;
 const room_alloc_proto = gameprotoRoot.roomalloc;
 const game_base_proto = gameprotoRoot.gamebase;
 const account_proto = protoRoot.account_proto;
-
+const game_userinfo_proto = gameprotoRoot.game_userinfo;
 
 import NetWsManager from './net/NetWsManager';
 
@@ -97,7 +97,7 @@ export class _GE_ {
 export const ge: _GE_ = _GE_.instance;
 
 export {
-    agent, client_proto, eventDispatcher, game_base_proto, gatlas, gaudio, gnet, gui, loader, proto_asset, room_alloc_proto, schedulerManager, account_proto, gamerecord
+    agent, client_proto, eventDispatcher, game_base_proto, gatlas, gaudio, gnet, gui, loader, proto_asset, room_alloc_proto, schedulerManager, account_proto, gamerecord, game_userinfo_proto
 };
 
 

@@ -21,6 +21,7 @@ export class pfTipsPanel extends UIBase {
 
     private _msglist: string[] = [];
     private _nodepool!: NodePool;
+    private _tipingMessage: string[] = [];  // 正在展示的提示
 
     onInit() {
         this._nodepool = new NodePool();
@@ -42,8 +43,21 @@ export class pfTipsPanel extends UIBase {
         let msg = this._msglist.shift();
         if (!msg) return;
         msg = msg + '';
+        if (this._isTiping(msg)) {
+            return;
+        }
         this._tipTxt(msg);
     };
+
+    private _isTiping(msg: string, isDelete: boolean = false) {
+        let idx = this._tipingMessage.indexOf(msg);
+        let isTiping = idx > -1;
+        if (isDelete && isTiping) {
+            this._tipingMessage.splice(idx, 1);
+        }
+
+        return isTiping;
+    }
 
     _tipTxt(msg: string) {
         let node = this._nodepool.get();
@@ -54,15 +68,16 @@ export class pfTipsPanel extends UIBase {
         if (!node) return;
         node.parent = this.panel;
 
+        this._tipingMessage.push(msg);
         node.setPosition(this.tip.getPosition());
         let comp = nodelink('txt', node, ERichText)!;
         comp.string = '<outline color=black width=1><color=#fbf9a6>' + msg + '</c></outline>';
         node.getComponent(UITransform).width = comp.getComponent(UITransform).width + 20;
         node.getComponent(UITransform).height = comp.getComponent(UITransform).height + 20;
-        this._tweenTip(node);
+        this._tweenTip(node, msg);
     }
 
-    _tweenTip(node: Node) {
+    _tweenTip(node: Node, msg: string) {
         Tween.stopAllByTarget(node);
         let tw = tween(node);
         tw.tag(100);
@@ -72,6 +87,7 @@ export class pfTipsPanel extends UIBase {
 
         tw = tween(node);
         tw.delay(2).call(() => {
+            this._isTiping(msg, true);
             this._nodepool.put(node);
         }).start();
 

@@ -7,11 +7,41 @@
         "name": "ccgame",
         "options": {
           "web": {
-            "astc_10x5": {
+            "astc_6x6": {
               "quality": "medium"
             }
           },
           "android": {}
+        }
+      },
+      "2dbxOpIXBE8oO13t0cq43i": {
+        "name": "ccgamesuper",
+        "options": {
+          "web": {
+            "astc_10x5": {
+              "quality": "medium"
+            }
+          }
+        }
+      },
+      "1dULQ7XaRGYLRL7QyS6MEl": {
+        "name": "ccgamemin",
+        "options": {
+          "web": {
+            "astc_5x5": {
+              "quality": "medium"
+            }
+          }
+        }
+      },
+      "a073/t07FF84VqMBlFrnB7": {
+        "name": "ccgame_h5",
+        "options": {
+          "web": {
+            "astc_8x8": {
+              "quality": "medium"
+            }
+          }
         }
       }
     },

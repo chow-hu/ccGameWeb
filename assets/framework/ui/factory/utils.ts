@@ -29,3 +29,16 @@ export function siblingChildByPriority(one: Node, uiJs: UIBase, panel: Node) {
     one.active = true;
     return true;
 }
+
+export function transGuiPath(layerPath: string) {
+    if (!layerPath || layerPath == '') {
+        return { name: '', path: '' };
+    }
+    let paths = layerPath.slice().split('/');
+    let name = paths[paths.length - 1];
+    let path = layerPath.slice();
+    if (!path.includes('/')) {
+        path = 'prefab/layer/' + path;
+    }
+    return { name, path };
+}

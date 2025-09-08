@@ -20,6 +20,11 @@ const mapping = {
     "WHEEL_COPY_URL": "Share link copied.",
     "WHEEL_IMG_SAVE": "Picture saved.",
 
+    GAME_GET_CONFIG_TIME_OUT: "Get level config time out!",
+    GAME_MATCH_TABLE_TIME_OUT: "Match time out!",
+    GAME_JOIN_TIME_OUT: "Into room time out!",
+    GAME_EXIT_TIME_OUT: "Exit room time out!",
+
     "GAME_ERROR_1": "Fail",
     "GAME_ERROR_2": "The table is not exist!",
     "GAME_ERROR_3": "Login repeat",
@@ -43,7 +48,7 @@ const mapping = {
     "GAME_ERROR_21": "You are not betting",
     "GAME_ERROR_22": "You are betting timeout",
     "GAME_ERROR_TIP": ' Please try again.',
-
+    "CURRENCY_SYMBOL_NUM": "₹%s",
     "NOT_IN_ROOM": "No room for the current game.",
     "DOWNLOAD_GAME_ERROR": "Failed to download the game, Please try again.",
     "TOKEN_LOSE": ['Account login anomaly detected. You have been disconnected.', 'You have been logged out of the game. Please return to the lobby to log in again.'],

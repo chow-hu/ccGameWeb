@@ -1,20 +1,25 @@
-import { CmdToPbName, game_base_proto, room_alloc_proto } from "../../../framework/ge";
+import { CmdToPbName, game_base_proto, game_userinfo_proto, room_alloc_proto } from "../../../framework/ge";
 
 /**子游戏公用协议 */
 export const GameReq = {
     GAME_CONFIG: "roomalloc.GameLevelConfigReq",
     REQUEST_ROOM: "roomalloc.AllocTableReq",
+    LEVEL_TABLE_INFO: "roomalloc.LevelTableInfoReq",
     LEAVE_ROOM: "gamebase.LeaveRoomReq",
     SIT_DOWN: "gamebase.UserSitDownReq",
     JOIN_ROOM: "gamebase.UserJoinTableReq",
     GAME_RULES: "gamebase.GetGameRuleReq",
     SHARE_POSTER: "gamebase.SharePosterReq",
     REQUEST_USER_BALANCE: "gamebase.ResetUserBalanceReq",
+    GET_USER_INFO: "game_userinfo.getUserinfoReq",
+    GET_USER_INFO_BY_FIELD: "game_userinfo.getUserinfoByfieldReq",
+    UPDATE_USER_INFO: "game_userinfo.updateUserinfoReq",
 }
 
 export const GameResp = {
     GAME_CONFIG: "roomalloc.GameLevelConfigResp",
     REQUEST_ROOM: "roomalloc.AllocTableResp",
+    LEVEL_TABLE_INFO: "roomalloc.LevelTableInfoResp",
     LEAVE_ROOM: "gamebase.LeaveRoomResp",
     GAMENOTIFICATION_PUSH: "gamebase.GameNotificationPush",
     SIT_DOWN: "gamebase.UserSitDownResp",
@@ -26,6 +31,9 @@ export const GameResp = {
     GAME_RULES: "gamebase.GetGameRuleResp",
     SHARE_POSTER: "gamebase.SharePosterResp",
     REQUEST_USER_BALANCE: "gamebase.ResetUserBalanceResp",
+    GET_USER_INFO: "game_userinfo.getUserinfoResp",
+    GET_USER_INFO_BY_FIELD: "game_userinfo.getUserinfoByfieldResp",
+    UPDATE_USER_INFO: "game_userinfo.updateUserinfoResp",
 }
 
 export const GameProto = {
@@ -59,6 +67,9 @@ export const GameEvent = {
     JOIN_ROOM_ERROR: "GameEvent_game_Join_Room_Error",
 
     /** 游戏-离开房间 */
+    LEAVE_ROOM_ERROR: "GameEvent_game_Leave_Room_Error",
+
+    /** 游戏-离开房间 */
     LEAVE_ROOM: "gamebase-LeaveRoomResp",
 
     GAMENOTIFICATION_PUSH: "gamebase-GameNotificationPush",
@@ -86,6 +97,23 @@ export const GameEvent = {
 
     /** 重置用户余额 */
     REQUEST_USER_BALANCE: "gamebase-ResetUserBalanceResp",
+    /** 游戏-请求场次桌子列表 */
+    LEVEL_TABLE_INFO: "roomalloc-LevelTableInfoResp",
+
+     /** 更新用户信息 */
+    UPDATE_USER_INFO: "update-user-info",
+
+    /** 修改用户信息返回 */
+    FIELD_USER_INFO: "field-user-info",
+
+    /** 修改用户昵称 */
+    UPDATE_USER_NICKNAME: "update-user-nickname",
+
+    /** 修改用户头像 */
+    UPDATE_USER_AVATAR: "update-user-avatar",
+
+    /** 修改用户性别 */
+    UPDATE_USER_GENDER: "update-user-gender",
 
 }
 /** 自定义事件 */
@@ -104,6 +132,8 @@ export const GameActionType = {
 CmdToPbName[room_alloc_proto.ROOMALLOC_CMD.ROOMALLOC_CMD_LEVEL_CONFIG_RESP] = "roomalloc.GameLevelConfigResp";
 // 请求配桌
 CmdToPbName[room_alloc_proto.ROOMALLOC_CMD.ROOMALLOC_CMD_ALLOC_TABLE_RESP] = "roomalloc.AllocTableResp";
+// 请求桌子信息
+CmdToPbName[room_alloc_proto.ROOMALLOC_CMD.ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP] = "roomalloc.LevelTableInfoResp";
 // 离开房间返回
 CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_LEAVE_RESP] = "gamebase.LeaveRoomResp";
 
@@ -125,3 +155,27 @@ CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_GET_RULE_RESP] = "gamebase.GetG
 CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_SHARE_POSTER_RESP] = "gamebase.SharePosterResp";
 // 重置用户余额
 CmdToPbName[game_base_proto.CCGAME_MSGID.CC_GAME_RESET_BALANCE_RESP] = "gamebase.ResetUserBalanceResp";
+
+// 获取玩家游戏信息
+CmdToPbName[game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_GET_USERINFO_RESP] = GameResp.GET_USER_INFO;
+// 获取玩家游戏部分信息
+CmdToPbName[game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_RESP] = GameResp.GET_USER_INFO_BY_FIELD;
+// 更新玩家游戏信息
+CmdToPbName[game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_UPDATE_USERINFO_RESP] = GameResp.UPDATE_USER_INFO;
+
+/** 玩家信息 */
+export interface IUpdateGameUserInfoData {
+    field: number,
+    int_val?: number,
+    str_val?: string,
+}
+
+export enum EUserField {
+    NONE = 0,
+    /** 头像 */
+    AVATAR = 1,
+    /** 昵称 */
+    NICKNAME = 2,
+    /** 性别 */
+    GENDER = 3,
+}

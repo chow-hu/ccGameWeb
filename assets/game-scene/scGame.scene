@@ -88,7 +88,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 384,
-      "y": 683,
+      "y": 831.5,
       "z": 0
     },
     "_lrot": {
@@ -123,7 +123,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 4
@@ -150,7 +150,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 1073741824,
+    "_layer": 1,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -173,9 +173,9 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 683,
+    "_orthoHeight": 831.5,
     "_near": 1,
-    "_far": 2000,
+    "_far": 1000,
     "_color": {
       "__type__": "cc.Color",
       "r": 0,
@@ -197,7 +197,7 @@
     "_shutter": 7,
     "_iso": 0,
     "_screenScale": 1,
-    "_visibility": 1116209152,
+    "_visibility": 1,
     "_targetTexture": null,
     "_postProcess": null,
     "_usePostProcess": false,
@@ -218,7 +218,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

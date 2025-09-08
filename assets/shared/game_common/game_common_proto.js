@@ -9,6 +9,2243 @@ var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.ut
 // Exported root namespace
 var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
+$root.game_userinfo = (function() {
+
+    /**
+     * Namespace game_userinfo.
+     * @exports game_userinfo
+     * @namespace
+     */
+    var game_userinfo = {};
+
+    /**
+     * GAME_USERINFO_CMD enum.
+     * @name game_userinfo.GAME_USERINFO_CMD
+     * @enum {number}
+     * @property {number} GAME_USERINFO_CMD_NONE=0 GAME_USERINFO_CMD_NONE value
+     * @property {number} GAME_USERINFO_CMD_GET_USERINFO_REQ=2200 GAME_USERINFO_CMD_GET_USERINFO_REQ value
+     * @property {number} GAME_USERINFO_CMD_GET_USERINFO_RESP=2201 GAME_USERINFO_CMD_GET_USERINFO_RESP value
+     * @property {number} GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_REQ=2202 GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_REQ value
+     * @property {number} GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_RESP=2203 GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_RESP value
+     * @property {number} GAME_USERINFO_CMD_UPDATE_USERINFO_REQ=2204 GAME_USERINFO_CMD_UPDATE_USERINFO_REQ value
+     * @property {number} GAME_USERINFO_CMD_UPDATE_USERINFO_RESP=2205 GAME_USERINFO_CMD_UPDATE_USERINFO_RESP value
+     */
+    game_userinfo.GAME_USERINFO_CMD = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "GAME_USERINFO_CMD_NONE"] = 0;
+        values[valuesById[2200] = "GAME_USERINFO_CMD_GET_USERINFO_REQ"] = 2200;
+        values[valuesById[2201] = "GAME_USERINFO_CMD_GET_USERINFO_RESP"] = 2201;
+        values[valuesById[2202] = "GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_REQ"] = 2202;
+        values[valuesById[2203] = "GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_RESP"] = 2203;
+        values[valuesById[2204] = "GAME_USERINFO_CMD_UPDATE_USERINFO_REQ"] = 2204;
+        values[valuesById[2205] = "GAME_USERINFO_CMD_UPDATE_USERINFO_RESP"] = 2205;
+        return values;
+    })();
+
+    /**
+     * ErrorCode enum.
+     * @name game_userinfo.ErrorCode
+     * @enum {number}
+     * @property {number} Success=0 Success value
+     * @property {number} ParsePbErr=1 ParsePbErr value
+     * @property {number} UidZero=2 UidZero value
+     * @property {number} ServerErr=3 ServerErr value
+     * @property {number} SendErr=4 SendErr value
+     * @property {number} GameIdZero=5 GameIdZero value
+     * @property {number} GetUserInfoErr=6 GetUserInfoErr value
+     */
+    game_userinfo.ErrorCode = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "Success"] = 0;
+        values[valuesById[1] = "ParsePbErr"] = 1;
+        values[valuesById[2] = "UidZero"] = 2;
+        values[valuesById[3] = "ServerErr"] = 3;
+        values[valuesById[4] = "SendErr"] = 4;
+        values[valuesById[5] = "GameIdZero"] = 5;
+        values[valuesById[6] = "GetUserInfoErr"] = 6;
+        return values;
+    })();
+
+    /**
+     * USER_FIELD enum.
+     * @name game_userinfo.USER_FIELD
+     * @enum {number}
+     * @property {number} FIELD_NONE=0 FIELD_NONE value
+     * @property {number} FIELD_HEADER=1 FIELD_HEADER value
+     * @property {number} FIELD_NICKNAME=2 FIELD_NICKNAME value
+     * @property {number} FIELD_GENDER=3 FIELD_GENDER value
+     */
+    game_userinfo.USER_FIELD = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "FIELD_NONE"] = 0;
+        values[valuesById[1] = "FIELD_HEADER"] = 1;
+        values[valuesById[2] = "FIELD_NICKNAME"] = 2;
+        values[valuesById[3] = "FIELD_GENDER"] = 3;
+        return values;
+    })();
+
+    game_userinfo.FieldValue = (function() {
+
+        /**
+         * Properties of a FieldValue.
+         * @memberof game_userinfo
+         * @interface IFieldValue
+         * @property {game_userinfo.USER_FIELD|null} [field] FieldValue field
+         * @property {number|null} [int_val] FieldValue int_val
+         * @property {string|null} [str_val] FieldValue str_val
+         */
+
+        /**
+         * Constructs a new FieldValue.
+         * @memberof game_userinfo
+         * @classdesc Represents a FieldValue.
+         * @implements IFieldValue
+         * @constructor
+         * @param {game_userinfo.IFieldValue=} [properties] Properties to set
+         */
+        function FieldValue(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * FieldValue field.
+         * @member {game_userinfo.USER_FIELD} field
+         * @memberof game_userinfo.FieldValue
+         * @instance
+         */
+        FieldValue.prototype.field = 0;
+
+        /**
+         * FieldValue int_val.
+         * @member {number|null|undefined} int_val
+         * @memberof game_userinfo.FieldValue
+         * @instance
+         */
+        FieldValue.prototype.int_val = null;
+
+        /**
+         * FieldValue str_val.
+         * @member {string|null|undefined} str_val
+         * @memberof game_userinfo.FieldValue
+         * @instance
+         */
+        FieldValue.prototype.str_val = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        /**
+         * FieldValue value.
+         * @member {"int_val"|"str_val"|undefined} value
+         * @memberof game_userinfo.FieldValue
+         * @instance
+         */
+        Object.defineProperty(FieldValue.prototype, "value", {
+            get: $util.oneOfGetter($oneOfFields = ["int_val", "str_val"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new FieldValue instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {game_userinfo.IFieldValue=} [properties] Properties to set
+         * @returns {game_userinfo.FieldValue} FieldValue instance
+         */
+        FieldValue.create = function create(properties) {
+            return new FieldValue(properties);
+        };
+
+        /**
+         * Encodes the specified FieldValue message. Does not implicitly {@link game_userinfo.FieldValue.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {game_userinfo.IFieldValue} message FieldValue message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        FieldValue.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.field != null && Object.hasOwnProperty.call(message, "field"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.field);
+            if (message.int_val != null && Object.hasOwnProperty.call(message, "int_val"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.int_val);
+            if (message.str_val != null && Object.hasOwnProperty.call(message, "str_val"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.str_val);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified FieldValue message, length delimited. Does not implicitly {@link game_userinfo.FieldValue.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {game_userinfo.IFieldValue} message FieldValue message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        FieldValue.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a FieldValue message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.FieldValue} FieldValue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        FieldValue.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.FieldValue();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.field = reader.int32();
+                    break;
+                case 2:
+                    message.int_val = reader.int32();
+                    break;
+                case 3:
+                    message.str_val = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a FieldValue message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.FieldValue} FieldValue
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        FieldValue.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a FieldValue message.
+         * @function verify
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        FieldValue.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            var properties = {};
+            if (message.field != null && message.hasOwnProperty("field"))
+                switch (message.field) {
+                default:
+                    return "field: enum value expected";
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                }
+            if (message.int_val != null && message.hasOwnProperty("int_val")) {
+                properties.value = 1;
+                if (!$util.isInteger(message.int_val))
+                    return "int_val: integer expected";
+            }
+            if (message.str_val != null && message.hasOwnProperty("str_val")) {
+                if (properties.value === 1)
+                    return "value: multiple values";
+                properties.value = 1;
+                if (!$util.isString(message.str_val))
+                    return "str_val: string expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a FieldValue message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.FieldValue} FieldValue
+         */
+        FieldValue.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.FieldValue)
+                return object;
+            var message = new $root.game_userinfo.FieldValue();
+            switch (object.field) {
+            case "FIELD_NONE":
+            case 0:
+                message.field = 0;
+                break;
+            case "FIELD_HEADER":
+            case 1:
+                message.field = 1;
+                break;
+            case "FIELD_NICKNAME":
+            case 2:
+                message.field = 2;
+                break;
+            case "FIELD_GENDER":
+            case 3:
+                message.field = 3;
+                break;
+            }
+            if (object.int_val != null)
+                message.int_val = object.int_val | 0;
+            if (object.str_val != null)
+                message.str_val = String(object.str_val);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a FieldValue message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.FieldValue
+         * @static
+         * @param {game_userinfo.FieldValue} message FieldValue
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        FieldValue.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.field = options.enums === String ? "FIELD_NONE" : 0;
+            if (message.field != null && message.hasOwnProperty("field"))
+                object.field = options.enums === String ? $root.game_userinfo.USER_FIELD[message.field] : message.field;
+            if (message.int_val != null && message.hasOwnProperty("int_val")) {
+                object.int_val = message.int_val;
+                if (options.oneofs)
+                    object.value = "int_val";
+            }
+            if (message.str_val != null && message.hasOwnProperty("str_val")) {
+                object.str_val = message.str_val;
+                if (options.oneofs)
+                    object.value = "str_val";
+            }
+            return object;
+        };
+
+        /**
+         * Converts this FieldValue to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.FieldValue
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        FieldValue.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return FieldValue;
+    })();
+
+    game_userinfo.getUserinfoReq = (function() {
+
+        /**
+         * Properties of a getUserinfoReq.
+         * @memberof game_userinfo
+         * @interface IgetUserinfoReq
+         * @property {number|null} [uid] getUserinfoReq uid
+         * @property {number|null} [game_id] getUserinfoReq game_id
+         * @property {Uint8Array|null} [trans] getUserinfoReq trans
+         */
+
+        /**
+         * Constructs a new getUserinfoReq.
+         * @memberof game_userinfo
+         * @classdesc Represents a getUserinfoReq.
+         * @implements IgetUserinfoReq
+         * @constructor
+         * @param {game_userinfo.IgetUserinfoReq=} [properties] Properties to set
+         */
+        function getUserinfoReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * getUserinfoReq uid.
+         * @member {number} uid
+         * @memberof game_userinfo.getUserinfoReq
+         * @instance
+         */
+        getUserinfoReq.prototype.uid = 0;
+
+        /**
+         * getUserinfoReq game_id.
+         * @member {number} game_id
+         * @memberof game_userinfo.getUserinfoReq
+         * @instance
+         */
+        getUserinfoReq.prototype.game_id = 0;
+
+        /**
+         * getUserinfoReq trans.
+         * @member {Uint8Array} trans
+         * @memberof game_userinfo.getUserinfoReq
+         * @instance
+         */
+        getUserinfoReq.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * Creates a new getUserinfoReq instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {game_userinfo.IgetUserinfoReq=} [properties] Properties to set
+         * @returns {game_userinfo.getUserinfoReq} getUserinfoReq instance
+         */
+        getUserinfoReq.create = function create(properties) {
+            return new getUserinfoReq(properties);
+        };
+
+        /**
+         * Encodes the specified getUserinfoReq message. Does not implicitly {@link game_userinfo.getUserinfoReq.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {game_userinfo.IgetUserinfoReq} message getUserinfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game_id != null && Object.hasOwnProperty.call(message, "game_id"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game_id);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.trans);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified getUserinfoReq message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {game_userinfo.IgetUserinfoReq} message getUserinfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a getUserinfoReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.getUserinfoReq} getUserinfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.getUserinfoReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game_id = reader.uint32();
+                    break;
+                case 3:
+                    message.trans = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a getUserinfoReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.getUserinfoReq} getUserinfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a getUserinfoReq message.
+         * @function verify
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        getUserinfoReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                if (!$util.isInteger(message.game_id))
+                    return "game_id: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates a getUserinfoReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.getUserinfoReq} getUserinfoReq
+         */
+        getUserinfoReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.getUserinfoReq)
+                return object;
+            var message = new $root.game_userinfo.getUserinfoReq();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game_id != null)
+                message.game_id = object.game_id >>> 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a getUserinfoReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.getUserinfoReq
+         * @static
+         * @param {game_userinfo.getUserinfoReq} message getUserinfoReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        getUserinfoReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game_id = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                object.game_id = message.game_id;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            return object;
+        };
+
+        /**
+         * Converts this getUserinfoReq to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.getUserinfoReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        getUserinfoReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return getUserinfoReq;
+    })();
+
+    game_userinfo.getUserinfoResp = (function() {
+
+        /**
+         * Properties of a getUserinfoResp.
+         * @memberof game_userinfo
+         * @interface IgetUserinfoResp
+         * @property {number|null} [uid] getUserinfoResp uid
+         * @property {number|null} [result] getUserinfoResp result
+         * @property {Uint8Array|null} [trans] getUserinfoResp trans
+         * @property {Array.<game_userinfo.IFieldValue>|null} [field_value_list] getUserinfoResp field_value_list
+         */
+
+        /**
+         * Constructs a new getUserinfoResp.
+         * @memberof game_userinfo
+         * @classdesc Represents a getUserinfoResp.
+         * @implements IgetUserinfoResp
+         * @constructor
+         * @param {game_userinfo.IgetUserinfoResp=} [properties] Properties to set
+         */
+        function getUserinfoResp(properties) {
+            this.field_value_list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * getUserinfoResp uid.
+         * @member {number} uid
+         * @memberof game_userinfo.getUserinfoResp
+         * @instance
+         */
+        getUserinfoResp.prototype.uid = 0;
+
+        /**
+         * getUserinfoResp result.
+         * @member {number} result
+         * @memberof game_userinfo.getUserinfoResp
+         * @instance
+         */
+        getUserinfoResp.prototype.result = 0;
+
+        /**
+         * getUserinfoResp trans.
+         * @member {Uint8Array} trans
+         * @memberof game_userinfo.getUserinfoResp
+         * @instance
+         */
+        getUserinfoResp.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * getUserinfoResp field_value_list.
+         * @member {Array.<game_userinfo.IFieldValue>} field_value_list
+         * @memberof game_userinfo.getUserinfoResp
+         * @instance
+         */
+        getUserinfoResp.prototype.field_value_list = $util.emptyArray;
+
+        /**
+         * Creates a new getUserinfoResp instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {game_userinfo.IgetUserinfoResp=} [properties] Properties to set
+         * @returns {game_userinfo.getUserinfoResp} getUserinfoResp instance
+         */
+        getUserinfoResp.create = function create(properties) {
+            return new getUserinfoResp(properties);
+        };
+
+        /**
+         * Encodes the specified getUserinfoResp message. Does not implicitly {@link game_userinfo.getUserinfoResp.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {game_userinfo.IgetUserinfoResp} message getUserinfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.trans);
+            if (message.field_value_list != null && message.field_value_list.length)
+                for (var i = 0; i < message.field_value_list.length; ++i)
+                    $root.game_userinfo.FieldValue.encode(message.field_value_list[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified getUserinfoResp message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {game_userinfo.IgetUserinfoResp} message getUserinfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a getUserinfoResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.getUserinfoResp} getUserinfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.getUserinfoResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.result = reader.int32();
+                    break;
+                case 3:
+                    message.trans = reader.bytes();
+                    break;
+                case 4:
+                    if (!(message.field_value_list && message.field_value_list.length))
+                        message.field_value_list = [];
+                    message.field_value_list.push($root.game_userinfo.FieldValue.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a getUserinfoResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.getUserinfoResp} getUserinfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a getUserinfoResp message.
+         * @function verify
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        getUserinfoResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                if (!$util.isInteger(message.result))
+                    return "result: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            if (message.field_value_list != null && message.hasOwnProperty("field_value_list")) {
+                if (!Array.isArray(message.field_value_list))
+                    return "field_value_list: array expected";
+                for (var i = 0; i < message.field_value_list.length; ++i) {
+                    var error = $root.game_userinfo.FieldValue.verify(message.field_value_list[i]);
+                    if (error)
+                        return "field_value_list." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a getUserinfoResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.getUserinfoResp} getUserinfoResp
+         */
+        getUserinfoResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.getUserinfoResp)
+                return object;
+            var message = new $root.game_userinfo.getUserinfoResp();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.result != null)
+                message.result = object.result | 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            if (object.field_value_list) {
+                if (!Array.isArray(object.field_value_list))
+                    throw TypeError(".game_userinfo.getUserinfoResp.field_value_list: array expected");
+                message.field_value_list = [];
+                for (var i = 0; i < object.field_value_list.length; ++i) {
+                    if (typeof object.field_value_list[i] !== "object")
+                        throw TypeError(".game_userinfo.getUserinfoResp.field_value_list: object expected");
+                    message.field_value_list[i] = $root.game_userinfo.FieldValue.fromObject(object.field_value_list[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a getUserinfoResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.getUserinfoResp
+         * @static
+         * @param {game_userinfo.getUserinfoResp} message getUserinfoResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        getUserinfoResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.field_value_list = [];
+            if (options.defaults) {
+                object.uid = 0;
+                object.result = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = message.result;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            if (message.field_value_list && message.field_value_list.length) {
+                object.field_value_list = [];
+                for (var j = 0; j < message.field_value_list.length; ++j)
+                    object.field_value_list[j] = $root.game_userinfo.FieldValue.toObject(message.field_value_list[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this getUserinfoResp to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.getUserinfoResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        getUserinfoResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return getUserinfoResp;
+    })();
+
+    game_userinfo.getUserinfoByfieldReq = (function() {
+
+        /**
+         * Properties of a getUserinfoByfieldReq.
+         * @memberof game_userinfo
+         * @interface IgetUserinfoByfieldReq
+         * @property {number|null} [uid] getUserinfoByfieldReq uid
+         * @property {number|null} [game_id] getUserinfoByfieldReq game_id
+         * @property {Uint8Array|null} [trans] getUserinfoByfieldReq trans
+         * @property {Array.<game_userinfo.USER_FIELD>|null} [field_list] getUserinfoByfieldReq field_list
+         */
+
+        /**
+         * Constructs a new getUserinfoByfieldReq.
+         * @memberof game_userinfo
+         * @classdesc Represents a getUserinfoByfieldReq.
+         * @implements IgetUserinfoByfieldReq
+         * @constructor
+         * @param {game_userinfo.IgetUserinfoByfieldReq=} [properties] Properties to set
+         */
+        function getUserinfoByfieldReq(properties) {
+            this.field_list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * getUserinfoByfieldReq uid.
+         * @member {number} uid
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @instance
+         */
+        getUserinfoByfieldReq.prototype.uid = 0;
+
+        /**
+         * getUserinfoByfieldReq game_id.
+         * @member {number} game_id
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @instance
+         */
+        getUserinfoByfieldReq.prototype.game_id = 0;
+
+        /**
+         * getUserinfoByfieldReq trans.
+         * @member {Uint8Array} trans
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @instance
+         */
+        getUserinfoByfieldReq.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * getUserinfoByfieldReq field_list.
+         * @member {Array.<game_userinfo.USER_FIELD>} field_list
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @instance
+         */
+        getUserinfoByfieldReq.prototype.field_list = $util.emptyArray;
+
+        /**
+         * Creates a new getUserinfoByfieldReq instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {game_userinfo.IgetUserinfoByfieldReq=} [properties] Properties to set
+         * @returns {game_userinfo.getUserinfoByfieldReq} getUserinfoByfieldReq instance
+         */
+        getUserinfoByfieldReq.create = function create(properties) {
+            return new getUserinfoByfieldReq(properties);
+        };
+
+        /**
+         * Encodes the specified getUserinfoByfieldReq message. Does not implicitly {@link game_userinfo.getUserinfoByfieldReq.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {game_userinfo.IgetUserinfoByfieldReq} message getUserinfoByfieldReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoByfieldReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game_id != null && Object.hasOwnProperty.call(message, "game_id"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game_id);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.trans);
+            if (message.field_list != null && message.field_list.length) {
+                writer.uint32(/* id 4, wireType 2 =*/34).fork();
+                for (var i = 0; i < message.field_list.length; ++i)
+                    writer.int32(message.field_list[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        /**
+         * Encodes the specified getUserinfoByfieldReq message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoByfieldReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {game_userinfo.IgetUserinfoByfieldReq} message getUserinfoByfieldReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoByfieldReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a getUserinfoByfieldReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.getUserinfoByfieldReq} getUserinfoByfieldReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoByfieldReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.getUserinfoByfieldReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game_id = reader.uint32();
+                    break;
+                case 3:
+                    message.trans = reader.bytes();
+                    break;
+                case 4:
+                    if (!(message.field_list && message.field_list.length))
+                        message.field_list = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.field_list.push(reader.int32());
+                    } else
+                        message.field_list.push(reader.int32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a getUserinfoByfieldReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.getUserinfoByfieldReq} getUserinfoByfieldReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoByfieldReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a getUserinfoByfieldReq message.
+         * @function verify
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        getUserinfoByfieldReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                if (!$util.isInteger(message.game_id))
+                    return "game_id: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            if (message.field_list != null && message.hasOwnProperty("field_list")) {
+                if (!Array.isArray(message.field_list))
+                    return "field_list: array expected";
+                for (var i = 0; i < message.field_list.length; ++i)
+                    switch (message.field_list[i]) {
+                    default:
+                        return "field_list: enum value[] expected";
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        break;
+                    }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a getUserinfoByfieldReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.getUserinfoByfieldReq} getUserinfoByfieldReq
+         */
+        getUserinfoByfieldReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.getUserinfoByfieldReq)
+                return object;
+            var message = new $root.game_userinfo.getUserinfoByfieldReq();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game_id != null)
+                message.game_id = object.game_id >>> 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            if (object.field_list) {
+                if (!Array.isArray(object.field_list))
+                    throw TypeError(".game_userinfo.getUserinfoByfieldReq.field_list: array expected");
+                message.field_list = [];
+                for (var i = 0; i < object.field_list.length; ++i)
+                    switch (object.field_list[i]) {
+                    default:
+                    case "FIELD_NONE":
+                    case 0:
+                        message.field_list[i] = 0;
+                        break;
+                    case "FIELD_HEADER":
+                    case 1:
+                        message.field_list[i] = 1;
+                        break;
+                    case "FIELD_NICKNAME":
+                    case 2:
+                        message.field_list[i] = 2;
+                        break;
+                    case "FIELD_GENDER":
+                    case 3:
+                        message.field_list[i] = 3;
+                        break;
+                    }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a getUserinfoByfieldReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @static
+         * @param {game_userinfo.getUserinfoByfieldReq} message getUserinfoByfieldReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        getUserinfoByfieldReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.field_list = [];
+            if (options.defaults) {
+                object.uid = 0;
+                object.game_id = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                object.game_id = message.game_id;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            if (message.field_list && message.field_list.length) {
+                object.field_list = [];
+                for (var j = 0; j < message.field_list.length; ++j)
+                    object.field_list[j] = options.enums === String ? $root.game_userinfo.USER_FIELD[message.field_list[j]] : message.field_list[j];
+            }
+            return object;
+        };
+
+        /**
+         * Converts this getUserinfoByfieldReq to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.getUserinfoByfieldReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        getUserinfoByfieldReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return getUserinfoByfieldReq;
+    })();
+
+    game_userinfo.getUserinfoByfieldResp = (function() {
+
+        /**
+         * Properties of a getUserinfoByfieldResp.
+         * @memberof game_userinfo
+         * @interface IgetUserinfoByfieldResp
+         * @property {number|null} [uid] getUserinfoByfieldResp uid
+         * @property {number|null} [result] getUserinfoByfieldResp result
+         * @property {Uint8Array|null} [trans] getUserinfoByfieldResp trans
+         * @property {Array.<game_userinfo.IFieldValue>|null} [field_value_list] getUserinfoByfieldResp field_value_list
+         */
+
+        /**
+         * Constructs a new getUserinfoByfieldResp.
+         * @memberof game_userinfo
+         * @classdesc Represents a getUserinfoByfieldResp.
+         * @implements IgetUserinfoByfieldResp
+         * @constructor
+         * @param {game_userinfo.IgetUserinfoByfieldResp=} [properties] Properties to set
+         */
+        function getUserinfoByfieldResp(properties) {
+            this.field_value_list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * getUserinfoByfieldResp uid.
+         * @member {number} uid
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @instance
+         */
+        getUserinfoByfieldResp.prototype.uid = 0;
+
+        /**
+         * getUserinfoByfieldResp result.
+         * @member {number} result
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @instance
+         */
+        getUserinfoByfieldResp.prototype.result = 0;
+
+        /**
+         * getUserinfoByfieldResp trans.
+         * @member {Uint8Array} trans
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @instance
+         */
+        getUserinfoByfieldResp.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * getUserinfoByfieldResp field_value_list.
+         * @member {Array.<game_userinfo.IFieldValue>} field_value_list
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @instance
+         */
+        getUserinfoByfieldResp.prototype.field_value_list = $util.emptyArray;
+
+        /**
+         * Creates a new getUserinfoByfieldResp instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {game_userinfo.IgetUserinfoByfieldResp=} [properties] Properties to set
+         * @returns {game_userinfo.getUserinfoByfieldResp} getUserinfoByfieldResp instance
+         */
+        getUserinfoByfieldResp.create = function create(properties) {
+            return new getUserinfoByfieldResp(properties);
+        };
+
+        /**
+         * Encodes the specified getUserinfoByfieldResp message. Does not implicitly {@link game_userinfo.getUserinfoByfieldResp.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {game_userinfo.IgetUserinfoByfieldResp} message getUserinfoByfieldResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoByfieldResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.trans);
+            if (message.field_value_list != null && message.field_value_list.length)
+                for (var i = 0; i < message.field_value_list.length; ++i)
+                    $root.game_userinfo.FieldValue.encode(message.field_value_list[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified getUserinfoByfieldResp message, length delimited. Does not implicitly {@link game_userinfo.getUserinfoByfieldResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {game_userinfo.IgetUserinfoByfieldResp} message getUserinfoByfieldResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        getUserinfoByfieldResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a getUserinfoByfieldResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.getUserinfoByfieldResp} getUserinfoByfieldResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoByfieldResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.getUserinfoByfieldResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.result = reader.int32();
+                    break;
+                case 3:
+                    message.trans = reader.bytes();
+                    break;
+                case 4:
+                    if (!(message.field_value_list && message.field_value_list.length))
+                        message.field_value_list = [];
+                    message.field_value_list.push($root.game_userinfo.FieldValue.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a getUserinfoByfieldResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.getUserinfoByfieldResp} getUserinfoByfieldResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        getUserinfoByfieldResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a getUserinfoByfieldResp message.
+         * @function verify
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        getUserinfoByfieldResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                if (!$util.isInteger(message.result))
+                    return "result: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            if (message.field_value_list != null && message.hasOwnProperty("field_value_list")) {
+                if (!Array.isArray(message.field_value_list))
+                    return "field_value_list: array expected";
+                for (var i = 0; i < message.field_value_list.length; ++i) {
+                    var error = $root.game_userinfo.FieldValue.verify(message.field_value_list[i]);
+                    if (error)
+                        return "field_value_list." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a getUserinfoByfieldResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.getUserinfoByfieldResp} getUserinfoByfieldResp
+         */
+        getUserinfoByfieldResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.getUserinfoByfieldResp)
+                return object;
+            var message = new $root.game_userinfo.getUserinfoByfieldResp();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.result != null)
+                message.result = object.result | 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            if (object.field_value_list) {
+                if (!Array.isArray(object.field_value_list))
+                    throw TypeError(".game_userinfo.getUserinfoByfieldResp.field_value_list: array expected");
+                message.field_value_list = [];
+                for (var i = 0; i < object.field_value_list.length; ++i) {
+                    if (typeof object.field_value_list[i] !== "object")
+                        throw TypeError(".game_userinfo.getUserinfoByfieldResp.field_value_list: object expected");
+                    message.field_value_list[i] = $root.game_userinfo.FieldValue.fromObject(object.field_value_list[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a getUserinfoByfieldResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @static
+         * @param {game_userinfo.getUserinfoByfieldResp} message getUserinfoByfieldResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        getUserinfoByfieldResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.field_value_list = [];
+            if (options.defaults) {
+                object.uid = 0;
+                object.result = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = message.result;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            if (message.field_value_list && message.field_value_list.length) {
+                object.field_value_list = [];
+                for (var j = 0; j < message.field_value_list.length; ++j)
+                    object.field_value_list[j] = $root.game_userinfo.FieldValue.toObject(message.field_value_list[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this getUserinfoByfieldResp to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.getUserinfoByfieldResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        getUserinfoByfieldResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return getUserinfoByfieldResp;
+    })();
+
+    game_userinfo.updateUserinfoReq = (function() {
+
+        /**
+         * Properties of an updateUserinfoReq.
+         * @memberof game_userinfo
+         * @interface IupdateUserinfoReq
+         * @property {number|null} [uid] updateUserinfoReq uid
+         * @property {number|null} [game_id] updateUserinfoReq game_id
+         * @property {Uint8Array|null} [trans] updateUserinfoReq trans
+         * @property {Array.<game_userinfo.IFieldValue>|null} [field_value_list] updateUserinfoReq field_value_list
+         * @property {number|null} [svid] updateUserinfoReq svid
+         */
+
+        /**
+         * Constructs a new updateUserinfoReq.
+         * @memberof game_userinfo
+         * @classdesc Represents an updateUserinfoReq.
+         * @implements IupdateUserinfoReq
+         * @constructor
+         * @param {game_userinfo.IupdateUserinfoReq=} [properties] Properties to set
+         */
+        function updateUserinfoReq(properties) {
+            this.field_value_list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * updateUserinfoReq uid.
+         * @member {number} uid
+         * @memberof game_userinfo.updateUserinfoReq
+         * @instance
+         */
+        updateUserinfoReq.prototype.uid = 0;
+
+        /**
+         * updateUserinfoReq game_id.
+         * @member {number} game_id
+         * @memberof game_userinfo.updateUserinfoReq
+         * @instance
+         */
+        updateUserinfoReq.prototype.game_id = 0;
+
+        /**
+         * updateUserinfoReq trans.
+         * @member {Uint8Array} trans
+         * @memberof game_userinfo.updateUserinfoReq
+         * @instance
+         */
+        updateUserinfoReq.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * updateUserinfoReq field_value_list.
+         * @member {Array.<game_userinfo.IFieldValue>} field_value_list
+         * @memberof game_userinfo.updateUserinfoReq
+         * @instance
+         */
+        updateUserinfoReq.prototype.field_value_list = $util.emptyArray;
+
+        /**
+         * updateUserinfoReq svid.
+         * @member {number} svid
+         * @memberof game_userinfo.updateUserinfoReq
+         * @instance
+         */
+        updateUserinfoReq.prototype.svid = 0;
+
+        /**
+         * Creates a new updateUserinfoReq instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {game_userinfo.IupdateUserinfoReq=} [properties] Properties to set
+         * @returns {game_userinfo.updateUserinfoReq} updateUserinfoReq instance
+         */
+        updateUserinfoReq.create = function create(properties) {
+            return new updateUserinfoReq(properties);
+        };
+
+        /**
+         * Encodes the specified updateUserinfoReq message. Does not implicitly {@link game_userinfo.updateUserinfoReq.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {game_userinfo.IupdateUserinfoReq} message updateUserinfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        updateUserinfoReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game_id != null && Object.hasOwnProperty.call(message, "game_id"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.game_id);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.trans);
+            if (message.field_value_list != null && message.field_value_list.length)
+                for (var i = 0; i < message.field_value_list.length; ++i)
+                    $root.game_userinfo.FieldValue.encode(message.field_value_list[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            if (message.svid != null && Object.hasOwnProperty.call(message, "svid"))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint32(message.svid);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified updateUserinfoReq message, length delimited. Does not implicitly {@link game_userinfo.updateUserinfoReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {game_userinfo.IupdateUserinfoReq} message updateUserinfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        updateUserinfoReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an updateUserinfoReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.updateUserinfoReq} updateUserinfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        updateUserinfoReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.updateUserinfoReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game_id = reader.uint32();
+                    break;
+                case 3:
+                    message.trans = reader.bytes();
+                    break;
+                case 4:
+                    if (!(message.field_value_list && message.field_value_list.length))
+                        message.field_value_list = [];
+                    message.field_value_list.push($root.game_userinfo.FieldValue.decode(reader, reader.uint32()));
+                    break;
+                case 5:
+                    message.svid = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an updateUserinfoReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.updateUserinfoReq} updateUserinfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        updateUserinfoReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an updateUserinfoReq message.
+         * @function verify
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        updateUserinfoReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                if (!$util.isInteger(message.game_id))
+                    return "game_id: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            if (message.field_value_list != null && message.hasOwnProperty("field_value_list")) {
+                if (!Array.isArray(message.field_value_list))
+                    return "field_value_list: array expected";
+                for (var i = 0; i < message.field_value_list.length; ++i) {
+                    var error = $root.game_userinfo.FieldValue.verify(message.field_value_list[i]);
+                    if (error)
+                        return "field_value_list." + error;
+                }
+            }
+            if (message.svid != null && message.hasOwnProperty("svid"))
+                if (!$util.isInteger(message.svid))
+                    return "svid: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates an updateUserinfoReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.updateUserinfoReq} updateUserinfoReq
+         */
+        updateUserinfoReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.updateUserinfoReq)
+                return object;
+            var message = new $root.game_userinfo.updateUserinfoReq();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game_id != null)
+                message.game_id = object.game_id >>> 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            if (object.field_value_list) {
+                if (!Array.isArray(object.field_value_list))
+                    throw TypeError(".game_userinfo.updateUserinfoReq.field_value_list: array expected");
+                message.field_value_list = [];
+                for (var i = 0; i < object.field_value_list.length; ++i) {
+                    if (typeof object.field_value_list[i] !== "object")
+                        throw TypeError(".game_userinfo.updateUserinfoReq.field_value_list: object expected");
+                    message.field_value_list[i] = $root.game_userinfo.FieldValue.fromObject(object.field_value_list[i]);
+                }
+            }
+            if (object.svid != null)
+                message.svid = object.svid >>> 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an updateUserinfoReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.updateUserinfoReq
+         * @static
+         * @param {game_userinfo.updateUserinfoReq} message updateUserinfoReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        updateUserinfoReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.field_value_list = [];
+            if (options.defaults) {
+                object.uid = 0;
+                object.game_id = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+                object.svid = 0;
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                object.game_id = message.game_id;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            if (message.field_value_list && message.field_value_list.length) {
+                object.field_value_list = [];
+                for (var j = 0; j < message.field_value_list.length; ++j)
+                    object.field_value_list[j] = $root.game_userinfo.FieldValue.toObject(message.field_value_list[j], options);
+            }
+            if (message.svid != null && message.hasOwnProperty("svid"))
+                object.svid = message.svid;
+            return object;
+        };
+
+        /**
+         * Converts this updateUserinfoReq to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.updateUserinfoReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        updateUserinfoReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return updateUserinfoReq;
+    })();
+
+    game_userinfo.updateUserinfoResp = (function() {
+
+        /**
+         * Properties of an updateUserinfoResp.
+         * @memberof game_userinfo
+         * @interface IupdateUserinfoResp
+         * @property {number|null} [uid] updateUserinfoResp uid
+         * @property {number|null} [result] updateUserinfoResp result
+         * @property {Uint8Array|null} [trans] updateUserinfoResp trans
+         */
+
+        /**
+         * Constructs a new updateUserinfoResp.
+         * @memberof game_userinfo
+         * @classdesc Represents an updateUserinfoResp.
+         * @implements IupdateUserinfoResp
+         * @constructor
+         * @param {game_userinfo.IupdateUserinfoResp=} [properties] Properties to set
+         */
+        function updateUserinfoResp(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * updateUserinfoResp uid.
+         * @member {number} uid
+         * @memberof game_userinfo.updateUserinfoResp
+         * @instance
+         */
+        updateUserinfoResp.prototype.uid = 0;
+
+        /**
+         * updateUserinfoResp result.
+         * @member {number} result
+         * @memberof game_userinfo.updateUserinfoResp
+         * @instance
+         */
+        updateUserinfoResp.prototype.result = 0;
+
+        /**
+         * updateUserinfoResp trans.
+         * @member {Uint8Array} trans
+         * @memberof game_userinfo.updateUserinfoResp
+         * @instance
+         */
+        updateUserinfoResp.prototype.trans = $util.newBuffer([]);
+
+        /**
+         * Creates a new updateUserinfoResp instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {game_userinfo.IupdateUserinfoResp=} [properties] Properties to set
+         * @returns {game_userinfo.updateUserinfoResp} updateUserinfoResp instance
+         */
+        updateUserinfoResp.create = function create(properties) {
+            return new updateUserinfoResp(properties);
+        };
+
+        /**
+         * Encodes the specified updateUserinfoResp message. Does not implicitly {@link game_userinfo.updateUserinfoResp.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {game_userinfo.IupdateUserinfoResp} message updateUserinfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        updateUserinfoResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.result);
+            if (message.trans != null && Object.hasOwnProperty.call(message, "trans"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.trans);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified updateUserinfoResp message, length delimited. Does not implicitly {@link game_userinfo.updateUserinfoResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {game_userinfo.IupdateUserinfoResp} message updateUserinfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        updateUserinfoResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes an updateUserinfoResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.updateUserinfoResp} updateUserinfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        updateUserinfoResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.updateUserinfoResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.result = reader.int32();
+                    break;
+                case 3:
+                    message.trans = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes an updateUserinfoResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.updateUserinfoResp} updateUserinfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        updateUserinfoResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies an updateUserinfoResp message.
+         * @function verify
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        updateUserinfoResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                if (!$util.isInteger(message.result))
+                    return "result: integer expected";
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                if (!(message.trans && typeof message.trans.length === "number" || $util.isString(message.trans)))
+                    return "trans: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates an updateUserinfoResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.updateUserinfoResp} updateUserinfoResp
+         */
+        updateUserinfoResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.updateUserinfoResp)
+                return object;
+            var message = new $root.game_userinfo.updateUserinfoResp();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.result != null)
+                message.result = object.result | 0;
+            if (object.trans != null)
+                if (typeof object.trans === "string")
+                    $util.base64.decode(object.trans, message.trans = $util.newBuffer($util.base64.length(object.trans)), 0);
+                else if (object.trans.length)
+                    message.trans = object.trans;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an updateUserinfoResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.updateUserinfoResp
+         * @static
+         * @param {game_userinfo.updateUserinfoResp} message updateUserinfoResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        updateUserinfoResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.result = 0;
+                if (options.bytes === String)
+                    object.trans = "";
+                else {
+                    object.trans = [];
+                    if (options.bytes !== Array)
+                        object.trans = $util.newBuffer(object.trans);
+                }
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = message.result;
+            if (message.trans != null && message.hasOwnProperty("trans"))
+                object.trans = options.bytes === String ? $util.base64.encode(message.trans, 0, message.trans.length) : options.bytes === Array ? Array.prototype.slice.call(message.trans) : message.trans;
+            return object;
+        };
+
+        /**
+         * Converts this updateUserinfoResp to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.updateUserinfoResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        updateUserinfoResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return updateUserinfoResp;
+    })();
+
+    game_userinfo.userinfoDataDb = (function() {
+
+        /**
+         * Properties of a userinfoDataDb.
+         * @memberof game_userinfo
+         * @interface IuserinfoDataDb
+         * @property {Array.<game_userinfo.IFieldValue>|null} [field_value_list] userinfoDataDb field_value_list
+         */
+
+        /**
+         * Constructs a new userinfoDataDb.
+         * @memberof game_userinfo
+         * @classdesc Represents a userinfoDataDb.
+         * @implements IuserinfoDataDb
+         * @constructor
+         * @param {game_userinfo.IuserinfoDataDb=} [properties] Properties to set
+         */
+        function userinfoDataDb(properties) {
+            this.field_value_list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * userinfoDataDb field_value_list.
+         * @member {Array.<game_userinfo.IFieldValue>} field_value_list
+         * @memberof game_userinfo.userinfoDataDb
+         * @instance
+         */
+        userinfoDataDb.prototype.field_value_list = $util.emptyArray;
+
+        /**
+         * Creates a new userinfoDataDb instance using the specified properties.
+         * @function create
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {game_userinfo.IuserinfoDataDb=} [properties] Properties to set
+         * @returns {game_userinfo.userinfoDataDb} userinfoDataDb instance
+         */
+        userinfoDataDb.create = function create(properties) {
+            return new userinfoDataDb(properties);
+        };
+
+        /**
+         * Encodes the specified userinfoDataDb message. Does not implicitly {@link game_userinfo.userinfoDataDb.verify|verify} messages.
+         * @function encode
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {game_userinfo.IuserinfoDataDb} message userinfoDataDb message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        userinfoDataDb.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.field_value_list != null && message.field_value_list.length)
+                for (var i = 0; i < message.field_value_list.length; ++i)
+                    $root.game_userinfo.FieldValue.encode(message.field_value_list[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified userinfoDataDb message, length delimited. Does not implicitly {@link game_userinfo.userinfoDataDb.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {game_userinfo.IuserinfoDataDb} message userinfoDataDb message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        userinfoDataDb.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a userinfoDataDb message from the specified reader or buffer.
+         * @function decode
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {game_userinfo.userinfoDataDb} userinfoDataDb
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        userinfoDataDb.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.game_userinfo.userinfoDataDb();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.field_value_list && message.field_value_list.length))
+                        message.field_value_list = [];
+                    message.field_value_list.push($root.game_userinfo.FieldValue.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a userinfoDataDb message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {game_userinfo.userinfoDataDb} userinfoDataDb
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        userinfoDataDb.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a userinfoDataDb message.
+         * @function verify
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        userinfoDataDb.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.field_value_list != null && message.hasOwnProperty("field_value_list")) {
+                if (!Array.isArray(message.field_value_list))
+                    return "field_value_list: array expected";
+                for (var i = 0; i < message.field_value_list.length; ++i) {
+                    var error = $root.game_userinfo.FieldValue.verify(message.field_value_list[i]);
+                    if (error)
+                        return "field_value_list." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a userinfoDataDb message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {game_userinfo.userinfoDataDb} userinfoDataDb
+         */
+        userinfoDataDb.fromObject = function fromObject(object) {
+            if (object instanceof $root.game_userinfo.userinfoDataDb)
+                return object;
+            var message = new $root.game_userinfo.userinfoDataDb();
+            if (object.field_value_list) {
+                if (!Array.isArray(object.field_value_list))
+                    throw TypeError(".game_userinfo.userinfoDataDb.field_value_list: array expected");
+                message.field_value_list = [];
+                for (var i = 0; i < object.field_value_list.length; ++i) {
+                    if (typeof object.field_value_list[i] !== "object")
+                        throw TypeError(".game_userinfo.userinfoDataDb.field_value_list: object expected");
+                    message.field_value_list[i] = $root.game_userinfo.FieldValue.fromObject(object.field_value_list[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a userinfoDataDb message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof game_userinfo.userinfoDataDb
+         * @static
+         * @param {game_userinfo.userinfoDataDb} message userinfoDataDb
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        userinfoDataDb.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.field_value_list = [];
+            if (message.field_value_list && message.field_value_list.length) {
+                object.field_value_list = [];
+                for (var j = 0; j < message.field_value_list.length; ++j)
+                    object.field_value_list[j] = $root.game_userinfo.FieldValue.toObject(message.field_value_list[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this userinfoDataDb to JSON.
+         * @function toJSON
+         * @memberof game_userinfo.userinfoDataDb
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        userinfoDataDb.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return userinfoDataDb;
+    })();
+
+    return game_userinfo;
+})();
+
 $root.client_proto = (function() {
 
     /**
@@ -2117,6 +4354,8 @@ $root.roomalloc = (function() {
      * @property {number} ROOMALLOC_CMD_ALLOC_TABLE_RESP=4703 ROOMALLOC_CMD_ALLOC_TABLE_RESP value
      * @property {number} ROOMALLOC_CMD_LEVEL_CONFIG_REQ=4704 ROOMALLOC_CMD_LEVEL_CONFIG_REQ value
      * @property {number} ROOMALLOC_CMD_LEVEL_CONFIG_RESP=4705 ROOMALLOC_CMD_LEVEL_CONFIG_RESP value
+     * @property {number} ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ=4706 ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ value
+     * @property {number} ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP=4707 ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP value
      */
     roomalloc.ROOMALLOC_CMD = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -2125,6 +4364,8 @@ $root.roomalloc = (function() {
         values[valuesById[4703] = "ROOMALLOC_CMD_ALLOC_TABLE_RESP"] = 4703;
         values[valuesById[4704] = "ROOMALLOC_CMD_LEVEL_CONFIG_REQ"] = 4704;
         values[valuesById[4705] = "ROOMALLOC_CMD_LEVEL_CONFIG_RESP"] = 4705;
+        values[valuesById[4706] = "ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ"] = 4706;
+        values[valuesById[4707] = "ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP"] = 4707;
         return values;
     })();
 
@@ -2140,6 +4381,8 @@ $root.roomalloc = (function() {
          * @property {number|null} [except_tid] AllocTableReq except_tid
          * @property {number|null} [target_tid] AllocTableReq target_tid
          * @property {string|null} [userinfo] AllocTableReq userinfo
+         * @property {boolean|null} [is_force_alloc] AllocTableReq is_force_alloc
+         * @property {number|null} [reason] AllocTableReq reason
          */
 
         /**
@@ -2206,6 +4449,22 @@ $root.roomalloc = (function() {
         AllocTableReq.prototype.userinfo = "";
 
         /**
+         * AllocTableReq is_force_alloc.
+         * @member {boolean} is_force_alloc
+         * @memberof roomalloc.AllocTableReq
+         * @instance
+         */
+        AllocTableReq.prototype.is_force_alloc = false;
+
+        /**
+         * AllocTableReq reason.
+         * @member {number} reason
+         * @memberof roomalloc.AllocTableReq
+         * @instance
+         */
+        AllocTableReq.prototype.reason = 0;
+
+        /**
          * Creates a new AllocTableReq instance using the specified properties.
          * @function create
          * @memberof roomalloc.AllocTableReq
@@ -2241,6 +4500,10 @@ $root.roomalloc = (function() {
                 writer.uint32(/* id 5, wireType 0 =*/40).int32(message.target_tid);
             if (message.userinfo != null && Object.hasOwnProperty.call(message, "userinfo"))
                 writer.uint32(/* id 6, wireType 2 =*/50).string(message.userinfo);
+            if (message.is_force_alloc != null && Object.hasOwnProperty.call(message, "is_force_alloc"))
+                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.is_force_alloc);
+            if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
+                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.reason);
             return writer;
         };
 
@@ -2292,6 +4555,12 @@ $root.roomalloc = (function() {
                     break;
                 case 6:
                     message.userinfo = reader.string();
+                    break;
+                case 7:
+                    message.is_force_alloc = reader.bool();
+                    break;
+                case 8:
+                    message.reason = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2346,6 +4615,12 @@ $root.roomalloc = (function() {
             if (message.userinfo != null && message.hasOwnProperty("userinfo"))
                 if (!$util.isString(message.userinfo))
                     return "userinfo: string expected";
+            if (message.is_force_alloc != null && message.hasOwnProperty("is_force_alloc"))
+                if (typeof message.is_force_alloc !== "boolean")
+                    return "is_force_alloc: boolean expected";
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                if (!$util.isInteger(message.reason))
+                    return "reason: integer expected";
             return null;
         };
 
@@ -2380,6 +4655,10 @@ $root.roomalloc = (function() {
                 message.target_tid = object.target_tid | 0;
             if (object.userinfo != null)
                 message.userinfo = String(object.userinfo);
+            if (object.is_force_alloc != null)
+                message.is_force_alloc = Boolean(object.is_force_alloc);
+            if (object.reason != null)
+                message.reason = object.reason | 0;
             return message;
         };
 
@@ -2407,6 +4686,8 @@ $root.roomalloc = (function() {
                 object.except_tid = 0;
                 object.target_tid = 0;
                 object.userinfo = "";
+                object.is_force_alloc = false;
+                object.reason = 0;
             }
             if (message.uid != null && message.hasOwnProperty("uid"))
                 object.uid = message.uid;
@@ -2423,6 +4704,10 @@ $root.roomalloc = (function() {
                 object.target_tid = message.target_tid;
             if (message.userinfo != null && message.hasOwnProperty("userinfo"))
                 object.userinfo = message.userinfo;
+            if (message.is_force_alloc != null && message.hasOwnProperty("is_force_alloc"))
+                object.is_force_alloc = message.is_force_alloc;
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                object.reason = message.reason;
             return object;
         };
 
@@ -3690,6 +5975,1033 @@ $root.roomalloc = (function() {
         return GameLevelConfigResp;
     })();
 
+    roomalloc.LevelTableInfoReq = (function() {
+
+        /**
+         * Properties of a LevelTableInfoReq.
+         * @memberof roomalloc
+         * @interface ILevelTableInfoReq
+         * @property {number|null} [uid] LevelTableInfoReq uid
+         * @property {number|null} [game_id] LevelTableInfoReq game_id
+         * @property {number|Long|null} [level] LevelTableInfoReq level
+         * @property {number|null} [self_tid] LevelTableInfoReq self_tid
+         * @property {number|null} [record_num] LevelTableInfoReq record_num
+         * @property {number|null} [self_svid] LevelTableInfoReq self_svid
+         */
+
+        /**
+         * Constructs a new LevelTableInfoReq.
+         * @memberof roomalloc
+         * @classdesc Represents a LevelTableInfoReq.
+         * @implements ILevelTableInfoReq
+         * @constructor
+         * @param {roomalloc.ILevelTableInfoReq=} [properties] Properties to set
+         */
+        function LevelTableInfoReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * LevelTableInfoReq uid.
+         * @member {number} uid
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         */
+        LevelTableInfoReq.prototype.uid = 0;
+
+        /**
+         * LevelTableInfoReq game_id.
+         * @member {number} game_id
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         */
+        LevelTableInfoReq.prototype.game_id = 0;
+
+        /**
+         * LevelTableInfoReq level.
+         * @member {number|Long} level
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         */
+        LevelTableInfoReq.prototype.level = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * LevelTableInfoReq self_tid.
+         * @member {number} self_tid
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         */
+        LevelTableInfoReq.prototype.self_tid = 0;
+
+        /**
+         * LevelTableInfoReq record_num.
+         * @member {number} record_num
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         */
+        LevelTableInfoReq.prototype.record_num = 0;
+
+        /**
+         * LevelTableInfoReq self_svid.
+         * @member {number} self_svid
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         */
+        LevelTableInfoReq.prototype.self_svid = 0;
+
+        /**
+         * Creates a new LevelTableInfoReq instance using the specified properties.
+         * @function create
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {roomalloc.ILevelTableInfoReq=} [properties] Properties to set
+         * @returns {roomalloc.LevelTableInfoReq} LevelTableInfoReq instance
+         */
+        LevelTableInfoReq.create = function create(properties) {
+            return new LevelTableInfoReq(properties);
+        };
+
+        /**
+         * Encodes the specified LevelTableInfoReq message. Does not implicitly {@link roomalloc.LevelTableInfoReq.verify|verify} messages.
+         * @function encode
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {roomalloc.ILevelTableInfoReq} message LevelTableInfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LevelTableInfoReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.game_id != null && Object.hasOwnProperty.call(message, "game_id"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.game_id);
+            if (message.level != null && Object.hasOwnProperty.call(message, "level"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int64(message.level);
+            if (message.self_tid != null && Object.hasOwnProperty.call(message, "self_tid"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.self_tid);
+            if (message.record_num != null && Object.hasOwnProperty.call(message, "record_num"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.record_num);
+            if (message.self_svid != null && Object.hasOwnProperty.call(message, "self_svid"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.self_svid);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified LevelTableInfoReq message, length delimited. Does not implicitly {@link roomalloc.LevelTableInfoReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {roomalloc.ILevelTableInfoReq} message LevelTableInfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LevelTableInfoReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a LevelTableInfoReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {roomalloc.LevelTableInfoReq} LevelTableInfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LevelTableInfoReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.roomalloc.LevelTableInfoReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.game_id = reader.int32();
+                    break;
+                case 3:
+                    message.level = reader.int64();
+                    break;
+                case 4:
+                    message.self_tid = reader.int32();
+                    break;
+                case 5:
+                    message.record_num = reader.int32();
+                    break;
+                case 6:
+                    message.self_svid = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a LevelTableInfoReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {roomalloc.LevelTableInfoReq} LevelTableInfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LevelTableInfoReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a LevelTableInfoReq message.
+         * @function verify
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        LevelTableInfoReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                if (!$util.isInteger(message.game_id))
+                    return "game_id: integer expected";
+            if (message.level != null && message.hasOwnProperty("level"))
+                if (!$util.isInteger(message.level) && !(message.level && $util.isInteger(message.level.low) && $util.isInteger(message.level.high)))
+                    return "level: integer|Long expected";
+            if (message.self_tid != null && message.hasOwnProperty("self_tid"))
+                if (!$util.isInteger(message.self_tid))
+                    return "self_tid: integer expected";
+            if (message.record_num != null && message.hasOwnProperty("record_num"))
+                if (!$util.isInteger(message.record_num))
+                    return "record_num: integer expected";
+            if (message.self_svid != null && message.hasOwnProperty("self_svid"))
+                if (!$util.isInteger(message.self_svid))
+                    return "self_svid: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a LevelTableInfoReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {roomalloc.LevelTableInfoReq} LevelTableInfoReq
+         */
+        LevelTableInfoReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.roomalloc.LevelTableInfoReq)
+                return object;
+            var message = new $root.roomalloc.LevelTableInfoReq();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.game_id != null)
+                message.game_id = object.game_id | 0;
+            if (object.level != null)
+                if ($util.Long)
+                    (message.level = $util.Long.fromValue(object.level)).unsigned = false;
+                else if (typeof object.level === "string")
+                    message.level = parseInt(object.level, 10);
+                else if (typeof object.level === "number")
+                    message.level = object.level;
+                else if (typeof object.level === "object")
+                    message.level = new $util.LongBits(object.level.low >>> 0, object.level.high >>> 0).toNumber();
+            if (object.self_tid != null)
+                message.self_tid = object.self_tid | 0;
+            if (object.record_num != null)
+                message.record_num = object.record_num | 0;
+            if (object.self_svid != null)
+                message.self_svid = object.self_svid | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a LevelTableInfoReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof roomalloc.LevelTableInfoReq
+         * @static
+         * @param {roomalloc.LevelTableInfoReq} message LevelTableInfoReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        LevelTableInfoReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                object.game_id = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.level = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.level = options.longs === String ? "0" : 0;
+                object.self_tid = 0;
+                object.record_num = 0;
+                object.self_svid = 0;
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.game_id != null && message.hasOwnProperty("game_id"))
+                object.game_id = message.game_id;
+            if (message.level != null && message.hasOwnProperty("level"))
+                if (typeof message.level === "number")
+                    object.level = options.longs === String ? String(message.level) : message.level;
+                else
+                    object.level = options.longs === String ? $util.Long.prototype.toString.call(message.level) : options.longs === Number ? new $util.LongBits(message.level.low >>> 0, message.level.high >>> 0).toNumber() : message.level;
+            if (message.self_tid != null && message.hasOwnProperty("self_tid"))
+                object.self_tid = message.self_tid;
+            if (message.record_num != null && message.hasOwnProperty("record_num"))
+                object.record_num = message.record_num;
+            if (message.self_svid != null && message.hasOwnProperty("self_svid"))
+                object.self_svid = message.self_svid;
+            return object;
+        };
+
+        /**
+         * Converts this LevelTableInfoReq to JSON.
+         * @function toJSON
+         * @memberof roomalloc.LevelTableInfoReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        LevelTableInfoReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return LevelTableInfoReq;
+    })();
+
+    roomalloc.WinInfo = (function() {
+
+        /**
+         * Properties of a WinInfo.
+         * @memberof roomalloc
+         * @interface IWinInfo
+         * @property {number|null} [win_result] WinInfo win_result
+         */
+
+        /**
+         * Constructs a new WinInfo.
+         * @memberof roomalloc
+         * @classdesc Represents a WinInfo.
+         * @implements IWinInfo
+         * @constructor
+         * @param {roomalloc.IWinInfo=} [properties] Properties to set
+         */
+        function WinInfo(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * WinInfo win_result.
+         * @member {number} win_result
+         * @memberof roomalloc.WinInfo
+         * @instance
+         */
+        WinInfo.prototype.win_result = 0;
+
+        /**
+         * Creates a new WinInfo instance using the specified properties.
+         * @function create
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {roomalloc.IWinInfo=} [properties] Properties to set
+         * @returns {roomalloc.WinInfo} WinInfo instance
+         */
+        WinInfo.create = function create(properties) {
+            return new WinInfo(properties);
+        };
+
+        /**
+         * Encodes the specified WinInfo message. Does not implicitly {@link roomalloc.WinInfo.verify|verify} messages.
+         * @function encode
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {roomalloc.IWinInfo} message WinInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        WinInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.win_result != null && Object.hasOwnProperty.call(message, "win_result"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.win_result);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified WinInfo message, length delimited. Does not implicitly {@link roomalloc.WinInfo.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {roomalloc.IWinInfo} message WinInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        WinInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a WinInfo message from the specified reader or buffer.
+         * @function decode
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {roomalloc.WinInfo} WinInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        WinInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.roomalloc.WinInfo();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 2:
+                    message.win_result = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a WinInfo message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {roomalloc.WinInfo} WinInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        WinInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a WinInfo message.
+         * @function verify
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        WinInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.win_result != null && message.hasOwnProperty("win_result"))
+                if (!$util.isInteger(message.win_result))
+                    return "win_result: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a WinInfo message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {roomalloc.WinInfo} WinInfo
+         */
+        WinInfo.fromObject = function fromObject(object) {
+            if (object instanceof $root.roomalloc.WinInfo)
+                return object;
+            var message = new $root.roomalloc.WinInfo();
+            if (object.win_result != null)
+                message.win_result = object.win_result | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a WinInfo message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof roomalloc.WinInfo
+         * @static
+         * @param {roomalloc.WinInfo} message WinInfo
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        WinInfo.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.win_result = 0;
+            if (message.win_result != null && message.hasOwnProperty("win_result"))
+                object.win_result = message.win_result;
+            return object;
+        };
+
+        /**
+         * Converts this WinInfo to JSON.
+         * @function toJSON
+         * @memberof roomalloc.WinInfo
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        WinInfo.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return WinInfo;
+    })();
+
+    roomalloc.LevelTableInfoResp = (function() {
+
+        /**
+         * Properties of a LevelTableInfoResp.
+         * @memberof roomalloc
+         * @interface ILevelTableInfoResp
+         * @property {Array.<roomalloc.LevelTableInfoResp.ITableInfo>|null} [tableList] LevelTableInfoResp tableList
+         */
+
+        /**
+         * Constructs a new LevelTableInfoResp.
+         * @memberof roomalloc
+         * @classdesc Represents a LevelTableInfoResp.
+         * @implements ILevelTableInfoResp
+         * @constructor
+         * @param {roomalloc.ILevelTableInfoResp=} [properties] Properties to set
+         */
+        function LevelTableInfoResp(properties) {
+            this.tableList = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * LevelTableInfoResp tableList.
+         * @member {Array.<roomalloc.LevelTableInfoResp.ITableInfo>} tableList
+         * @memberof roomalloc.LevelTableInfoResp
+         * @instance
+         */
+        LevelTableInfoResp.prototype.tableList = $util.emptyArray;
+
+        /**
+         * Creates a new LevelTableInfoResp instance using the specified properties.
+         * @function create
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {roomalloc.ILevelTableInfoResp=} [properties] Properties to set
+         * @returns {roomalloc.LevelTableInfoResp} LevelTableInfoResp instance
+         */
+        LevelTableInfoResp.create = function create(properties) {
+            return new LevelTableInfoResp(properties);
+        };
+
+        /**
+         * Encodes the specified LevelTableInfoResp message. Does not implicitly {@link roomalloc.LevelTableInfoResp.verify|verify} messages.
+         * @function encode
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {roomalloc.ILevelTableInfoResp} message LevelTableInfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LevelTableInfoResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.tableList != null && message.tableList.length)
+                for (var i = 0; i < message.tableList.length; ++i)
+                    $root.roomalloc.LevelTableInfoResp.TableInfo.encode(message.tableList[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified LevelTableInfoResp message, length delimited. Does not implicitly {@link roomalloc.LevelTableInfoResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {roomalloc.ILevelTableInfoResp} message LevelTableInfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LevelTableInfoResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a LevelTableInfoResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {roomalloc.LevelTableInfoResp} LevelTableInfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LevelTableInfoResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.roomalloc.LevelTableInfoResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.tableList && message.tableList.length))
+                        message.tableList = [];
+                    message.tableList.push($root.roomalloc.LevelTableInfoResp.TableInfo.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a LevelTableInfoResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {roomalloc.LevelTableInfoResp} LevelTableInfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LevelTableInfoResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a LevelTableInfoResp message.
+         * @function verify
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        LevelTableInfoResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.tableList != null && message.hasOwnProperty("tableList")) {
+                if (!Array.isArray(message.tableList))
+                    return "tableList: array expected";
+                for (var i = 0; i < message.tableList.length; ++i) {
+                    var error = $root.roomalloc.LevelTableInfoResp.TableInfo.verify(message.tableList[i]);
+                    if (error)
+                        return "tableList." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a LevelTableInfoResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {roomalloc.LevelTableInfoResp} LevelTableInfoResp
+         */
+        LevelTableInfoResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.roomalloc.LevelTableInfoResp)
+                return object;
+            var message = new $root.roomalloc.LevelTableInfoResp();
+            if (object.tableList) {
+                if (!Array.isArray(object.tableList))
+                    throw TypeError(".roomalloc.LevelTableInfoResp.tableList: array expected");
+                message.tableList = [];
+                for (var i = 0; i < object.tableList.length; ++i) {
+                    if (typeof object.tableList[i] !== "object")
+                        throw TypeError(".roomalloc.LevelTableInfoResp.tableList: object expected");
+                    message.tableList[i] = $root.roomalloc.LevelTableInfoResp.TableInfo.fromObject(object.tableList[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a LevelTableInfoResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof roomalloc.LevelTableInfoResp
+         * @static
+         * @param {roomalloc.LevelTableInfoResp} message LevelTableInfoResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        LevelTableInfoResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.tableList = [];
+            if (message.tableList && message.tableList.length) {
+                object.tableList = [];
+                for (var j = 0; j < message.tableList.length; ++j)
+                    object.tableList[j] = $root.roomalloc.LevelTableInfoResp.TableInfo.toObject(message.tableList[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this LevelTableInfoResp to JSON.
+         * @function toJSON
+         * @memberof roomalloc.LevelTableInfoResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        LevelTableInfoResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        LevelTableInfoResp.TableInfo = (function() {
+
+            /**
+             * Properties of a TableInfo.
+             * @memberof roomalloc.LevelTableInfoResp
+             * @interface ITableInfo
+             * @property {number|null} [table_id] TableInfo table_id
+             * @property {number|null} [player_num] TableInfo player_num
+             * @property {number|null} [status] TableInfo status
+             * @property {number|null} [change_time] TableInfo change_time
+             * @property {number|null} [index] TableInfo index
+             * @property {Array.<roomalloc.IWinInfo>|null} [winInfoList] TableInfo winInfoList
+             */
+
+            /**
+             * Constructs a new TableInfo.
+             * @memberof roomalloc.LevelTableInfoResp
+             * @classdesc Represents a TableInfo.
+             * @implements ITableInfo
+             * @constructor
+             * @param {roomalloc.LevelTableInfoResp.ITableInfo=} [properties] Properties to set
+             */
+            function TableInfo(properties) {
+                this.winInfoList = [];
+                if (properties)
+                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * TableInfo table_id.
+             * @member {number} table_id
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             */
+            TableInfo.prototype.table_id = 0;
+
+            /**
+             * TableInfo player_num.
+             * @member {number} player_num
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             */
+            TableInfo.prototype.player_num = 0;
+
+            /**
+             * TableInfo status.
+             * @member {number} status
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             */
+            TableInfo.prototype.status = 0;
+
+            /**
+             * TableInfo change_time.
+             * @member {number} change_time
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             */
+            TableInfo.prototype.change_time = 0;
+
+            /**
+             * TableInfo index.
+             * @member {number} index
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             */
+            TableInfo.prototype.index = 0;
+
+            /**
+             * TableInfo winInfoList.
+             * @member {Array.<roomalloc.IWinInfo>} winInfoList
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             */
+            TableInfo.prototype.winInfoList = $util.emptyArray;
+
+            /**
+             * Creates a new TableInfo instance using the specified properties.
+             * @function create
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {roomalloc.LevelTableInfoResp.ITableInfo=} [properties] Properties to set
+             * @returns {roomalloc.LevelTableInfoResp.TableInfo} TableInfo instance
+             */
+            TableInfo.create = function create(properties) {
+                return new TableInfo(properties);
+            };
+
+            /**
+             * Encodes the specified TableInfo message. Does not implicitly {@link roomalloc.LevelTableInfoResp.TableInfo.verify|verify} messages.
+             * @function encode
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {roomalloc.LevelTableInfoResp.ITableInfo} message TableInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TableInfo.encode = function encode(message, writer) {
+                if (!writer)
+                    writer = $Writer.create();
+                if (message.table_id != null && Object.hasOwnProperty.call(message, "table_id"))
+                    writer.uint32(/* id 1, wireType 0 =*/8).int32(message.table_id);
+                if (message.player_num != null && Object.hasOwnProperty.call(message, "player_num"))
+                    writer.uint32(/* id 2, wireType 0 =*/16).int32(message.player_num);
+                if (message.status != null && Object.hasOwnProperty.call(message, "status"))
+                    writer.uint32(/* id 3, wireType 0 =*/24).int32(message.status);
+                if (message.change_time != null && Object.hasOwnProperty.call(message, "change_time"))
+                    writer.uint32(/* id 4, wireType 0 =*/32).int32(message.change_time);
+                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
+                    writer.uint32(/* id 5, wireType 0 =*/40).int32(message.index);
+                if (message.winInfoList != null && message.winInfoList.length)
+                    for (var i = 0; i < message.winInfoList.length; ++i)
+                        $root.roomalloc.WinInfo.encode(message.winInfoList[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                return writer;
+            };
+
+            /**
+             * Encodes the specified TableInfo message, length delimited. Does not implicitly {@link roomalloc.LevelTableInfoResp.TableInfo.verify|verify} messages.
+             * @function encodeDelimited
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {roomalloc.LevelTableInfoResp.ITableInfo} message TableInfo message or plain object to encode
+             * @param {$protobuf.Writer} [writer] Writer to encode to
+             * @returns {$protobuf.Writer} Writer
+             */
+            TableInfo.encodeDelimited = function encodeDelimited(message, writer) {
+                return this.encode(message, writer).ldelim();
+            };
+
+            /**
+             * Decodes a TableInfo message from the specified reader or buffer.
+             * @function decode
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {roomalloc.LevelTableInfoResp.TableInfo} TableInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TableInfo.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.roomalloc.LevelTableInfoResp.TableInfo();
+                while (reader.pos < end) {
+                    var tag = reader.uint32();
+                    switch (tag >>> 3) {
+                    case 1:
+                        message.table_id = reader.int32();
+                        break;
+                    case 2:
+                        message.player_num = reader.int32();
+                        break;
+                    case 3:
+                        message.status = reader.int32();
+                        break;
+                    case 4:
+                        message.change_time = reader.int32();
+                        break;
+                    case 5:
+                        message.index = reader.int32();
+                        break;
+                    case 6:
+                        if (!(message.winInfoList && message.winInfoList.length))
+                            message.winInfoList = [];
+                        message.winInfoList.push($root.roomalloc.WinInfo.decode(reader, reader.uint32()));
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Decodes a TableInfo message from the specified reader or buffer, length delimited.
+             * @function decodeDelimited
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @returns {roomalloc.LevelTableInfoResp.TableInfo} TableInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            TableInfo.decodeDelimited = function decodeDelimited(reader) {
+                if (!(reader instanceof $Reader))
+                    reader = new $Reader(reader);
+                return this.decode(reader, reader.uint32());
+            };
+
+            /**
+             * Verifies a TableInfo message.
+             * @function verify
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            TableInfo.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.table_id != null && message.hasOwnProperty("table_id"))
+                    if (!$util.isInteger(message.table_id))
+                        return "table_id: integer expected";
+                if (message.player_num != null && message.hasOwnProperty("player_num"))
+                    if (!$util.isInteger(message.player_num))
+                        return "player_num: integer expected";
+                if (message.status != null && message.hasOwnProperty("status"))
+                    if (!$util.isInteger(message.status))
+                        return "status: integer expected";
+                if (message.change_time != null && message.hasOwnProperty("change_time"))
+                    if (!$util.isInteger(message.change_time))
+                        return "change_time: integer expected";
+                if (message.index != null && message.hasOwnProperty("index"))
+                    if (!$util.isInteger(message.index))
+                        return "index: integer expected";
+                if (message.winInfoList != null && message.hasOwnProperty("winInfoList")) {
+                    if (!Array.isArray(message.winInfoList))
+                        return "winInfoList: array expected";
+                    for (var i = 0; i < message.winInfoList.length; ++i) {
+                        var error = $root.roomalloc.WinInfo.verify(message.winInfoList[i]);
+                        if (error)
+                            return "winInfoList." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a TableInfo message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {roomalloc.LevelTableInfoResp.TableInfo} TableInfo
+             */
+            TableInfo.fromObject = function fromObject(object) {
+                if (object instanceof $root.roomalloc.LevelTableInfoResp.TableInfo)
+                    return object;
+                var message = new $root.roomalloc.LevelTableInfoResp.TableInfo();
+                if (object.table_id != null)
+                    message.table_id = object.table_id | 0;
+                if (object.player_num != null)
+                    message.player_num = object.player_num | 0;
+                if (object.status != null)
+                    message.status = object.status | 0;
+                if (object.change_time != null)
+                    message.change_time = object.change_time | 0;
+                if (object.index != null)
+                    message.index = object.index | 0;
+                if (object.winInfoList) {
+                    if (!Array.isArray(object.winInfoList))
+                        throw TypeError(".roomalloc.LevelTableInfoResp.TableInfo.winInfoList: array expected");
+                    message.winInfoList = [];
+                    for (var i = 0; i < object.winInfoList.length; ++i) {
+                        if (typeof object.winInfoList[i] !== "object")
+                            throw TypeError(".roomalloc.LevelTableInfoResp.TableInfo.winInfoList: object expected");
+                        message.winInfoList[i] = $root.roomalloc.WinInfo.fromObject(object.winInfoList[i]);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a TableInfo message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @static
+             * @param {roomalloc.LevelTableInfoResp.TableInfo} message TableInfo
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            TableInfo.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                var object = {};
+                if (options.arrays || options.defaults)
+                    object.winInfoList = [];
+                if (options.defaults) {
+                    object.table_id = 0;
+                    object.player_num = 0;
+                    object.status = 0;
+                    object.change_time = 0;
+                    object.index = 0;
+                }
+                if (message.table_id != null && message.hasOwnProperty("table_id"))
+                    object.table_id = message.table_id;
+                if (message.player_num != null && message.hasOwnProperty("player_num"))
+                    object.player_num = message.player_num;
+                if (message.status != null && message.hasOwnProperty("status"))
+                    object.status = message.status;
+                if (message.change_time != null && message.hasOwnProperty("change_time"))
+                    object.change_time = message.change_time;
+                if (message.index != null && message.hasOwnProperty("index"))
+                    object.index = message.index;
+                if (message.winInfoList && message.winInfoList.length) {
+                    object.winInfoList = [];
+                    for (var j = 0; j < message.winInfoList.length; ++j)
+                        object.winInfoList[j] = $root.roomalloc.WinInfo.toObject(message.winInfoList[j], options);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this TableInfo to JSON.
+             * @function toJSON
+             * @memberof roomalloc.LevelTableInfoResp.TableInfo
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            TableInfo.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return TableInfo;
+        })();
+
+        return LevelTableInfoResp;
+    })();
+
     return roomalloc;
 })();
 
@@ -3711,6 +7023,7 @@ $root.gamebase = (function() {
      * @property {number} SERVER_TYPE_ROOMSERVER=5 SERVER_TYPE_ROOMSERVER value
      * @property {number} SERVER_TYPE_GAME_MANAGE=20 SERVER_TYPE_GAME_MANAGE value
      * @property {number} SERVER_TYPE_ROOMALLOC=47 SERVER_TYPE_ROOMALLOC value
+     * @property {number} SERVER_TYPE_GAME_USERINFO=120 SERVER_TYPE_GAME_USERINFO value
      */
     gamebase.SERVER_INNER_MSG_TYPE = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -3719,6 +7032,7 @@ $root.gamebase = (function() {
         values[valuesById[5] = "SERVER_TYPE_ROOMSERVER"] = 5;
         values[valuesById[20] = "SERVER_TYPE_GAME_MANAGE"] = 20;
         values[valuesById[47] = "SERVER_TYPE_ROOMALLOC"] = 47;
+        values[valuesById[120] = "SERVER_TYPE_GAME_USERINFO"] = 120;
         return values;
     })();
 

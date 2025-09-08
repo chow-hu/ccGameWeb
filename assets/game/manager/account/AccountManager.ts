@@ -238,7 +238,7 @@ export class AccountManager extends IManager {
             data.balance = this._isFirstLogin ? data.balance : Cache.User.getBalance();
         }
         Cache.User.saveUser(data);
-        // gmgr.get<ReportManager>(EMgr.REPORT).initTrack(Cache.User.getUser().game, Cache.User.getUser().uid);
+        gmgr.get<ReportManager>(EMgr.REPORT).initTrack();
         // 广播登录成功的事件
         this.emit(LoginEvent.LOGIN_SUCCESS);
         this._isFirstLogin = false;

@@ -3,7 +3,7 @@ let fs = require('fs-extra');
 const tools = require('./core/tools');
 const { writeJSONSync } = require('fs-extra');
 
-let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation) {
+let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation, size) {
     // 修改md5Cache
     let configStr = fs.readFileSync(path.join(urlPack, `buildConfigJson/buildConfig_${platorm}.json`), { encoding: 'utf-8' });
     if (md5 == "true") {
@@ -20,11 +20,19 @@ let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orie
         configStr = configStr.replace(/"embedWebDebugger":\s*false,/g, '"embedWebDebugger": true,');
     }
 
+    let sct = ct == 'true' ? 'false' : 'true';
+    configStr = configStr.replace(
+        /("skipCompressTexture":\s*)(true|false)/,
+        `$1${sct}`
+    );
+
     configStr = configStr.replace(/"orientation":\s*"([a-z"]+)",/g, `"orientation": "${orientation}",`);
     let setingStr = fs.readFileSync(path.join(__dirname, "../settings/v2/packages/project.json"), { encoding: 'utf-8' });
     let setingCon = JSON.parse(setingStr);
-    let max = Math.max(setingCon.general.designResolution.width, setingCon.general.designResolution.height);
-    let min = Math.min(setingCon.general.designResolution.width, setingCon.general.designResolution.height);
+    // let max = Math.max(setingCon.general.designResolution.width, setingCon.general.designResolution.height);
+    // let min = Math.min(setingCon.general.designResolution.width, setingCon.general.designResolution.height);
+    let max = Math.max(size[0], size[1]);
+    let min = Math.min(size[0], size[1]);
     setingCon.general.designResolution.width = orientation == 'landscape' ? max : min;
     setingCon.general.designResolution.height = orientation == 'landscape' ? min : max;
     console.log(setingCon)
@@ -53,7 +61,7 @@ let modifyBuildTemplate = function (name, orientation) {
     let path;
     if (name == 'Crash') {
         path = `build-templates/${platorm}-abCrash${kb ? '-kb' : ''}/`;
-    } else if (name == 'abJet') {
+    } else if (name == 'abJet' || name == 'abChicken2') {
         path = `build-templates/${platorm}-abJet${kb ? '-kb' : ''}/`;
     } else {
         path = `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
@@ -109,6 +117,7 @@ let urlPack = path.join(__dirname, "../ccgamePack");
 let urlBuild = path.join(__dirname, "../build/super-html/common_min/ccgame_common_min.html")
 let platorm = 'web-mobile';
 let kb = false;
+let ct = 'false';
 let run = function (os_param) {
     step = os_param["--step"];
     let bundle = os_param["--bundle"] || '';
@@ -119,14 +128,16 @@ let run = function (os_param) {
     let build_env = os_param["--build_env"];
     platorm = os_param["--platorm"] || platorm;
     kb = os_param["--kb"] || false;
+    ct = os_param["--ct"] || 'false';
     if (bundles.length == 0) {
         process.exit(1);
     }
     try {
         if (step == 1) {
             let md5 = os_param["--md5"] || true;
+            let size = (os_param["--size"] || '768/1366').split('/');
             // let orientation = { "port": 'portrait', 'land': 'landscape' }[os_param["--orientation"]] || 'auto';
-            modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation);
+            modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation, size);
             modifyBuildTemplate(bundles[0], orientation);
         } else if (step == 2) {
             backupApk(build_env, bundles[0]);

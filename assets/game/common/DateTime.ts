@@ -18,7 +18,7 @@ const offset = currentDate.getTimezoneOffset();
 /** 指定时区的时间计算 */
 export namespace DateTime {
     /** 地区时区(与时间相关) */
-    function TimeZoneDefault(): string {
+    export function TimeZoneDefault(): string {
         return config.timezone;
     };
     /**
@@ -26,7 +26,7 @@ export namespace DateTime {
      * @param timeZone 指定时区
      * @returns number 返回偏移值 单位:毫秒 负数代表往前数  正数代表往后推
      */
-    function getTargetTimeZoneOffset(timeZone: string | number): number {
+    export function getTargetTimeZoneOffset(timeZone: string | number): number {
         let min = 0;
         if (typeof (timeZone) === 'number') {
             min = timeZone;

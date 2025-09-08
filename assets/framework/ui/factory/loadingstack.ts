@@ -37,7 +37,8 @@ export class LoadingStack {
         let one = this._panel.getChildByName('default');
         one.active = false;
         if (parm == false) {
-            if (custom && priority <= this._priority) {
+            if (custom) {
+                Tween.stopAllByTarget(custom)
                 custom.active = false;
                 custom.destroy();
             }
@@ -49,6 +50,7 @@ export class LoadingStack {
             } else if (this._priority < priority && custom.active) {
                 return;
             }
+            Tween.stopAllByTarget(custom)
             let comp = custom.getComponent(UIBase);
             if (comp && comp.init) {
                 comp.init(parm);

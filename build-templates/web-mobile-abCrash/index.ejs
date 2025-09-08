@@ -53,7 +53,7 @@
 
 		</div>	
 		
-		<div id="progressText" style="position: absolute; top: 200px;left: 0;right: 0;text-align: center; color: white; font-size: 40px; display: block;">
+		<div id="progressText" style="position: absolute; top: 200px;left: 0;right: 0;text-align: center; color: white; font-size: 40px; display: none;">
 		0%
 		</div>  
     </div>	  
@@ -81,7 +81,7 @@
 	},50);
 	setTimeout(()=>{
 		var progressText = document.getElementById('progressText');
-		progressText.style.display = 'block';
+		progressText.style.display = 'none';
 	}, 4000);
 	window.ccgameloading = ccgameloading;
 	

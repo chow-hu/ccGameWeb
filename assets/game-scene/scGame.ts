@@ -15,6 +15,7 @@ import { SubGameOrientation } from '../game/manager/subGameManager/interface';
 import { gmgr } from '../game/manager/gmgr';
 import { SubGameManager } from '../game/manager/subGameManager/SubGameManager';
 import { EMgr } from '../game/manager/interface';
+import { config } from '../plug-in/config';
 const { ccclass, property } = _decorator;
 
 @ccclass('scGame')
@@ -36,9 +37,20 @@ export class scGame extends UIBase {
                 director.addPersistRootNode(node);
                 globalThis.commonUI = node;
                 DataHandle.instance.scopeParam();
+                this.debugUI();
             }
         }, true);
     };
+    debugUI() {
+        if (!config.DEV) { return; }
+        loader.load('prefab/node/DebugUI', Prefab, null, (err, res) => {
+            if (!res) {
+                return;
+            }
+            let node = instantiate(res);
+            director.addPersistRootNode(node);
+        }, true);
+    }
 
     start() {
 

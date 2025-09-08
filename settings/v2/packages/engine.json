@@ -68,7 +68,7 @@
         "_value": false
       },
       "profiler": {
-        "_value": false
+        "_value": true
       },
       "occlusion-query": {
         "_value": false
@@ -122,7 +122,7 @@
         "_value": false
       },
       "custom-pipeline": {
-        "_value": false
+        "_value": true
       },
       "graphcis": {
         "_value": true
@@ -136,10 +136,12 @@
       "animation",
       "audio",
       "base",
+      "custom-pipeline",
       "gfx-webgl",
       "gfx-webgl2",
       "meshopt",
       "particle-2d",
+      "profiler",
       "spine",
       "tween",
       "ui",
@@ -153,6 +155,7 @@
     "flags": {}
   },
   "macroConfig": {
-    "BATCHER2D_MEM_INCREMENT": 1440
+    "BATCHER2D_MEM_INCREMENT": 1440,
+    "CUSTOM_PIPELINE_NAME": "Custom"
   }
 }

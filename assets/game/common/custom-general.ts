@@ -15,7 +15,6 @@ import { sdk } from '../sdk/sdk';
 import { AppEvent } from './AppEvent';
 import { Utils } from './Utils';
 import { BUILDER, GDKeys } from './interface';
-import { User } from '../cache/User';
 import { Cache } from '../cache/Cache';
 
 /**
@@ -1150,16 +1149,19 @@ export function generateQRCode(node: Node, url: string) {
  * @param number 
  * @returns 
  */
-export function formatWithCommas(number: number | string, dot: number = 2) {
-    // var parts = number.toString().split(".");
-    // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // return parts.join(".");
+export function formatWithCommas(number: number | string, dot: number = 2, lettter: string = ",", isCompletion = true) {
     dot = dot < 0 ? 0 : dot;
     number = parseFloat(number.toString());
     if (dot == 0) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        number = Math.floor(number);
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, lettter);
+    } else if (isCompletion) {
+        return number.toFixed(dot).replace(/(\d)(?=(\d{3})+\.)/g, `$1${lettter}`);
     } else {
-        return number.toFixed(dot).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        let m = Math.pow(10, dot);
+        number = Math.floor(new Decimal(number).times(m).toNumber()) / m;  // 直接乘除会有精度问题。
+        // number = Math.floor(number * m) / m;
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, lettter);
     }
 }
 

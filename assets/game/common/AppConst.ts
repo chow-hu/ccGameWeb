@@ -69,20 +69,26 @@ export namespace AppConst {
         abActivity: { name: "abActivity", url: "", md5: "" },
     };
     /** 子游戏包名配置 */
-    export const GameBundleConf: { [key: string | number]: IBundleOption & { orientation?: SubGameOrientation } } = {
+    export const GameBundleConf: { [key: string | number]: IBundleOption & { orientation?: SubGameOrientation, gameName?: string } } = {
         /** 游戏:Crash */
-        101: { name: "abCrash", layer: "lyLoadingView", url: "", md5: "" },
+        101: { name: "abCrash", layer: "lyLoadingView", url: "", md5: "", gameName: 'Aviator' },
         /** 游戏: AndarBahar */
-        102: { name: "abAndarBahar", layer: "lyAndarLoading", url: "", md5: "", depends: ["abJackPot"], orientation: SubGameOrientation.landScape },
+        102: { name: "abAndarBahar", layer: "lyAndarLoading", url: "", md5: "", depends: ["abJackPot"], orientation: SubGameOrientation.landScape, gameName: 'Andarbahar' },
         /** 游戏:Jet */
-        103: { name: "abJet", layer: "lyJetLoadingView", url: "", md5: "" },
+        103: { name: "abJet", layer: "lyJetLoadingView", url: "", md5: "", gameName: 'Aviator pro' },
         /** 游戏:UpDown */
-        104: { name: "abUpDown", layer: "lyUpDownLoading", url: "", md5: "" },
+        104: { name: "abUpDown", layer: "lyUpDownLoading", url: "", md5: "", gameName: '7Up7Down' },
         /** 游戏:abMoneyCome */
-        105: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "" },
+        105: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "", gameName: 'Money Coming' },
         /** 游戏:abMines */
-        106: { name: "abMines", layer: "lyMinesLoadingView", url: "", md5: "" },
+        106: { name: "abMines", layer: "lyMinesLoadingViewNew", url: "", md5: "" },
+        /** 游戏:abChicken2 */
+        107: { name: "abChicken2", layer: "abChicken2Loading/prefab/layer/lyChicken2Loading", url: "", md5: "", gameName: 'Chicken Road 2' },
+        /** 游戏: */
+        108: { name: "abSquid", layer: "abSquidGameLoading/prefab/layer/lySquidGameLoadingView", url: "", md5: "", gameName: 'Squid Game' },
     }
+
+    export const NotOwnLoadingGames = [101, 103, 107];
     /** 附属包配置 */
     export const SubBundleConf: { [key: string | number]: IBundleOption } = {
         /** abJackPot */
@@ -102,7 +108,7 @@ export namespace AppConst {
         return null;
     }
     /** 根据子游戏id获取子游戏 */
-    export const GetGamePackageConfById = function (id): IBundleOption & { orientation?: SubGameOrientation } {
+    export const GetGamePackageConfById = function (id): IBundleOption & { orientation?: SubGameOrientation, gameName?: string } {
         id = Number(id);
         if (isNaN(id)) { return null; }
         return AppConst.GameBundleConf[id];

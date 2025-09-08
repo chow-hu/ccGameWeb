@@ -17,6 +17,7 @@ import { SubGameDetail, SubGameEventGame, SubGameProducer } from "./interface";
 import { GiGameEvent } from "./interfaceGIApi";
 import { BUILD } from "cc/env";
 import { gi } from "./subGameGlobal";
+import { transGuiPath } from "db://assets/framework/ui/factory/utils";
 
 export class SubGameManager extends IManager {
     private lastGame: SubGameDetail = null;
@@ -82,9 +83,10 @@ export class SubGameManager extends IManager {
     }
 
     private doOpen(detail: SubGameDetail) {
+        let trans = transGuiPath(detail.bundleConf.layer);
         let enterGame = () => {
             this.initByEnterGame(detail);
-            gui.openBundleLayer(detail.bundleConf.name, detail.bundleConf.layer, null, {
+            gui.openBundleLayer(detail.bundleConf.name, trans.path, null, {
                 onAdded: () => {
                     if (this.hasOwnLoading(detail.gameID)) {
                         this.emit(SubGameEventGame.start);
@@ -93,7 +95,7 @@ export class SubGameManager extends IManager {
                 },
                 onError: () => {
                     this.doError(detail, 4);
-                    warn(`加载包${detail.bundleConf} 的layer：${detail.bundleConf.layer} 失败`, Utils.JsonEncode(detail.bundleConf));
+                    warn(`加载包${detail.bundleConf} 的layer：${trans.path} 失败`, Utils.JsonEncode(detail.bundleConf));
                 },
             });
         }
@@ -104,7 +106,7 @@ export class SubGameManager extends IManager {
                 return;
             }
             if (this.hasOwnLoading(detail.gameID)) {
-                AssetsLoader.instance.bundleLoad(bundleName, 'prefab/layer/' + detail.bundleConf.layer, Prefab, null, (err, prefab) => {
+                AssetsLoader.instance.bundleLoad(bundleName, trans.path, Prefab, null, (err, prefab) => {
                     if (err) {
                         if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
                             location.reload();
@@ -133,7 +135,7 @@ export class SubGameManager extends IManager {
     }
 
     hasOwnLoading(gameID: number): boolean {
-        return gameID != 101 && gameID != 103;
+        return !AppConst.NotOwnLoadingGames.includes(gameID);
     }
 
     /** 预加载包列表 */

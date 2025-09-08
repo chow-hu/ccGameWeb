@@ -73,6 +73,12 @@ class GameConfig {
             dev['timezone'] = timezone;
         }
     }
+
+    /** 是否显示dev */
+    public get DEV(): boolean {
+        return this._output('dev');
+    }
+
 }
 
 export const config = new GameConfig();

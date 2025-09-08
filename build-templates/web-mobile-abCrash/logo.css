@@ -3,8 +3,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width:213px;
-  height: 142px;
+  width:201px;
+  height: 91px;
   background: url(./logo_spribe.png) no-repeat center;
   transform:translate(-50%, -80%) rotate(0deg) scale(0.5, 0.5) ;
   background-color: transparent;
@@ -12,11 +12,11 @@
 #animation {
   margin:auto;
   position: absolute;
-  top: 142px;
+  top: 108px;
   left: 0;
   right:0;
-  width:200px;
-  height: 71px;
+  width:80px;
+  height: 36px;
   background: url(./logo.gif) no-repeat center;
   background-color: transparent;
 }

@@ -13227,6 +13227,7 @@ $root.gamerecord = (function() {
              * @property {number|null} [firstofdayflag] GameRecordItem firstofdayflag
              * @property {Uint8Array|null} [detail] GameRecordItem detail
              * @property {number|Long|null} [id] GameRecordItem id
+             * @property {Uint8Array|null} [ext] GameRecordItem ext
              */
 
             /**
@@ -13317,6 +13318,14 @@ $root.gamerecord = (function() {
             GameRecordItem.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
             /**
+             * GameRecordItem ext.
+             * @member {Uint8Array} ext
+             * @memberof gamerecord.GameRecordResp.GameRecordItem
+             * @instance
+             */
+            GameRecordItem.prototype.ext = $util.newBuffer([]);
+
+            /**
              * Creates a new GameRecordItem instance using the specified properties.
              * @function create
              * @memberof gamerecord.GameRecordResp.GameRecordItem
@@ -13358,6 +13367,8 @@ $root.gamerecord = (function() {
                     writer.uint32(/* id 8, wireType 2 =*/66).bytes(message.detail);
                 if (message.id != null && Object.hasOwnProperty.call(message, "id"))
                     writer.uint32(/* id 9, wireType 0 =*/72).uint64(message.id);
+                if (message.ext != null && Object.hasOwnProperty.call(message, "ext"))
+                    writer.uint32(/* id 10, wireType 2 =*/82).bytes(message.ext);
                 return writer;
             };
 
@@ -13418,6 +13429,9 @@ $root.gamerecord = (function() {
                         break;
                     case 9:
                         message.id = reader.uint64();
+                        break;
+                    case 10:
+                        message.ext = reader.bytes();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -13493,6 +13507,9 @@ $root.gamerecord = (function() {
                 if (message.id != null && message.hasOwnProperty("id"))
                     if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                         return "id: integer|Long expected";
+                if (message.ext != null && message.hasOwnProperty("ext"))
+                    if (!(message.ext && typeof message.ext.length === "number" || $util.isString(message.ext)))
+                        return "ext: buffer expected";
                 return null;
             };
 
@@ -13581,6 +13598,11 @@ $root.gamerecord = (function() {
                         message.id = object.id;
                     else if (typeof object.id === "object")
                         message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                if (object.ext != null)
+                    if (typeof object.ext === "string")
+                        $util.base64.decode(object.ext, message.ext = $util.newBuffer($util.base64.length(object.ext)), 0);
+                    else if (object.ext.length)
+                        message.ext = object.ext;
                 return message;
             };
 
@@ -13629,6 +13651,13 @@ $root.gamerecord = (function() {
                         object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                     } else
                         object.id = options.longs === String ? "0" : 0;
+                    if (options.bytes === String)
+                        object.ext = "";
+                    else {
+                        object.ext = [];
+                        if (options.bytes !== Array)
+                            object.ext = $util.newBuffer(object.ext);
+                    }
                 }
                 if (message.roundid != null && message.hasOwnProperty("roundid"))
                     object.roundid = message.roundid;
@@ -13660,6 +13689,8 @@ $root.gamerecord = (function() {
                         object.id = options.longs === String ? String(message.id) : message.id;
                     else
                         object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                if (message.ext != null && message.hasOwnProperty("ext"))
+                    object.ext = options.bytes === String ? $util.base64.encode(message.ext, 0, message.ext.length) : options.bytes === Array ? Array.prototype.slice.call(message.ext) : message.ext;
                 return object;
             };
 
@@ -14545,6 +14576,7 @@ $root.gamerecord = (function() {
          * @property {number|Long|null} [timestamp] GameRecordData timestamp
          * @property {Uint8Array|null} [detail] GameRecordData detail
          * @property {number|null} [agencyid] GameRecordData agencyid
+         * @property {Uint8Array|null} [ext] GameRecordData ext
          */
 
         /**
@@ -14643,6 +14675,14 @@ $root.gamerecord = (function() {
         GameRecordData.prototype.agencyid = 0;
 
         /**
+         * GameRecordData ext.
+         * @member {Uint8Array} ext
+         * @memberof gamerecord.GameRecordData
+         * @instance
+         */
+        GameRecordData.prototype.ext = $util.newBuffer([]);
+
+        /**
          * Creates a new GameRecordData instance using the specified properties.
          * @function create
          * @memberof gamerecord.GameRecordData
@@ -14686,6 +14726,8 @@ $root.gamerecord = (function() {
                 writer.uint32(/* id 9, wireType 2 =*/74).bytes(message.detail);
             if (message.agencyid != null && Object.hasOwnProperty.call(message, "agencyid"))
                 writer.uint32(/* id 10, wireType 0 =*/80).uint32(message.agencyid);
+            if (message.ext != null && Object.hasOwnProperty.call(message, "ext"))
+                writer.uint32(/* id 11, wireType 2 =*/90).bytes(message.ext);
             return writer;
         };
 
@@ -14749,6 +14791,9 @@ $root.gamerecord = (function() {
                     break;
                 case 10:
                     message.agencyid = reader.uint32();
+                    break;
+                case 11:
+                    message.ext = reader.bytes();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -14827,6 +14872,9 @@ $root.gamerecord = (function() {
             if (message.agencyid != null && message.hasOwnProperty("agencyid"))
                 if (!$util.isInteger(message.agencyid))
                     return "agencyid: integer expected";
+            if (message.ext != null && message.hasOwnProperty("ext"))
+                if (!(message.ext && typeof message.ext.length === "number" || $util.isString(message.ext)))
+                    return "ext: buffer expected";
             return null;
         };
 
@@ -14910,6 +14958,11 @@ $root.gamerecord = (function() {
                     message.detail = object.detail;
             if (object.agencyid != null)
                 message.agencyid = object.agencyid >>> 0;
+            if (object.ext != null)
+                if (typeof object.ext === "string")
+                    $util.base64.decode(object.ext, message.ext = $util.newBuffer($util.base64.length(object.ext)), 0);
+                else if (object.ext.length)
+                    message.ext = object.ext;
             return message;
         };
 
@@ -14955,6 +15008,13 @@ $root.gamerecord = (function() {
                         object.detail = $util.newBuffer(object.detail);
                 }
                 object.agencyid = 0;
+                if (options.bytes === String)
+                    object.ext = "";
+                else {
+                    object.ext = [];
+                    if (options.bytes !== Array)
+                        object.ext = $util.newBuffer(object.ext);
+                }
             }
             if (message.uid != null && message.hasOwnProperty("uid"))
                 object.uid = message.uid;
@@ -14985,6 +15045,8 @@ $root.gamerecord = (function() {
                 object.detail = options.bytes === String ? $util.base64.encode(message.detail, 0, message.detail.length) : options.bytes === Array ? Array.prototype.slice.call(message.detail) : message.detail;
             if (message.agencyid != null && message.hasOwnProperty("agencyid"))
                 object.agencyid = message.agencyid;
+            if (message.ext != null && message.hasOwnProperty("ext"))
+                object.ext = options.bytes === String ? $util.base64.encode(message.ext, 0, message.ext.length) : options.bytes === Array ? Array.prototype.slice.call(message.ext) : message.ext;
             return object;
         };
 
@@ -15231,6 +15293,7 @@ $root.gamerecord = (function() {
          * @property {number|null} [firstofdayflag] GameRecordDataCache firstofdayflag
          * @property {number|null} [recordcount] GameRecordDataCache recordcount
          * @property {number|Long|null} [cacheindex] GameRecordDataCache cacheindex
+         * @property {Uint8Array|null} [ext] GameRecordDataCache ext
          */
 
         /**
@@ -15369,6 +15432,14 @@ $root.gamerecord = (function() {
         GameRecordDataCache.prototype.cacheindex = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
         /**
+         * GameRecordDataCache ext.
+         * @member {Uint8Array} ext
+         * @memberof gamerecord.GameRecordDataCache
+         * @instance
+         */
+        GameRecordDataCache.prototype.ext = $util.newBuffer([]);
+
+        /**
          * Creates a new GameRecordDataCache instance using the specified properties.
          * @function create
          * @memberof gamerecord.GameRecordDataCache
@@ -15422,6 +15493,8 @@ $root.gamerecord = (function() {
                 writer.uint32(/* id 14, wireType 0 =*/112).uint32(message.recordcount);
             if (message.cacheindex != null && Object.hasOwnProperty.call(message, "cacheindex"))
                 writer.uint32(/* id 15, wireType 0 =*/120).uint64(message.cacheindex);
+            if (message.ext != null && Object.hasOwnProperty.call(message, "ext"))
+                writer.uint32(/* id 16, wireType 2 =*/130).bytes(message.ext);
             return writer;
         };
 
@@ -15500,6 +15573,9 @@ $root.gamerecord = (function() {
                     break;
                 case 15:
                     message.cacheindex = reader.uint64();
+                    break;
+                case 16:
+                    message.ext = reader.bytes();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -15593,6 +15669,9 @@ $root.gamerecord = (function() {
             if (message.cacheindex != null && message.hasOwnProperty("cacheindex"))
                 if (!$util.isInteger(message.cacheindex) && !(message.cacheindex && $util.isInteger(message.cacheindex.low) && $util.isInteger(message.cacheindex.high)))
                     return "cacheindex: integer|Long expected";
+            if (message.ext != null && message.hasOwnProperty("ext"))
+                if (!(message.ext && typeof message.ext.length === "number" || $util.isString(message.ext)))
+                    return "ext: buffer expected";
             return null;
         };
 
@@ -15707,6 +15786,11 @@ $root.gamerecord = (function() {
                     message.cacheindex = object.cacheindex;
                 else if (typeof object.cacheindex === "object")
                     message.cacheindex = new $util.LongBits(object.cacheindex.low >>> 0, object.cacheindex.high >>> 0).toNumber(true);
+            if (object.ext != null)
+                if (typeof object.ext === "string")
+                    $util.base64.decode(object.ext, message.ext = $util.newBuffer($util.base64.length(object.ext)), 0);
+                else if (object.ext.length)
+                    message.ext = object.ext;
             return message;
         };
 
@@ -15769,6 +15853,13 @@ $root.gamerecord = (function() {
                     object.cacheindex = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.cacheindex = options.longs === String ? "0" : 0;
+                if (options.bytes === String)
+                    object.ext = "";
+                else {
+                    object.ext = [];
+                    if (options.bytes !== Array)
+                        object.ext = $util.newBuffer(object.ext);
+                }
             }
             if (message.uid != null && message.hasOwnProperty("uid"))
                 object.uid = message.uid;
@@ -15818,6 +15909,8 @@ $root.gamerecord = (function() {
                     object.cacheindex = options.longs === String ? String(message.cacheindex) : message.cacheindex;
                 else
                     object.cacheindex = options.longs === String ? $util.Long.prototype.toString.call(message.cacheindex) : options.longs === Number ? new $util.LongBits(message.cacheindex.low >>> 0, message.cacheindex.high >>> 0).toNumber(true) : message.cacheindex;
+            if (message.ext != null && message.hasOwnProperty("ext"))
+                object.ext = options.bytes === String ? $util.base64.encode(message.ext, 0, message.ext.length) : options.bytes === Array ? Array.prototype.slice.call(message.ext) : message.ext;
             return object;
         };
 

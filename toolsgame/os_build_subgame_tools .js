@@ -61,7 +61,7 @@ let modifyBuildTemplate = function (name, orientation) {
     let path;
     if (name == 'Crash') {
         path = `build-templates/${platorm}-abCrash${kb ? '-kb' : ''}/`;
-    } else if (name == 'abJet' || name == 'abChicken2') {
+    } else if (name == 'abJet' || name == 'abChicken2' || name == 'abSquid') {
         path = `build-templates/${platorm}-abJet${kb ? '-kb' : ''}/`;
     } else {
         path = `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;

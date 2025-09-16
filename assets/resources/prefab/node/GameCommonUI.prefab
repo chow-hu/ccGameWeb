@@ -67,7 +67,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 384,
-      "y": 683,
+      "y": 831.5000000000001,
       "z": 0
     },
     "_lrot": {
@@ -156,7 +156,7 @@
     "_priority": 1,
     "_fov": 68.68,
     "_fovAxis": 0,
-    "_orthoHeight": 683,
+    "_orthoHeight": 831.5000000000001,
     "_near": 0,
     "_far": 1000,
     "_color": {
@@ -207,14 +207,14 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Camera3d",
+    "_name": "CameraPopUp",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 7
@@ -225,9 +225,9 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -388.767,
-      "y": -684.089,
-      "z": 1500
+      "x": 0,
+      "y": 0,
+      "z": 1000
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -243,7 +243,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 8388608,
+    "_layer": 33554432,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -254,7 +254,7 @@
   },
   {
     "__type__": "cc.Camera",
-    "_name": "",
+    "_name": "Camera<CameraComponent>",
     "_objFlags": 0,
     "__editorExtras__": {},
     "node": {
@@ -265,17 +265,17 @@
       "__id__": 8
     },
     "_projection": 0,
-    "_priority": 2,
-    "_fov": 22,
-    "_fovAxis": 1,
-    "_orthoHeight": 688.9,
+    "_priority": 4,
+    "_fov": 68.68,
+    "_fovAxis": 0,
+    "_orthoHeight": 831.5000000000001,
     "_near": 0,
-    "_far": 1986.6,
+    "_far": 1000,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 0,
+      "g": 0,
+      "b": 0,
       "a": 0
     },
     "_depth": 1,
@@ -292,7 +292,7 @@
     "_shutter": 7,
     "_iso": 0,
     "_screenScale": 1,
-    "_visibility": 8388608,
+    "_visibility": 2,
     "_targetTexture": null,
     "_postProcess": null,
     "_usePostProcess": false,
@@ -302,7 +302,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "cdm81BvvdIQpyfMPmjqhpo"
+    "fileId": "41vqjLYoJN5IMsLSYCHTpp"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -312,7 +312,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "a0kKW8kPpKkLfHOOLATQmr",
+    "fileId": "50bt7qj55O/77YSvd3mXUq",
     "instance": null,
     "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
@@ -439,7 +439,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663.0000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -561,7 +561,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663.0000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -668,7 +668,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -721,7 +721,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -867,7 +867,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663.0000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1065,7 +1065,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -1119,7 +1119,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -1169,7 +1169,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -1386,7 +1386,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -1542,7 +1542,7 @@
       "z": 1
     },
     "_mobility": 0,
-    "_layer": 33554432,
+    "_layer": 2,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -1566,7 +1566,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663.0000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1709,7 +1709,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -381,
-      "y": 665.36,
+      "y": 813.8600000000001,
       "z": 0
     },
     "_lrot": {
@@ -1895,7 +1895,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663.0000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1972,7 +1972,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 768,
-      "height": 1366
+      "height": 1663.0000000000002
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2079,9 +2079,7 @@
     "panelFloat": {
       "__id__": 42
     },
-    "CameraNode": {
-      "__id__": 6
-    },
+    "CameraNode": null,
     "panelLoading": {
       "__id__": 64
     },

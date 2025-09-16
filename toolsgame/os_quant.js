@@ -16,12 +16,31 @@ let excuteCompress = function (file) {
     }
 }
 
+let checkFileSize = function (file, size = 5) {
+    fs.stat(file, (err, stats) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        if (stats.size / 1024 > size) {
+            console.log(`${file}: ${stats.size} bytes`);
+            excuteCompress(file);
+        }
+    });
+
+}
+
 let compress = function (dir) {
     let files = fs.readdirSync(dir);
     for (let i = 0; i < files.length; i++) {
         let file = path.join(dir, files[i]);
         if (file.endsWith(".png")/*  || file.endsWith(".jpg") */) {
-            excuteCompress(file);
+            // excuteCompress(file);
+            let fileState = fs.lstatSync(file);
+            if (fileState.size / 1024 > 5) {
+                console.log(`${file}: ${fileState.size} bytes`);
+                excuteCompress(file);
+            }
         } else {
             let fileState = fs.lstatSync(file);
             if (fileState.isDirectory()) {

@@ -88,7 +88,7 @@ export namespace AppConst {
         108: { name: "abSquid", layer: "abSquidGameLoading/prefab/layer/lySquidGameLoadingView", url: "", md5: "", gameName: 'Squid Game' },
     }
 
-    export const NotOwnLoadingGames = [101, 103, 107];
+    export const NotOwnLoadingGames = [101, 103, 107, 108];
     /** 附属包配置 */
     export const SubBundleConf: { [key: string | number]: IBundleOption } = {
         /** abJackPot */

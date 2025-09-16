@@ -5147,6 +5147,9 @@ declare namespace ccgame {
 
                 /** GameRecordItem id */
                 id?: (number|Long|null);
+
+                /** GameRecordItem ext */
+                ext?: (Uint8Array|null);
             }
 
             /** Represents a GameRecordItem. */
@@ -5184,6 +5187,9 @@ declare namespace ccgame {
 
                 /** GameRecordItem id. */
                 public id: (number|Long);
+
+                /** GameRecordItem ext. */
+                public ext: Uint8Array;
 
                 /**
                  * Creates a new GameRecordItem instance using the specified properties.
@@ -5619,6 +5625,9 @@ declare namespace ccgame {
 
             /** GameRecordData agencyid */
             agencyid?: (number|null);
+
+            /** GameRecordData ext */
+            ext?: (Uint8Array|null);
         }
 
         /** Represents a GameRecordData. */
@@ -5659,6 +5668,9 @@ declare namespace ccgame {
 
             /** GameRecordData agencyid. */
             public agencyid: number;
+
+            /** GameRecordData ext. */
+            public ext: Uint8Array;
 
             /**
              * Creates a new GameRecordData instance using the specified properties.
@@ -5868,6 +5880,9 @@ declare namespace ccgame {
 
             /** GameRecordDataCache cacheindex */
             cacheindex?: (number|Long|null);
+
+            /** GameRecordDataCache ext */
+            ext?: (Uint8Array|null);
         }
 
         /** Represents a GameRecordDataCache. */
@@ -5923,6 +5938,9 @@ declare namespace ccgame {
 
             /** GameRecordDataCache cacheindex. */
             public cacheindex: (number|Long);
+
+            /** GameRecordDataCache ext. */
+            public ext: Uint8Array;
 
             /**
              * Creates a new GameRecordDataCache instance using the specified properties.

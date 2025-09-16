@@ -30,5 +30,5 @@ export enum EMgr {
     SUBGAMEMANAGER = 'SubGameManager',
     GAMEDOWNLOAD = 'gameDownload',
     GAMERECORD = 'gameRecord', 
-    DALU = 'DaLu', // 大路管理器
+    DALU = 'DaLu', // ?????
 }

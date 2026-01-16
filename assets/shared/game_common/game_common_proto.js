@@ -4356,6 +4356,7 @@ $root.roomalloc = (function() {
      * @property {number} ROOMALLOC_CMD_LEVEL_CONFIG_RESP=4705 ROOMALLOC_CMD_LEVEL_CONFIG_RESP value
      * @property {number} ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ=4706 ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ value
      * @property {number} ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP=4707 ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP value
+     * @property {number} CC_GAME_BALANCE_CHANGE_PUSH=4708 CC_GAME_BALANCE_CHANGE_PUSH value
      */
     roomalloc.ROOMALLOC_CMD = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -4366,6 +4367,7 @@ $root.roomalloc = (function() {
         values[valuesById[4705] = "ROOMALLOC_CMD_LEVEL_CONFIG_RESP"] = 4705;
         values[valuesById[4706] = "ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ"] = 4706;
         values[valuesById[4707] = "ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP"] = 4707;
+        values[valuesById[4708] = "CC_GAME_BALANCE_CHANGE_PUSH"] = 4708;
         return values;
     })();
 
@@ -6481,6 +6483,7 @@ $root.roomalloc = (function() {
          * @memberof roomalloc
          * @interface ILevelTableInfoResp
          * @property {Array.<roomalloc.LevelTableInfoResp.ITableInfo>|null} [tableList] LevelTableInfoResp tableList
+         * @property {number|Long|null} [level] LevelTableInfoResp level
          */
 
         /**
@@ -6506,6 +6509,14 @@ $root.roomalloc = (function() {
          * @instance
          */
         LevelTableInfoResp.prototype.tableList = $util.emptyArray;
+
+        /**
+         * LevelTableInfoResp level.
+         * @member {number|Long} level
+         * @memberof roomalloc.LevelTableInfoResp
+         * @instance
+         */
+        LevelTableInfoResp.prototype.level = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
          * Creates a new LevelTableInfoResp instance using the specified properties.
@@ -6534,6 +6545,8 @@ $root.roomalloc = (function() {
             if (message.tableList != null && message.tableList.length)
                 for (var i = 0; i < message.tableList.length; ++i)
                     $root.roomalloc.LevelTableInfoResp.TableInfo.encode(message.tableList[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.level != null && Object.hasOwnProperty.call(message, "level"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.level);
             return writer;
         };
 
@@ -6572,6 +6585,9 @@ $root.roomalloc = (function() {
                     if (!(message.tableList && message.tableList.length))
                         message.tableList = [];
                     message.tableList.push($root.roomalloc.LevelTableInfoResp.TableInfo.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.level = reader.int64();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6617,6 +6633,9 @@ $root.roomalloc = (function() {
                         return "tableList." + error;
                 }
             }
+            if (message.level != null && message.hasOwnProperty("level"))
+                if (!$util.isInteger(message.level) && !(message.level && $util.isInteger(message.level.low) && $util.isInteger(message.level.high)))
+                    return "level: integer|Long expected";
             return null;
         };
 
@@ -6642,6 +6661,15 @@ $root.roomalloc = (function() {
                     message.tableList[i] = $root.roomalloc.LevelTableInfoResp.TableInfo.fromObject(object.tableList[i]);
                 }
             }
+            if (object.level != null)
+                if ($util.Long)
+                    (message.level = $util.Long.fromValue(object.level)).unsigned = false;
+                else if (typeof object.level === "string")
+                    message.level = parseInt(object.level, 10);
+                else if (typeof object.level === "number")
+                    message.level = object.level;
+                else if (typeof object.level === "object")
+                    message.level = new $util.LongBits(object.level.low >>> 0, object.level.high >>> 0).toNumber();
             return message;
         };
 
@@ -6660,11 +6688,22 @@ $root.roomalloc = (function() {
             var object = {};
             if (options.arrays || options.defaults)
                 object.tableList = [];
+            if (options.defaults)
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.level = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.level = options.longs === String ? "0" : 0;
             if (message.tableList && message.tableList.length) {
                 object.tableList = [];
                 for (var j = 0; j < message.tableList.length; ++j)
                     object.tableList[j] = $root.roomalloc.LevelTableInfoResp.TableInfo.toObject(message.tableList[j], options);
             }
+            if (message.level != null && message.hasOwnProperty("level"))
+                if (typeof message.level === "number")
+                    object.level = options.longs === String ? String(message.level) : message.level;
+                else
+                    object.level = options.longs === String ? $util.Long.prototype.toString.call(message.level) : options.longs === Number ? new $util.LongBits(message.level.low >>> 0, message.level.high >>> 0).toNumber() : message.level;
             return object;
         };
 
@@ -7002,6 +7041,230 @@ $root.roomalloc = (function() {
         return LevelTableInfoResp;
     })();
 
+    roomalloc.BalanceChangePush = (function() {
+
+        /**
+         * Properties of a BalanceChangePush.
+         * @memberof roomalloc
+         * @interface IBalanceChangePush
+         * @property {number|null} [uid] BalanceChangePush uid
+         * @property {number|Long|null} [balance] BalanceChangePush balance
+         */
+
+        /**
+         * Constructs a new BalanceChangePush.
+         * @memberof roomalloc
+         * @classdesc Represents a BalanceChangePush.
+         * @implements IBalanceChangePush
+         * @constructor
+         * @param {roomalloc.IBalanceChangePush=} [properties] Properties to set
+         */
+        function BalanceChangePush(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * BalanceChangePush uid.
+         * @member {number} uid
+         * @memberof roomalloc.BalanceChangePush
+         * @instance
+         */
+        BalanceChangePush.prototype.uid = 0;
+
+        /**
+         * BalanceChangePush balance.
+         * @member {number|Long} balance
+         * @memberof roomalloc.BalanceChangePush
+         * @instance
+         */
+        BalanceChangePush.prototype.balance = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new BalanceChangePush instance using the specified properties.
+         * @function create
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {roomalloc.IBalanceChangePush=} [properties] Properties to set
+         * @returns {roomalloc.BalanceChangePush} BalanceChangePush instance
+         */
+        BalanceChangePush.create = function create(properties) {
+            return new BalanceChangePush(properties);
+        };
+
+        /**
+         * Encodes the specified BalanceChangePush message. Does not implicitly {@link roomalloc.BalanceChangePush.verify|verify} messages.
+         * @function encode
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {roomalloc.IBalanceChangePush} message BalanceChangePush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        BalanceChangePush.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uid != null && Object.hasOwnProperty.call(message, "uid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.uid);
+            if (message.balance != null && Object.hasOwnProperty.call(message, "balance"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.balance);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified BalanceChangePush message, length delimited. Does not implicitly {@link roomalloc.BalanceChangePush.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {roomalloc.IBalanceChangePush} message BalanceChangePush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        BalanceChangePush.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a BalanceChangePush message from the specified reader or buffer.
+         * @function decode
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {roomalloc.BalanceChangePush} BalanceChangePush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        BalanceChangePush.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.roomalloc.BalanceChangePush();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uid = reader.uint32();
+                    break;
+                case 2:
+                    message.balance = reader.int64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a BalanceChangePush message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {roomalloc.BalanceChangePush} BalanceChangePush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        BalanceChangePush.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a BalanceChangePush message.
+         * @function verify
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        BalanceChangePush.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                if (!$util.isInteger(message.uid))
+                    return "uid: integer expected";
+            if (message.balance != null && message.hasOwnProperty("balance"))
+                if (!$util.isInteger(message.balance) && !(message.balance && $util.isInteger(message.balance.low) && $util.isInteger(message.balance.high)))
+                    return "balance: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a BalanceChangePush message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {roomalloc.BalanceChangePush} BalanceChangePush
+         */
+        BalanceChangePush.fromObject = function fromObject(object) {
+            if (object instanceof $root.roomalloc.BalanceChangePush)
+                return object;
+            var message = new $root.roomalloc.BalanceChangePush();
+            if (object.uid != null)
+                message.uid = object.uid >>> 0;
+            if (object.balance != null)
+                if ($util.Long)
+                    (message.balance = $util.Long.fromValue(object.balance)).unsigned = false;
+                else if (typeof object.balance === "string")
+                    message.balance = parseInt(object.balance, 10);
+                else if (typeof object.balance === "number")
+                    message.balance = object.balance;
+                else if (typeof object.balance === "object")
+                    message.balance = new $util.LongBits(object.balance.low >>> 0, object.balance.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a BalanceChangePush message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof roomalloc.BalanceChangePush
+         * @static
+         * @param {roomalloc.BalanceChangePush} message BalanceChangePush
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        BalanceChangePush.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uid = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.balance = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.balance = options.longs === String ? "0" : 0;
+            }
+            if (message.uid != null && message.hasOwnProperty("uid"))
+                object.uid = message.uid;
+            if (message.balance != null && message.hasOwnProperty("balance"))
+                if (typeof message.balance === "number")
+                    object.balance = options.longs === String ? String(message.balance) : message.balance;
+                else
+                    object.balance = options.longs === String ? $util.Long.prototype.toString.call(message.balance) : options.longs === Number ? new $util.LongBits(message.balance.low >>> 0, message.balance.high >>> 0).toNumber() : message.balance;
+            return object;
+        };
+
+        /**
+         * Converts this BalanceChangePush to JSON.
+         * @function toJSON
+         * @memberof roomalloc.BalanceChangePush
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        BalanceChangePush.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return BalanceChangePush;
+    })();
+
     return roomalloc;
 })();
 
@@ -7045,6 +7308,8 @@ $root.gamebase = (function() {
      * @property {number} CCGAME_ANDAR=102 CCGAME_ANDAR value
      * @property {number} CCGAME_AVIATOR2=103 CCGAME_AVIATOR2 value
      * @property {number} CCGAME_SEVENUP=104 CCGAME_SEVENUP value
+     * @property {number} CCGAME_MONEYCOMING=105 CCGAME_MONEYCOMING value
+     * @property {number} CCGAME_MINES=106 CCGAME_MINES value
      */
     gamebase.CCGAME_ID = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -7053,6 +7318,8 @@ $root.gamebase = (function() {
         values[valuesById[102] = "CCGAME_ANDAR"] = 102;
         values[valuesById[103] = "CCGAME_AVIATOR2"] = 103;
         values[valuesById[104] = "CCGAME_SEVENUP"] = 104;
+        values[valuesById[105] = "CCGAME_MONEYCOMING"] = 105;
+        values[valuesById[106] = "CCGAME_MINES"] = 106;
         return values;
     })();
 
@@ -7149,6 +7416,10 @@ $root.gamebase = (function() {
      * @property {number} CC_GAME_NOTIFICATION_PUSH=10037 CC_GAME_NOTIFICATION_PUSH value
      * @property {number} CC_GAME_RESET_BALANCE_REQ=10038 CC_GAME_RESET_BALANCE_REQ value
      * @property {number} CC_GAME_RESET_BALANCE_RESP=10039 CC_GAME_RESET_BALANCE_RESP value
+     * @property {number} CC_GAME_GET_GAME_INFO_REQ=10040 CC_GAME_GET_GAME_INFO_REQ value
+     * @property {number} CC_GAME_MODIFY_USER_INFO_REQ=10041 CC_GAME_MODIFY_USER_INFO_REQ value
+     * @property {number} CC_GAME_MODIFY_USER_INFO_RESP=10042 CC_GAME_MODIFY_USER_INFO_RESP value
+     * @property {number} CC_GAME_JACKPOT_SWITCH_PUSH=10043 CC_GAME_JACKPOT_SWITCH_PUSH value
      */
     gamebase.CCGAME_MSGID = (function() {
         var valuesById = {}, values = Object.create(valuesById);
@@ -7183,6 +7454,10 @@ $root.gamebase = (function() {
         values[valuesById[10037] = "CC_GAME_NOTIFICATION_PUSH"] = 10037;
         values[valuesById[10038] = "CC_GAME_RESET_BALANCE_REQ"] = 10038;
         values[valuesById[10039] = "CC_GAME_RESET_BALANCE_RESP"] = 10039;
+        values[valuesById[10040] = "CC_GAME_GET_GAME_INFO_REQ"] = 10040;
+        values[valuesById[10041] = "CC_GAME_MODIFY_USER_INFO_REQ"] = 10041;
+        values[valuesById[10042] = "CC_GAME_MODIFY_USER_INFO_RESP"] = 10042;
+        values[valuesById[10043] = "CC_GAME_JACKPOT_SWITCH_PUSH"] = 10043;
         return values;
     })();
 
@@ -8428,6 +8703,7 @@ $root.gamebase = (function() {
          * @memberof gamebase
          * @interface IUserJoinTableReq
          * @property {number|null} [table_id] UserJoinTableReq table_id
+         * @property {string|null} [userinfo] UserJoinTableReq userinfo
          */
 
         /**
@@ -8452,6 +8728,14 @@ $root.gamebase = (function() {
          * @instance
          */
         UserJoinTableReq.prototype.table_id = 0;
+
+        /**
+         * UserJoinTableReq userinfo.
+         * @member {string} userinfo
+         * @memberof gamebase.UserJoinTableReq
+         * @instance
+         */
+        UserJoinTableReq.prototype.userinfo = "";
 
         /**
          * Creates a new UserJoinTableReq instance using the specified properties.
@@ -8479,6 +8763,8 @@ $root.gamebase = (function() {
                 writer = $Writer.create();
             if (message.table_id != null && Object.hasOwnProperty.call(message, "table_id"))
                 writer.uint32(/* id 1, wireType 0 =*/8).int32(message.table_id);
+            if (message.userinfo != null && Object.hasOwnProperty.call(message, "userinfo"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.userinfo);
             return writer;
         };
 
@@ -8515,6 +8801,9 @@ $root.gamebase = (function() {
                 switch (tag >>> 3) {
                 case 1:
                     message.table_id = reader.int32();
+                    break;
+                case 2:
+                    message.userinfo = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -8554,6 +8843,9 @@ $root.gamebase = (function() {
             if (message.table_id != null && message.hasOwnProperty("table_id"))
                 if (!$util.isInteger(message.table_id))
                     return "table_id: integer expected";
+            if (message.userinfo != null && message.hasOwnProperty("userinfo"))
+                if (!$util.isString(message.userinfo))
+                    return "userinfo: string expected";
             return null;
         };
 
@@ -8571,6 +8863,8 @@ $root.gamebase = (function() {
             var message = new $root.gamebase.UserJoinTableReq();
             if (object.table_id != null)
                 message.table_id = object.table_id | 0;
+            if (object.userinfo != null)
+                message.userinfo = String(object.userinfo);
             return message;
         };
 
@@ -8587,10 +8881,14 @@ $root.gamebase = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.defaults)
+            if (options.defaults) {
                 object.table_id = 0;
+                object.userinfo = "";
+            }
             if (message.table_id != null && message.hasOwnProperty("table_id"))
                 object.table_id = message.table_id;
+            if (message.userinfo != null && message.hasOwnProperty("userinfo"))
+                object.userinfo = message.userinfo;
             return object;
         };
 
@@ -9831,7 +10129,7 @@ $root.gamebase = (function() {
          * @property {Array.<number>|null} [rewardIdList] JackpotUserData rewardIdList
          * @property {boolean|null} [isReward] JackpotUserData isReward
          * @property {Array.<number>|null} [collects] JackpotUserData collects
-         * @property {Array.<gamebase.JackpotUserData.IRewardItem>|null} [rewardDetail] JackpotUserData rewardDetail
+         * @property {Array.<number|Long>|null} [rewardDetail] JackpotUserData rewardDetail
          */
 
         /**
@@ -9910,7 +10208,7 @@ $root.gamebase = (function() {
 
         /**
          * JackpotUserData rewardDetail.
-         * @member {Array.<gamebase.JackpotUserData.IRewardItem>} rewardDetail
+         * @member {Array.<number|Long>} rewardDetail
          * @memberof gamebase.JackpotUserData
          * @instance
          */
@@ -9962,9 +10260,12 @@ $root.gamebase = (function() {
                     writer.int32(message.collects[i]);
                 writer.ldelim();
             }
-            if (message.rewardDetail != null && message.rewardDetail.length)
+            if (message.rewardDetail != null && message.rewardDetail.length) {
+                writer.uint32(/* id 8, wireType 2 =*/66).fork();
                 for (var i = 0; i < message.rewardDetail.length; ++i)
-                    $root.gamebase.JackpotUserData.RewardItem.encode(message.rewardDetail[i], writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+                    writer.int64(message.rewardDetail[i]);
+                writer.ldelim();
+            }
             return writer;
         };
 
@@ -10037,7 +10338,12 @@ $root.gamebase = (function() {
                 case 8:
                     if (!(message.rewardDetail && message.rewardDetail.length))
                         message.rewardDetail = [];
-                    message.rewardDetail.push($root.gamebase.JackpotUserData.RewardItem.decode(reader, reader.uint32()));
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.rewardDetail.push(reader.int64());
+                    } else
+                        message.rewardDetail.push(reader.int64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -10106,11 +10412,9 @@ $root.gamebase = (function() {
             if (message.rewardDetail != null && message.hasOwnProperty("rewardDetail")) {
                 if (!Array.isArray(message.rewardDetail))
                     return "rewardDetail: array expected";
-                for (var i = 0; i < message.rewardDetail.length; ++i) {
-                    var error = $root.gamebase.JackpotUserData.RewardItem.verify(message.rewardDetail[i]);
-                    if (error)
-                        return "rewardDetail." + error;
-                }
+                for (var i = 0; i < message.rewardDetail.length; ++i)
+                    if (!$util.isInteger(message.rewardDetail[i]) && !(message.rewardDetail[i] && $util.isInteger(message.rewardDetail[i].low) && $util.isInteger(message.rewardDetail[i].high)))
+                        return "rewardDetail: integer|Long[] expected";
             }
             return null;
         };
@@ -10162,11 +10466,15 @@ $root.gamebase = (function() {
                 if (!Array.isArray(object.rewardDetail))
                     throw TypeError(".gamebase.JackpotUserData.rewardDetail: array expected");
                 message.rewardDetail = [];
-                for (var i = 0; i < object.rewardDetail.length; ++i) {
-                    if (typeof object.rewardDetail[i] !== "object")
-                        throw TypeError(".gamebase.JackpotUserData.rewardDetail: object expected");
-                    message.rewardDetail[i] = $root.gamebase.JackpotUserData.RewardItem.fromObject(object.rewardDetail[i]);
-                }
+                for (var i = 0; i < object.rewardDetail.length; ++i)
+                    if ($util.Long)
+                        (message.rewardDetail[i] = $util.Long.fromValue(object.rewardDetail[i])).unsigned = false;
+                    else if (typeof object.rewardDetail[i] === "string")
+                        message.rewardDetail[i] = parseInt(object.rewardDetail[i], 10);
+                    else if (typeof object.rewardDetail[i] === "number")
+                        message.rewardDetail[i] = object.rewardDetail[i];
+                    else if (typeof object.rewardDetail[i] === "object")
+                        message.rewardDetail[i] = new $util.LongBits(object.rewardDetail[i].low >>> 0, object.rewardDetail[i].high >>> 0).toNumber();
             }
             return message;
         };
@@ -10226,7 +10534,10 @@ $root.gamebase = (function() {
             if (message.rewardDetail && message.rewardDetail.length) {
                 object.rewardDetail = [];
                 for (var j = 0; j < message.rewardDetail.length; ++j)
-                    object.rewardDetail[j] = $root.gamebase.JackpotUserData.RewardItem.toObject(message.rewardDetail[j], options);
+                    if (typeof message.rewardDetail[j] === "number")
+                        object.rewardDetail[j] = options.longs === String ? String(message.rewardDetail[j]) : message.rewardDetail[j];
+                    else
+                        object.rewardDetail[j] = options.longs === String ? $util.Long.prototype.toString.call(message.rewardDetail[j]) : options.longs === Number ? new $util.LongBits(message.rewardDetail[j].low >>> 0, message.rewardDetail[j].high >>> 0).toNumber() : message.rewardDetail[j];
             }
             return object;
         };
@@ -10242,244 +10553,6 @@ $root.gamebase = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        JackpotUserData.RewardItem = (function() {
-
-            /**
-             * Properties of a RewardItem.
-             * @memberof gamebase.JackpotUserData
-             * @interface IRewardItem
-             * @property {number|Long|null} [totalReward] RewardItem totalReward
-             * @property {number|Long|null} [shareReward] RewardItem shareReward
-             */
-
-            /**
-             * Constructs a new RewardItem.
-             * @memberof gamebase.JackpotUserData
-             * @classdesc Represents a RewardItem.
-             * @implements IRewardItem
-             * @constructor
-             * @param {gamebase.JackpotUserData.IRewardItem=} [properties] Properties to set
-             */
-            function RewardItem(properties) {
-                if (properties)
-                    for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * RewardItem totalReward.
-             * @member {number|Long} totalReward
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @instance
-             */
-            RewardItem.prototype.totalReward = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-            /**
-             * RewardItem shareReward.
-             * @member {number|Long} shareReward
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @instance
-             */
-            RewardItem.prototype.shareReward = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-            /**
-             * Creates a new RewardItem instance using the specified properties.
-             * @function create
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {gamebase.JackpotUserData.IRewardItem=} [properties] Properties to set
-             * @returns {gamebase.JackpotUserData.RewardItem} RewardItem instance
-             */
-            RewardItem.create = function create(properties) {
-                return new RewardItem(properties);
-            };
-
-            /**
-             * Encodes the specified RewardItem message. Does not implicitly {@link gamebase.JackpotUserData.RewardItem.verify|verify} messages.
-             * @function encode
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {gamebase.JackpotUserData.IRewardItem} message RewardItem message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            RewardItem.encode = function encode(message, writer) {
-                if (!writer)
-                    writer = $Writer.create();
-                if (message.totalReward != null && Object.hasOwnProperty.call(message, "totalReward"))
-                    writer.uint32(/* id 1, wireType 0 =*/8).int64(message.totalReward);
-                if (message.shareReward != null && Object.hasOwnProperty.call(message, "shareReward"))
-                    writer.uint32(/* id 2, wireType 0 =*/16).int64(message.shareReward);
-                return writer;
-            };
-
-            /**
-             * Encodes the specified RewardItem message, length delimited. Does not implicitly {@link gamebase.JackpotUserData.RewardItem.verify|verify} messages.
-             * @function encodeDelimited
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {gamebase.JackpotUserData.IRewardItem} message RewardItem message or plain object to encode
-             * @param {$protobuf.Writer} [writer] Writer to encode to
-             * @returns {$protobuf.Writer} Writer
-             */
-            RewardItem.encodeDelimited = function encodeDelimited(message, writer) {
-                return this.encode(message, writer).ldelim();
-            };
-
-            /**
-             * Decodes a RewardItem message from the specified reader or buffer.
-             * @function decode
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @param {number} [length] Message length if known beforehand
-             * @returns {gamebase.JackpotUserData.RewardItem} RewardItem
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            RewardItem.decode = function decode(reader, length) {
-                if (!(reader instanceof $Reader))
-                    reader = $Reader.create(reader);
-                var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.JackpotUserData.RewardItem();
-                while (reader.pos < end) {
-                    var tag = reader.uint32();
-                    switch (tag >>> 3) {
-                    case 1:
-                        message.totalReward = reader.int64();
-                        break;
-                    case 2:
-                        message.shareReward = reader.int64();
-                        break;
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Decodes a RewardItem message from the specified reader or buffer, length delimited.
-             * @function decodeDelimited
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-             * @returns {gamebase.JackpotUserData.RewardItem} RewardItem
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            RewardItem.decodeDelimited = function decodeDelimited(reader) {
-                if (!(reader instanceof $Reader))
-                    reader = new $Reader(reader);
-                return this.decode(reader, reader.uint32());
-            };
-
-            /**
-             * Verifies a RewardItem message.
-             * @function verify
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            RewardItem.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.totalReward != null && message.hasOwnProperty("totalReward"))
-                    if (!$util.isInteger(message.totalReward) && !(message.totalReward && $util.isInteger(message.totalReward.low) && $util.isInteger(message.totalReward.high)))
-                        return "totalReward: integer|Long expected";
-                if (message.shareReward != null && message.hasOwnProperty("shareReward"))
-                    if (!$util.isInteger(message.shareReward) && !(message.shareReward && $util.isInteger(message.shareReward.low) && $util.isInteger(message.shareReward.high)))
-                        return "shareReward: integer|Long expected";
-                return null;
-            };
-
-            /**
-             * Creates a RewardItem message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {gamebase.JackpotUserData.RewardItem} RewardItem
-             */
-            RewardItem.fromObject = function fromObject(object) {
-                if (object instanceof $root.gamebase.JackpotUserData.RewardItem)
-                    return object;
-                var message = new $root.gamebase.JackpotUserData.RewardItem();
-                if (object.totalReward != null)
-                    if ($util.Long)
-                        (message.totalReward = $util.Long.fromValue(object.totalReward)).unsigned = false;
-                    else if (typeof object.totalReward === "string")
-                        message.totalReward = parseInt(object.totalReward, 10);
-                    else if (typeof object.totalReward === "number")
-                        message.totalReward = object.totalReward;
-                    else if (typeof object.totalReward === "object")
-                        message.totalReward = new $util.LongBits(object.totalReward.low >>> 0, object.totalReward.high >>> 0).toNumber();
-                if (object.shareReward != null)
-                    if ($util.Long)
-                        (message.shareReward = $util.Long.fromValue(object.shareReward)).unsigned = false;
-                    else if (typeof object.shareReward === "string")
-                        message.shareReward = parseInt(object.shareReward, 10);
-                    else if (typeof object.shareReward === "number")
-                        message.shareReward = object.shareReward;
-                    else if (typeof object.shareReward === "object")
-                        message.shareReward = new $util.LongBits(object.shareReward.low >>> 0, object.shareReward.high >>> 0).toNumber();
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a RewardItem message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @static
-             * @param {gamebase.JackpotUserData.RewardItem} message RewardItem
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            RewardItem.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                var object = {};
-                if (options.defaults) {
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, false);
-                        object.totalReward = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.totalReward = options.longs === String ? "0" : 0;
-                    if ($util.Long) {
-                        var long = new $util.Long(0, 0, false);
-                        object.shareReward = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                    } else
-                        object.shareReward = options.longs === String ? "0" : 0;
-                }
-                if (message.totalReward != null && message.hasOwnProperty("totalReward"))
-                    if (typeof message.totalReward === "number")
-                        object.totalReward = options.longs === String ? String(message.totalReward) : message.totalReward;
-                    else
-                        object.totalReward = options.longs === String ? $util.Long.prototype.toString.call(message.totalReward) : options.longs === Number ? new $util.LongBits(message.totalReward.low >>> 0, message.totalReward.high >>> 0).toNumber() : message.totalReward;
-                if (message.shareReward != null && message.hasOwnProperty("shareReward"))
-                    if (typeof message.shareReward === "number")
-                        object.shareReward = options.longs === String ? String(message.shareReward) : message.shareReward;
-                    else
-                        object.shareReward = options.longs === String ? $util.Long.prototype.toString.call(message.shareReward) : options.longs === Number ? new $util.LongBits(message.shareReward.low >>> 0, message.shareReward.high >>> 0).toNumber() : message.shareReward;
-                return object;
-            };
-
-            /**
-             * Converts this RewardItem to JSON.
-             * @function toJSON
-             * @memberof gamebase.JackpotUserData.RewardItem
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            RewardItem.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return RewardItem;
-        })();
-
         return JackpotUserData;
     })();
 
@@ -10490,7 +10563,6 @@ $root.gamebase = (function() {
          * @memberof gamebase
          * @interface IJackpotGetRewardReq
          * @property {number|null} [rewardId] JackpotGetRewardReq rewardId
-         * @property {boolean|null} [isShared] JackpotGetRewardReq isShared
          */
 
         /**
@@ -10515,14 +10587,6 @@ $root.gamebase = (function() {
          * @instance
          */
         JackpotGetRewardReq.prototype.rewardId = 0;
-
-        /**
-         * JackpotGetRewardReq isShared.
-         * @member {boolean} isShared
-         * @memberof gamebase.JackpotGetRewardReq
-         * @instance
-         */
-        JackpotGetRewardReq.prototype.isShared = false;
 
         /**
          * Creates a new JackpotGetRewardReq instance using the specified properties.
@@ -10550,8 +10614,6 @@ $root.gamebase = (function() {
                 writer = $Writer.create();
             if (message.rewardId != null && Object.hasOwnProperty.call(message, "rewardId"))
                 writer.uint32(/* id 1, wireType 0 =*/8).int32(message.rewardId);
-            if (message.isShared != null && Object.hasOwnProperty.call(message, "isShared"))
-                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.isShared);
             return writer;
         };
 
@@ -10588,9 +10650,6 @@ $root.gamebase = (function() {
                 switch (tag >>> 3) {
                 case 1:
                     message.rewardId = reader.int32();
-                    break;
-                case 2:
-                    message.isShared = reader.bool();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -10630,9 +10689,6 @@ $root.gamebase = (function() {
             if (message.rewardId != null && message.hasOwnProperty("rewardId"))
                 if (!$util.isInteger(message.rewardId))
                     return "rewardId: integer expected";
-            if (message.isShared != null && message.hasOwnProperty("isShared"))
-                if (typeof message.isShared !== "boolean")
-                    return "isShared: boolean expected";
             return null;
         };
 
@@ -10650,8 +10706,6 @@ $root.gamebase = (function() {
             var message = new $root.gamebase.JackpotGetRewardReq();
             if (object.rewardId != null)
                 message.rewardId = object.rewardId | 0;
-            if (object.isShared != null)
-                message.isShared = Boolean(object.isShared);
             return message;
         };
 
@@ -10668,14 +10722,10 @@ $root.gamebase = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.defaults) {
+            if (options.defaults)
                 object.rewardId = 0;
-                object.isShared = false;
-            }
             if (message.rewardId != null && message.hasOwnProperty("rewardId"))
                 object.rewardId = message.rewardId;
-            if (message.isShared != null && message.hasOwnProperty("isShared"))
-                object.isShared = message.isShared;
             return object;
         };
 
@@ -10705,7 +10755,6 @@ $root.gamebase = (function() {
          * @property {number|Long|null} [maxReward] JackpotGetRewardResp maxReward
          * @property {gamebase.IJackpotUserData|null} [jackpotinfo] JackpotGetRewardResp jackpotinfo
          * @property {number|Long|null} [balance] JackpotGetRewardResp balance
-         * @property {boolean|null} [isShared] JackpotGetRewardResp isShared
          */
 
         /**
@@ -10772,14 +10821,6 @@ $root.gamebase = (function() {
         JackpotGetRewardResp.prototype.balance = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
-         * JackpotGetRewardResp isShared.
-         * @member {boolean} isShared
-         * @memberof gamebase.JackpotGetRewardResp
-         * @instance
-         */
-        JackpotGetRewardResp.prototype.isShared = false;
-
-        /**
          * Creates a new JackpotGetRewardResp instance using the specified properties.
          * @function create
          * @memberof gamebase.JackpotGetRewardResp
@@ -10815,8 +10856,6 @@ $root.gamebase = (function() {
                 $root.gamebase.JackpotUserData.encode(message.jackpotinfo, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             if (message.balance != null && Object.hasOwnProperty.call(message, "balance"))
                 writer.uint32(/* id 6, wireType 0 =*/48).int64(message.balance);
-            if (message.isShared != null && Object.hasOwnProperty.call(message, "isShared"))
-                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.isShared);
             return writer;
         };
 
@@ -10868,9 +10907,6 @@ $root.gamebase = (function() {
                     break;
                 case 6:
                     message.balance = reader.int64();
-                    break;
-                case 7:
-                    message.isShared = reader.bool();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -10927,9 +10963,6 @@ $root.gamebase = (function() {
             if (message.balance != null && message.hasOwnProperty("balance"))
                 if (!$util.isInteger(message.balance) && !(message.balance && $util.isInteger(message.balance.low) && $util.isInteger(message.balance.high)))
                     return "balance: integer|Long expected";
-            if (message.isShared != null && message.hasOwnProperty("isShared"))
-                if (typeof message.isShared !== "boolean")
-                    return "isShared: boolean expected";
             return null;
         };
 
@@ -10988,8 +11021,6 @@ $root.gamebase = (function() {
                     message.balance = object.balance;
                 else if (typeof object.balance === "object")
                     message.balance = new $util.LongBits(object.balance.low >>> 0, object.balance.high >>> 0).toNumber();
-            if (object.isShared != null)
-                message.isShared = Boolean(object.isShared);
             return message;
         };
 
@@ -11029,7 +11060,6 @@ $root.gamebase = (function() {
                     object.balance = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.balance = options.longs === String ? "0" : 0;
-                object.isShared = false;
             }
             if (message.result != null && message.hasOwnProperty("result"))
                 object.result = message.result;
@@ -11055,8 +11085,6 @@ $root.gamebase = (function() {
                     object.balance = options.longs === String ? String(message.balance) : message.balance;
                 else
                     object.balance = options.longs === String ? $util.Long.prototype.toString.call(message.balance) : options.longs === Number ? new $util.LongBits(message.balance.low >>> 0, message.balance.high >>> 0).toNumber() : message.balance;
-            if (message.isShared != null && message.hasOwnProperty("isShared"))
-                object.isShared = message.isShared;
             return object;
         };
 
@@ -11549,7 +11577,6 @@ $root.gamebase = (function() {
          * @property {string|null} [strHeader] RewardRecord strHeader
          * @property {number|null} [timeStamp] RewardRecord timeStamp
          * @property {number|Long|null} [reward] RewardRecord reward
-         * @property {number|Long|null} [shareReward] RewardRecord shareReward
          */
 
         /**
@@ -11608,14 +11635,6 @@ $root.gamebase = (function() {
         RewardRecord.prototype.reward = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
-         * RewardRecord shareReward.
-         * @member {number|Long} shareReward
-         * @memberof gamebase.RewardRecord
-         * @instance
-         */
-        RewardRecord.prototype.shareReward = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
          * Creates a new RewardRecord instance using the specified properties.
          * @function create
          * @memberof gamebase.RewardRecord
@@ -11649,8 +11668,6 @@ $root.gamebase = (function() {
                 writer.uint32(/* id 4, wireType 0 =*/32).int32(message.timeStamp);
             if (message.reward != null && Object.hasOwnProperty.call(message, "reward"))
                 writer.uint32(/* id 5, wireType 0 =*/40).int64(message.reward);
-            if (message.shareReward != null && Object.hasOwnProperty.call(message, "shareReward"))
-                writer.uint32(/* id 6, wireType 0 =*/48).int64(message.shareReward);
             return writer;
         };
 
@@ -11699,9 +11716,6 @@ $root.gamebase = (function() {
                     break;
                 case 5:
                     message.reward = reader.int64();
-                    break;
-                case 6:
-                    message.shareReward = reader.int64();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -11753,9 +11767,6 @@ $root.gamebase = (function() {
             if (message.reward != null && message.hasOwnProperty("reward"))
                 if (!$util.isInteger(message.reward) && !(message.reward && $util.isInteger(message.reward.low) && $util.isInteger(message.reward.high)))
                     return "reward: integer|Long expected";
-            if (message.shareReward != null && message.hasOwnProperty("shareReward"))
-                if (!$util.isInteger(message.shareReward) && !(message.shareReward && $util.isInteger(message.shareReward.low) && $util.isInteger(message.shareReward.high)))
-                    return "shareReward: integer|Long expected";
             return null;
         };
 
@@ -11788,15 +11799,6 @@ $root.gamebase = (function() {
                     message.reward = object.reward;
                 else if (typeof object.reward === "object")
                     message.reward = new $util.LongBits(object.reward.low >>> 0, object.reward.high >>> 0).toNumber();
-            if (object.shareReward != null)
-                if ($util.Long)
-                    (message.shareReward = $util.Long.fromValue(object.shareReward)).unsigned = false;
-                else if (typeof object.shareReward === "string")
-                    message.shareReward = parseInt(object.shareReward, 10);
-                else if (typeof object.shareReward === "number")
-                    message.shareReward = object.shareReward;
-                else if (typeof object.shareReward === "object")
-                    message.shareReward = new $util.LongBits(object.shareReward.low >>> 0, object.shareReward.high >>> 0).toNumber();
             return message;
         };
 
@@ -11823,11 +11825,6 @@ $root.gamebase = (function() {
                     object.reward = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.reward = options.longs === String ? "0" : 0;
-                if ($util.Long) {
-                    var long = new $util.Long(0, 0, false);
-                    object.shareReward = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.shareReward = options.longs === String ? "0" : 0;
             }
             if (message.uid != null && message.hasOwnProperty("uid"))
                 object.uid = message.uid;
@@ -11842,11 +11839,6 @@ $root.gamebase = (function() {
                     object.reward = options.longs === String ? String(message.reward) : message.reward;
                 else
                     object.reward = options.longs === String ? $util.Long.prototype.toString.call(message.reward) : options.longs === Number ? new $util.LongBits(message.reward.low >>> 0, message.reward.high >>> 0).toNumber() : message.reward;
-            if (message.shareReward != null && message.hasOwnProperty("shareReward"))
-                if (typeof message.shareReward === "number")
-                    object.shareReward = options.longs === String ? String(message.shareReward) : message.shareReward;
-                else
-                    object.shareReward = options.longs === String ? $util.Long.prototype.toString.call(message.shareReward) : options.longs === Number ? new $util.LongBits(message.shareReward.low >>> 0, message.shareReward.high >>> 0).toNumber() : message.shareReward;
             return object;
         };
 
@@ -12243,7 +12235,7 @@ $root.gamebase = (function() {
          * @property {number|null} [timeStamp] UserJackReward timeStamp
          * @property {number|null} [rewardType] UserJackReward rewardType
          * @property {number|Long|null} [rewardValue] UserJackReward rewardValue
-         * @property {number|Long|null} [shareReward] UserJackReward shareReward
+         * @property {number|null} [rewardId] UserJackReward rewardId
          */
 
         /**
@@ -12302,12 +12294,12 @@ $root.gamebase = (function() {
         UserJackReward.prototype.rewardValue = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
-         * UserJackReward shareReward.
-         * @member {number|Long} shareReward
+         * UserJackReward rewardId.
+         * @member {number} rewardId
          * @memberof gamebase.UserJackReward
          * @instance
          */
-        UserJackReward.prototype.shareReward = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        UserJackReward.prototype.rewardId = 0;
 
         /**
          * Creates a new UserJackReward instance using the specified properties.
@@ -12343,8 +12335,8 @@ $root.gamebase = (function() {
                 writer.uint32(/* id 4, wireType 0 =*/32).int32(message.rewardType);
             if (message.rewardValue != null && Object.hasOwnProperty.call(message, "rewardValue"))
                 writer.uint32(/* id 5, wireType 0 =*/40).int64(message.rewardValue);
-            if (message.shareReward != null && Object.hasOwnProperty.call(message, "shareReward"))
-                writer.uint32(/* id 6, wireType 0 =*/48).int64(message.shareReward);
+            if (message.rewardId != null && Object.hasOwnProperty.call(message, "rewardId"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.rewardId);
             return writer;
         };
 
@@ -12395,7 +12387,7 @@ $root.gamebase = (function() {
                     message.rewardValue = reader.int64();
                     break;
                 case 6:
-                    message.shareReward = reader.int64();
+                    message.rewardId = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -12447,9 +12439,9 @@ $root.gamebase = (function() {
             if (message.rewardValue != null && message.hasOwnProperty("rewardValue"))
                 if (!$util.isInteger(message.rewardValue) && !(message.rewardValue && $util.isInteger(message.rewardValue.low) && $util.isInteger(message.rewardValue.high)))
                     return "rewardValue: integer|Long expected";
-            if (message.shareReward != null && message.hasOwnProperty("shareReward"))
-                if (!$util.isInteger(message.shareReward) && !(message.shareReward && $util.isInteger(message.shareReward.low) && $util.isInteger(message.shareReward.high)))
-                    return "shareReward: integer|Long expected";
+            if (message.rewardId != null && message.hasOwnProperty("rewardId"))
+                if (!$util.isInteger(message.rewardId))
+                    return "rewardId: integer expected";
             return null;
         };
 
@@ -12489,15 +12481,8 @@ $root.gamebase = (function() {
                     message.rewardValue = object.rewardValue;
                 else if (typeof object.rewardValue === "object")
                     message.rewardValue = new $util.LongBits(object.rewardValue.low >>> 0, object.rewardValue.high >>> 0).toNumber();
-            if (object.shareReward != null)
-                if ($util.Long)
-                    (message.shareReward = $util.Long.fromValue(object.shareReward)).unsigned = false;
-                else if (typeof object.shareReward === "string")
-                    message.shareReward = parseInt(object.shareReward, 10);
-                else if (typeof object.shareReward === "number")
-                    message.shareReward = object.shareReward;
-                else if (typeof object.shareReward === "object")
-                    message.shareReward = new $util.LongBits(object.shareReward.low >>> 0, object.shareReward.high >>> 0).toNumber();
+            if (object.rewardId != null)
+                message.rewardId = object.rewardId | 0;
             return message;
         };
 
@@ -12528,11 +12513,7 @@ $root.gamebase = (function() {
                     object.rewardValue = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.rewardValue = options.longs === String ? "0" : 0;
-                if ($util.Long) {
-                    var long = new $util.Long(0, 0, false);
-                    object.shareReward = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.shareReward = options.longs === String ? "0" : 0;
+                object.rewardId = 0;
             }
             if (message.isGet != null && message.hasOwnProperty("isGet"))
                 object.isGet = message.isGet;
@@ -12550,11 +12531,8 @@ $root.gamebase = (function() {
                     object.rewardValue = options.longs === String ? String(message.rewardValue) : message.rewardValue;
                 else
                     object.rewardValue = options.longs === String ? $util.Long.prototype.toString.call(message.rewardValue) : options.longs === Number ? new $util.LongBits(message.rewardValue.low >>> 0, message.rewardValue.high >>> 0).toNumber() : message.rewardValue;
-            if (message.shareReward != null && message.hasOwnProperty("shareReward"))
-                if (typeof message.shareReward === "number")
-                    object.shareReward = options.longs === String ? String(message.shareReward) : message.shareReward;
-                else
-                    object.shareReward = options.longs === String ? $util.Long.prototype.toString.call(message.shareReward) : options.longs === Number ? new $util.LongBits(message.shareReward.low >>> 0, message.shareReward.high >>> 0).toNumber() : message.shareReward;
+            if (message.rewardId != null && message.hasOwnProperty("rewardId"))
+                object.rewardId = message.rewardId;
             return object;
         };
 
@@ -13549,7 +13527,6 @@ $root.gamebase = (function() {
          * @property {Array.<gamebase.IJackRward>|null} [rewardList] JackpotGetRewardDetailResp rewardList
          * @property {Array.<number|Long>|null} [betList] JackpotGetRewardDetailResp betList
          * @property {Array.<gamebase.IJackCollect>|null} [cardList] JackpotGetRewardDetailResp cardList
-         * @property {number|null} [share_ratio] JackpotGetRewardDetailResp share_ratio
          */
 
         /**
@@ -13628,14 +13605,6 @@ $root.gamebase = (function() {
         JackpotGetRewardDetailResp.prototype.cardList = $util.emptyArray;
 
         /**
-         * JackpotGetRewardDetailResp share_ratio.
-         * @member {number} share_ratio
-         * @memberof gamebase.JackpotGetRewardDetailResp
-         * @instance
-         */
-        JackpotGetRewardDetailResp.prototype.share_ratio = 0;
-
-        /**
          * Creates a new JackpotGetRewardDetailResp instance using the specified properties.
          * @function create
          * @memberof gamebase.JackpotGetRewardDetailResp
@@ -13683,8 +13652,6 @@ $root.gamebase = (function() {
             if (message.cardList != null && message.cardList.length)
                 for (var i = 0; i < message.cardList.length; ++i)
                     $root.gamebase.JackCollect.encode(message.cardList[i], writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-            if (message.share_ratio != null && Object.hasOwnProperty.call(message, "share_ratio"))
-                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.share_ratio);
             return writer;
         };
 
@@ -13757,9 +13724,6 @@ $root.gamebase = (function() {
                     if (!(message.cardList && message.cardList.length))
                         message.cardList = [];
                     message.cardList.push($root.gamebase.JackCollect.decode(reader, reader.uint32()));
-                    break;
-                case 8:
-                    message.share_ratio = reader.int32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -13837,9 +13801,6 @@ $root.gamebase = (function() {
                         return "cardList." + error;
                 }
             }
-            if (message.share_ratio != null && message.hasOwnProperty("share_ratio"))
-                if (!$util.isInteger(message.share_ratio))
-                    return "share_ratio: integer expected";
             return null;
         };
 
@@ -13909,8 +13870,6 @@ $root.gamebase = (function() {
                     message.cardList[i] = $root.gamebase.JackCollect.fromObject(object.cardList[i]);
                 }
             }
-            if (object.share_ratio != null)
-                message.share_ratio = object.share_ratio | 0;
             return message;
         };
 
@@ -13937,7 +13896,6 @@ $root.gamebase = (function() {
                 object.win_count = 0;
                 object.total_count = 0;
                 object.continue_time = 0;
-                object.share_ratio = 0;
             }
             if (message.win_count != null && message.hasOwnProperty("win_count"))
                 object.win_count = message.win_count;
@@ -13971,8 +13929,6 @@ $root.gamebase = (function() {
                 for (var j = 0; j < message.cardList.length; ++j)
                     object.cardList[j] = $root.gamebase.JackCollect.toObject(message.cardList[j], options);
             }
-            if (message.share_ratio != null && message.hasOwnProperty("share_ratio"))
-                object.share_ratio = message.share_ratio;
             return object;
         };
 
@@ -15772,6 +15728,221 @@ $root.gamebase = (function() {
         return JackpotPoolChangePush;
     })();
 
+    gamebase.JackpotSwitchPush = (function() {
+
+        /**
+         * Properties of a JackpotSwitchPush.
+         * @memberof gamebase
+         * @interface IJackpotSwitchPush
+         * @property {number|null} [open] JackpotSwitchPush open
+         * @property {gamebase.IJackpotUserData|null} [jackpotinfo] JackpotSwitchPush jackpotinfo
+         */
+
+        /**
+         * Constructs a new JackpotSwitchPush.
+         * @memberof gamebase
+         * @classdesc Represents a JackpotSwitchPush.
+         * @implements IJackpotSwitchPush
+         * @constructor
+         * @param {gamebase.IJackpotSwitchPush=} [properties] Properties to set
+         */
+        function JackpotSwitchPush(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * JackpotSwitchPush open.
+         * @member {number} open
+         * @memberof gamebase.JackpotSwitchPush
+         * @instance
+         */
+        JackpotSwitchPush.prototype.open = 0;
+
+        /**
+         * JackpotSwitchPush jackpotinfo.
+         * @member {gamebase.IJackpotUserData|null|undefined} jackpotinfo
+         * @memberof gamebase.JackpotSwitchPush
+         * @instance
+         */
+        JackpotSwitchPush.prototype.jackpotinfo = null;
+
+        /**
+         * Creates a new JackpotSwitchPush instance using the specified properties.
+         * @function create
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {gamebase.IJackpotSwitchPush=} [properties] Properties to set
+         * @returns {gamebase.JackpotSwitchPush} JackpotSwitchPush instance
+         */
+        JackpotSwitchPush.create = function create(properties) {
+            return new JackpotSwitchPush(properties);
+        };
+
+        /**
+         * Encodes the specified JackpotSwitchPush message. Does not implicitly {@link gamebase.JackpotSwitchPush.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {gamebase.IJackpotSwitchPush} message JackpotSwitchPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackpotSwitchPush.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.open != null && Object.hasOwnProperty.call(message, "open"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.open);
+            if (message.jackpotinfo != null && Object.hasOwnProperty.call(message, "jackpotinfo"))
+                $root.gamebase.JackpotUserData.encode(message.jackpotinfo, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified JackpotSwitchPush message, length delimited. Does not implicitly {@link gamebase.JackpotSwitchPush.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {gamebase.IJackpotSwitchPush} message JackpotSwitchPush message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackpotSwitchPush.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a JackpotSwitchPush message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.JackpotSwitchPush} JackpotSwitchPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackpotSwitchPush.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.JackpotSwitchPush();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.open = reader.int32();
+                    break;
+                case 2:
+                    message.jackpotinfo = $root.gamebase.JackpotUserData.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a JackpotSwitchPush message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.JackpotSwitchPush} JackpotSwitchPush
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackpotSwitchPush.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a JackpotSwitchPush message.
+         * @function verify
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        JackpotSwitchPush.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.open != null && message.hasOwnProperty("open"))
+                if (!$util.isInteger(message.open))
+                    return "open: integer expected";
+            if (message.jackpotinfo != null && message.hasOwnProperty("jackpotinfo")) {
+                var error = $root.gamebase.JackpotUserData.verify(message.jackpotinfo);
+                if (error)
+                    return "jackpotinfo." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a JackpotSwitchPush message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.JackpotSwitchPush} JackpotSwitchPush
+         */
+        JackpotSwitchPush.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.JackpotSwitchPush)
+                return object;
+            var message = new $root.gamebase.JackpotSwitchPush();
+            if (object.open != null)
+                message.open = object.open | 0;
+            if (object.jackpotinfo != null) {
+                if (typeof object.jackpotinfo !== "object")
+                    throw TypeError(".gamebase.JackpotSwitchPush.jackpotinfo: object expected");
+                message.jackpotinfo = $root.gamebase.JackpotUserData.fromObject(object.jackpotinfo);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a JackpotSwitchPush message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.JackpotSwitchPush
+         * @static
+         * @param {gamebase.JackpotSwitchPush} message JackpotSwitchPush
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        JackpotSwitchPush.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.open = 0;
+                object.jackpotinfo = null;
+            }
+            if (message.open != null && message.hasOwnProperty("open"))
+                object.open = message.open;
+            if (message.jackpotinfo != null && message.hasOwnProperty("jackpotinfo"))
+                object.jackpotinfo = $root.gamebase.JackpotUserData.toObject(message.jackpotinfo, options);
+            return object;
+        };
+
+        /**
+         * Converts this JackpotSwitchPush to JSON.
+         * @function toJSON
+         * @memberof gamebase.JackpotSwitchPush
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        JackpotSwitchPush.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return JackpotSwitchPush;
+    })();
+
     gamebase.GameNotificationPush = (function() {
 
         /**
@@ -16433,6 +16604,7 @@ $root.gamebase = (function() {
          * @property {number|Long|null} [reward_pool] UserJackpotRecordDetail reward_pool
          * @property {number|null} [reward_type] UserJackpotRecordDetail reward_type
          * @property {number|Long|null} [reward_value] UserJackpotRecordDetail reward_value
+         * @property {number|Long|null} [llround_no] UserJackpotRecordDetail llround_no
          */
 
         /**
@@ -16507,6 +16679,14 @@ $root.gamebase = (function() {
         UserJackpotRecordDetail.prototype.reward_value = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
+         * UserJackpotRecordDetail llround_no.
+         * @member {number|Long} llround_no
+         * @memberof gamebase.UserJackpotRecordDetail
+         * @instance
+         */
+        UserJackpotRecordDetail.prototype.llround_no = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
          * Creates a new UserJackpotRecordDetail instance using the specified properties.
          * @function create
          * @memberof gamebase.UserJackpotRecordDetail
@@ -16544,6 +16724,8 @@ $root.gamebase = (function() {
                 writer.uint32(/* id 6, wireType 0 =*/48).int32(message.reward_type);
             if (message.reward_value != null && Object.hasOwnProperty.call(message, "reward_value"))
                 writer.uint32(/* id 7, wireType 0 =*/56).int64(message.reward_value);
+            if (message.llround_no != null && Object.hasOwnProperty.call(message, "llround_no"))
+                writer.uint32(/* id 8, wireType 0 =*/64).int64(message.llround_no);
             return writer;
         };
 
@@ -16598,6 +16780,9 @@ $root.gamebase = (function() {
                     break;
                 case 7:
                     message.reward_value = reader.int64();
+                    break;
+                case 8:
+                    message.llround_no = reader.int64();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -16655,6 +16840,9 @@ $root.gamebase = (function() {
             if (message.reward_value != null && message.hasOwnProperty("reward_value"))
                 if (!$util.isInteger(message.reward_value) && !(message.reward_value && $util.isInteger(message.reward_value.low) && $util.isInteger(message.reward_value.high)))
                     return "reward_value: integer|Long expected";
+            if (message.llround_no != null && message.hasOwnProperty("llround_no"))
+                if (!$util.isInteger(message.llround_no) && !(message.llround_no && $util.isInteger(message.llround_no.low) && $util.isInteger(message.llround_no.high)))
+                    return "llround_no: integer|Long expected";
             return null;
         };
 
@@ -16705,6 +16893,15 @@ $root.gamebase = (function() {
                     message.reward_value = object.reward_value;
                 else if (typeof object.reward_value === "object")
                     message.reward_value = new $util.LongBits(object.reward_value.low >>> 0, object.reward_value.high >>> 0).toNumber();
+            if (object.llround_no != null)
+                if ($util.Long)
+                    (message.llround_no = $util.Long.fromValue(object.llround_no)).unsigned = false;
+                else if (typeof object.llround_no === "string")
+                    message.llround_no = parseInt(object.llround_no, 10);
+                else if (typeof object.llround_no === "number")
+                    message.llround_no = object.llround_no;
+                else if (typeof object.llround_no === "object")
+                    message.llround_no = new $util.LongBits(object.llround_no.low >>> 0, object.llround_no.high >>> 0).toNumber();
             return message;
         };
 
@@ -16741,6 +16938,11 @@ $root.gamebase = (function() {
                     object.reward_value = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                 } else
                     object.reward_value = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.llround_no = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.llround_no = options.longs === String ? "0" : 0;
             }
             if (message.uid != null && message.hasOwnProperty("uid"))
                 object.uid = message.uid;
@@ -16765,6 +16967,11 @@ $root.gamebase = (function() {
                     object.reward_value = options.longs === String ? String(message.reward_value) : message.reward_value;
                 else
                     object.reward_value = options.longs === String ? $util.Long.prototype.toString.call(message.reward_value) : options.longs === Number ? new $util.LongBits(message.reward_value.low >>> 0, message.reward_value.high >>> 0).toNumber() : message.reward_value;
+            if (message.llround_no != null && message.hasOwnProperty("llround_no"))
+                if (typeof message.llround_no === "number")
+                    object.llround_no = options.longs === String ? String(message.llround_no) : message.llround_no;
+                else
+                    object.llround_no = options.longs === String ? $util.Long.prototype.toString.call(message.llround_no) : options.longs === Number ? new $util.LongBits(message.llround_no.low >>> 0, message.llround_no.high >>> 0).toNumber() : message.llround_no;
             return object;
         };
 
@@ -16780,6 +16987,2559 @@ $root.gamebase = (function() {
         };
 
         return UserJackpotRecordDetail;
+    })();
+
+    gamebase.ReqGetGameInfoReq = (function() {
+
+        /**
+         * Properties of a ReqGetGameInfoReq.
+         * @memberof gamebase
+         * @interface IReqGetGameInfoReq
+         */
+
+        /**
+         * Constructs a new ReqGetGameInfoReq.
+         * @memberof gamebase
+         * @classdesc Represents a ReqGetGameInfoReq.
+         * @implements IReqGetGameInfoReq
+         * @constructor
+         * @param {gamebase.IReqGetGameInfoReq=} [properties] Properties to set
+         */
+        function ReqGetGameInfoReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a new ReqGetGameInfoReq instance using the specified properties.
+         * @function create
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {gamebase.IReqGetGameInfoReq=} [properties] Properties to set
+         * @returns {gamebase.ReqGetGameInfoReq} ReqGetGameInfoReq instance
+         */
+        ReqGetGameInfoReq.create = function create(properties) {
+            return new ReqGetGameInfoReq(properties);
+        };
+
+        /**
+         * Encodes the specified ReqGetGameInfoReq message. Does not implicitly {@link gamebase.ReqGetGameInfoReq.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {gamebase.IReqGetGameInfoReq} message ReqGetGameInfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ReqGetGameInfoReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ReqGetGameInfoReq message, length delimited. Does not implicitly {@link gamebase.ReqGetGameInfoReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {gamebase.IReqGetGameInfoReq} message ReqGetGameInfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ReqGetGameInfoReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ReqGetGameInfoReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.ReqGetGameInfoReq} ReqGetGameInfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ReqGetGameInfoReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.ReqGetGameInfoReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ReqGetGameInfoReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.ReqGetGameInfoReq} ReqGetGameInfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ReqGetGameInfoReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ReqGetGameInfoReq message.
+         * @function verify
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ReqGetGameInfoReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+
+        /**
+         * Creates a ReqGetGameInfoReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.ReqGetGameInfoReq} ReqGetGameInfoReq
+         */
+        ReqGetGameInfoReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.ReqGetGameInfoReq)
+                return object;
+            return new $root.gamebase.ReqGetGameInfoReq();
+        };
+
+        /**
+         * Creates a plain object from a ReqGetGameInfoReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @static
+         * @param {gamebase.ReqGetGameInfoReq} message ReqGetGameInfoReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ReqGetGameInfoReq.toObject = function toObject() {
+            return {};
+        };
+
+        /**
+         * Converts this ReqGetGameInfoReq to JSON.
+         * @function toJSON
+         * @memberof gamebase.ReqGetGameInfoReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ReqGetGameInfoReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return ReqGetGameInfoReq;
+    })();
+
+    gamebase.BetRecordDetail = (function() {
+
+        /**
+         * Properties of a BetRecordDetail.
+         * @memberof gamebase
+         * @interface IBetRecordDetail
+         * @property {number|null} [index] BetRecordDetail index
+         * @property {number|null} [times] BetRecordDetail times
+         * @property {number|null} [roundid] BetRecordDetail roundid
+         * @property {number|Long|null} [bet] BetRecordDetail bet
+         * @property {number|Long|null} [win] BetRecordDetail win
+         * @property {number|Long|null} [timestamp] BetRecordDetail timestamp
+         */
+
+        /**
+         * Constructs a new BetRecordDetail.
+         * @memberof gamebase
+         * @classdesc Represents a BetRecordDetail.
+         * @implements IBetRecordDetail
+         * @constructor
+         * @param {gamebase.IBetRecordDetail=} [properties] Properties to set
+         */
+        function BetRecordDetail(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * BetRecordDetail index.
+         * @member {number} index
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         */
+        BetRecordDetail.prototype.index = 0;
+
+        /**
+         * BetRecordDetail times.
+         * @member {number} times
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         */
+        BetRecordDetail.prototype.times = 0;
+
+        /**
+         * BetRecordDetail roundid.
+         * @member {number} roundid
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         */
+        BetRecordDetail.prototype.roundid = 0;
+
+        /**
+         * BetRecordDetail bet.
+         * @member {number|Long} bet
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         */
+        BetRecordDetail.prototype.bet = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * BetRecordDetail win.
+         * @member {number|Long} win
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         */
+        BetRecordDetail.prototype.win = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * BetRecordDetail timestamp.
+         * @member {number|Long} timestamp
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         */
+        BetRecordDetail.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new BetRecordDetail instance using the specified properties.
+         * @function create
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {gamebase.IBetRecordDetail=} [properties] Properties to set
+         * @returns {gamebase.BetRecordDetail} BetRecordDetail instance
+         */
+        BetRecordDetail.create = function create(properties) {
+            return new BetRecordDetail(properties);
+        };
+
+        /**
+         * Encodes the specified BetRecordDetail message. Does not implicitly {@link gamebase.BetRecordDetail.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {gamebase.IBetRecordDetail} message BetRecordDetail message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        BetRecordDetail.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.index != null && Object.hasOwnProperty.call(message, "index"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.index);
+            if (message.times != null && Object.hasOwnProperty.call(message, "times"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.times);
+            if (message.roundid != null && Object.hasOwnProperty.call(message, "roundid"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.roundid);
+            if (message.bet != null && Object.hasOwnProperty.call(message, "bet"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int64(message.bet);
+            if (message.win != null && Object.hasOwnProperty.call(message, "win"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int64(message.win);
+            if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
+                writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.timestamp);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified BetRecordDetail message, length delimited. Does not implicitly {@link gamebase.BetRecordDetail.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {gamebase.IBetRecordDetail} message BetRecordDetail message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        BetRecordDetail.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a BetRecordDetail message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.BetRecordDetail} BetRecordDetail
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        BetRecordDetail.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.BetRecordDetail();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.index = reader.int32();
+                    break;
+                case 2:
+                    message.times = reader.int32();
+                    break;
+                case 3:
+                    message.roundid = reader.int32();
+                    break;
+                case 4:
+                    message.bet = reader.int64();
+                    break;
+                case 5:
+                    message.win = reader.int64();
+                    break;
+                case 6:
+                    message.timestamp = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a BetRecordDetail message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.BetRecordDetail} BetRecordDetail
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        BetRecordDetail.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a BetRecordDetail message.
+         * @function verify
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        BetRecordDetail.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.index != null && message.hasOwnProperty("index"))
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+            if (message.times != null && message.hasOwnProperty("times"))
+                if (!$util.isInteger(message.times))
+                    return "times: integer expected";
+            if (message.roundid != null && message.hasOwnProperty("roundid"))
+                if (!$util.isInteger(message.roundid))
+                    return "roundid: integer expected";
+            if (message.bet != null && message.hasOwnProperty("bet"))
+                if (!$util.isInteger(message.bet) && !(message.bet && $util.isInteger(message.bet.low) && $util.isInteger(message.bet.high)))
+                    return "bet: integer|Long expected";
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (!$util.isInteger(message.win) && !(message.win && $util.isInteger(message.win.low) && $util.isInteger(message.win.high)))
+                    return "win: integer|Long expected";
+            if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                if (!$util.isInteger(message.timestamp) && !(message.timestamp && $util.isInteger(message.timestamp.low) && $util.isInteger(message.timestamp.high)))
+                    return "timestamp: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a BetRecordDetail message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.BetRecordDetail} BetRecordDetail
+         */
+        BetRecordDetail.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.BetRecordDetail)
+                return object;
+            var message = new $root.gamebase.BetRecordDetail();
+            if (object.index != null)
+                message.index = object.index | 0;
+            if (object.times != null)
+                message.times = object.times | 0;
+            if (object.roundid != null)
+                message.roundid = object.roundid | 0;
+            if (object.bet != null)
+                if ($util.Long)
+                    (message.bet = $util.Long.fromValue(object.bet)).unsigned = false;
+                else if (typeof object.bet === "string")
+                    message.bet = parseInt(object.bet, 10);
+                else if (typeof object.bet === "number")
+                    message.bet = object.bet;
+                else if (typeof object.bet === "object")
+                    message.bet = new $util.LongBits(object.bet.low >>> 0, object.bet.high >>> 0).toNumber();
+            if (object.win != null)
+                if ($util.Long)
+                    (message.win = $util.Long.fromValue(object.win)).unsigned = false;
+                else if (typeof object.win === "string")
+                    message.win = parseInt(object.win, 10);
+                else if (typeof object.win === "number")
+                    message.win = object.win;
+                else if (typeof object.win === "object")
+                    message.win = new $util.LongBits(object.win.low >>> 0, object.win.high >>> 0).toNumber();
+            if (object.timestamp != null)
+                if ($util.Long)
+                    (message.timestamp = $util.Long.fromValue(object.timestamp)).unsigned = true;
+                else if (typeof object.timestamp === "string")
+                    message.timestamp = parseInt(object.timestamp, 10);
+                else if (typeof object.timestamp === "number")
+                    message.timestamp = object.timestamp;
+                else if (typeof object.timestamp === "object")
+                    message.timestamp = new $util.LongBits(object.timestamp.low >>> 0, object.timestamp.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a BetRecordDetail message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.BetRecordDetail
+         * @static
+         * @param {gamebase.BetRecordDetail} message BetRecordDetail
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        BetRecordDetail.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.index = 0;
+                object.times = 0;
+                object.roundid = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.bet = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.bet = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.win = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.win = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.timestamp = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.timestamp = options.longs === String ? "0" : 0;
+            }
+            if (message.index != null && message.hasOwnProperty("index"))
+                object.index = message.index;
+            if (message.times != null && message.hasOwnProperty("times"))
+                object.times = message.times;
+            if (message.roundid != null && message.hasOwnProperty("roundid"))
+                object.roundid = message.roundid;
+            if (message.bet != null && message.hasOwnProperty("bet"))
+                if (typeof message.bet === "number")
+                    object.bet = options.longs === String ? String(message.bet) : message.bet;
+                else
+                    object.bet = options.longs === String ? $util.Long.prototype.toString.call(message.bet) : options.longs === Number ? new $util.LongBits(message.bet.low >>> 0, message.bet.high >>> 0).toNumber() : message.bet;
+            if (message.win != null && message.hasOwnProperty("win"))
+                if (typeof message.win === "number")
+                    object.win = options.longs === String ? String(message.win) : message.win;
+                else
+                    object.win = options.longs === String ? $util.Long.prototype.toString.call(message.win) : options.longs === Number ? new $util.LongBits(message.win.low >>> 0, message.win.high >>> 0).toNumber() : message.win;
+            if (message.timestamp != null && message.hasOwnProperty("timestamp"))
+                if (typeof message.timestamp === "number")
+                    object.timestamp = options.longs === String ? String(message.timestamp) : message.timestamp;
+                else
+                    object.timestamp = options.longs === String ? $util.Long.prototype.toString.call(message.timestamp) : options.longs === Number ? new $util.LongBits(message.timestamp.low >>> 0, message.timestamp.high >>> 0).toNumber(true) : message.timestamp;
+            return object;
+        };
+
+        /**
+         * Converts this BetRecordDetail to JSON.
+         * @function toJSON
+         * @memberof gamebase.BetRecordDetail
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        BetRecordDetail.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return BetRecordDetail;
+    })();
+
+    gamebase.ModifyUserInfoReq = (function() {
+
+        /**
+         * Properties of a ModifyUserInfoReq.
+         * @memberof gamebase
+         * @interface IModifyUserInfoReq
+         * @property {number|null} [gender] ModifyUserInfoReq gender
+         * @property {string|null} [header] ModifyUserInfoReq header
+         * @property {string|null} [nickname] ModifyUserInfoReq nickname
+         */
+
+        /**
+         * Constructs a new ModifyUserInfoReq.
+         * @memberof gamebase
+         * @classdesc Represents a ModifyUserInfoReq.
+         * @implements IModifyUserInfoReq
+         * @constructor
+         * @param {gamebase.IModifyUserInfoReq=} [properties] Properties to set
+         */
+        function ModifyUserInfoReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ModifyUserInfoReq gender.
+         * @member {number} gender
+         * @memberof gamebase.ModifyUserInfoReq
+         * @instance
+         */
+        ModifyUserInfoReq.prototype.gender = 0;
+
+        /**
+         * ModifyUserInfoReq header.
+         * @member {string} header
+         * @memberof gamebase.ModifyUserInfoReq
+         * @instance
+         */
+        ModifyUserInfoReq.prototype.header = "";
+
+        /**
+         * ModifyUserInfoReq nickname.
+         * @member {string} nickname
+         * @memberof gamebase.ModifyUserInfoReq
+         * @instance
+         */
+        ModifyUserInfoReq.prototype.nickname = "";
+
+        /**
+         * Creates a new ModifyUserInfoReq instance using the specified properties.
+         * @function create
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {gamebase.IModifyUserInfoReq=} [properties] Properties to set
+         * @returns {gamebase.ModifyUserInfoReq} ModifyUserInfoReq instance
+         */
+        ModifyUserInfoReq.create = function create(properties) {
+            return new ModifyUserInfoReq(properties);
+        };
+
+        /**
+         * Encodes the specified ModifyUserInfoReq message. Does not implicitly {@link gamebase.ModifyUserInfoReq.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {gamebase.IModifyUserInfoReq} message ModifyUserInfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ModifyUserInfoReq.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gender != null && Object.hasOwnProperty.call(message, "gender"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.gender);
+            if (message.header != null && Object.hasOwnProperty.call(message, "header"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.header);
+            if (message.nickname != null && Object.hasOwnProperty.call(message, "nickname"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.nickname);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ModifyUserInfoReq message, length delimited. Does not implicitly {@link gamebase.ModifyUserInfoReq.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {gamebase.IModifyUserInfoReq} message ModifyUserInfoReq message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ModifyUserInfoReq.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ModifyUserInfoReq message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.ModifyUserInfoReq} ModifyUserInfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ModifyUserInfoReq.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.ModifyUserInfoReq();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.gender = reader.int32();
+                    break;
+                case 2:
+                    message.header = reader.string();
+                    break;
+                case 3:
+                    message.nickname = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ModifyUserInfoReq message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.ModifyUserInfoReq} ModifyUserInfoReq
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ModifyUserInfoReq.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ModifyUserInfoReq message.
+         * @function verify
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ModifyUserInfoReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                if (!$util.isInteger(message.gender))
+                    return "gender: integer expected";
+            if (message.header != null && message.hasOwnProperty("header"))
+                if (!$util.isString(message.header))
+                    return "header: string expected";
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                if (!$util.isString(message.nickname))
+                    return "nickname: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a ModifyUserInfoReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.ModifyUserInfoReq} ModifyUserInfoReq
+         */
+        ModifyUserInfoReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.ModifyUserInfoReq)
+                return object;
+            var message = new $root.gamebase.ModifyUserInfoReq();
+            if (object.gender != null)
+                message.gender = object.gender | 0;
+            if (object.header != null)
+                message.header = String(object.header);
+            if (object.nickname != null)
+                message.nickname = String(object.nickname);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ModifyUserInfoReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.ModifyUserInfoReq
+         * @static
+         * @param {gamebase.ModifyUserInfoReq} message ModifyUserInfoReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ModifyUserInfoReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.gender = 0;
+                object.header = "";
+                object.nickname = "";
+            }
+            if (message.gender != null && message.hasOwnProperty("gender"))
+                object.gender = message.gender;
+            if (message.header != null && message.hasOwnProperty("header"))
+                object.header = message.header;
+            if (message.nickname != null && message.hasOwnProperty("nickname"))
+                object.nickname = message.nickname;
+            return object;
+        };
+
+        /**
+         * Converts this ModifyUserInfoReq to JSON.
+         * @function toJSON
+         * @memberof gamebase.ModifyUserInfoReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ModifyUserInfoReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return ModifyUserInfoReq;
+    })();
+
+    gamebase.ModifyUserInfoResp = (function() {
+
+        /**
+         * Properties of a ModifyUserInfoResp.
+         * @memberof gamebase
+         * @interface IModifyUserInfoResp
+         * @property {number|null} [result] ModifyUserInfoResp result
+         */
+
+        /**
+         * Constructs a new ModifyUserInfoResp.
+         * @memberof gamebase
+         * @classdesc Represents a ModifyUserInfoResp.
+         * @implements IModifyUserInfoResp
+         * @constructor
+         * @param {gamebase.IModifyUserInfoResp=} [properties] Properties to set
+         */
+        function ModifyUserInfoResp(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ModifyUserInfoResp result.
+         * @member {number} result
+         * @memberof gamebase.ModifyUserInfoResp
+         * @instance
+         */
+        ModifyUserInfoResp.prototype.result = 0;
+
+        /**
+         * Creates a new ModifyUserInfoResp instance using the specified properties.
+         * @function create
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {gamebase.IModifyUserInfoResp=} [properties] Properties to set
+         * @returns {gamebase.ModifyUserInfoResp} ModifyUserInfoResp instance
+         */
+        ModifyUserInfoResp.create = function create(properties) {
+            return new ModifyUserInfoResp(properties);
+        };
+
+        /**
+         * Encodes the specified ModifyUserInfoResp message. Does not implicitly {@link gamebase.ModifyUserInfoResp.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {gamebase.IModifyUserInfoResp} message ModifyUserInfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ModifyUserInfoResp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.result != null && Object.hasOwnProperty.call(message, "result"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.result);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ModifyUserInfoResp message, length delimited. Does not implicitly {@link gamebase.ModifyUserInfoResp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {gamebase.IModifyUserInfoResp} message ModifyUserInfoResp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ModifyUserInfoResp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ModifyUserInfoResp message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.ModifyUserInfoResp} ModifyUserInfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ModifyUserInfoResp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.ModifyUserInfoResp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.result = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ModifyUserInfoResp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.ModifyUserInfoResp} ModifyUserInfoResp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ModifyUserInfoResp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ModifyUserInfoResp message.
+         * @function verify
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ModifyUserInfoResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.result != null && message.hasOwnProperty("result"))
+                if (!$util.isInteger(message.result))
+                    return "result: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a ModifyUserInfoResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.ModifyUserInfoResp} ModifyUserInfoResp
+         */
+        ModifyUserInfoResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.ModifyUserInfoResp)
+                return object;
+            var message = new $root.gamebase.ModifyUserInfoResp();
+            if (object.result != null)
+                message.result = object.result | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ModifyUserInfoResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.ModifyUserInfoResp
+         * @static
+         * @param {gamebase.ModifyUserInfoResp} message ModifyUserInfoResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ModifyUserInfoResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.result = 0;
+            if (message.result != null && message.hasOwnProperty("result"))
+                object.result = message.result;
+            return object;
+        };
+
+        /**
+         * Converts this ModifyUserInfoResp to JSON.
+         * @function toJSON
+         * @memberof gamebase.ModifyUserInfoResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ModifyUserInfoResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return ModifyUserInfoResp;
+    })();
+
+    gamebase.JackoptConfig = (function() {
+
+        /**
+         * Properties of a JackoptConfig.
+         * @memberof gamebase
+         * @interface IJackoptConfig
+         * @property {Array.<gamebase.ISharePostItem>|null} [list] JackoptConfig list
+         */
+
+        /**
+         * Constructs a new JackoptConfig.
+         * @memberof gamebase
+         * @classdesc Represents a JackoptConfig.
+         * @implements IJackoptConfig
+         * @constructor
+         * @param {gamebase.IJackoptConfig=} [properties] Properties to set
+         */
+        function JackoptConfig(properties) {
+            this.list = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * JackoptConfig list.
+         * @member {Array.<gamebase.ISharePostItem>} list
+         * @memberof gamebase.JackoptConfig
+         * @instance
+         */
+        JackoptConfig.prototype.list = $util.emptyArray;
+
+        /**
+         * Creates a new JackoptConfig instance using the specified properties.
+         * @function create
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {gamebase.IJackoptConfig=} [properties] Properties to set
+         * @returns {gamebase.JackoptConfig} JackoptConfig instance
+         */
+        JackoptConfig.create = function create(properties) {
+            return new JackoptConfig(properties);
+        };
+
+        /**
+         * Encodes the specified JackoptConfig message. Does not implicitly {@link gamebase.JackoptConfig.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {gamebase.IJackoptConfig} message JackoptConfig message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackoptConfig.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.list != null && message.list.length)
+                for (var i = 0; i < message.list.length; ++i)
+                    $root.gamebase.SharePostItem.encode(message.list[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified JackoptConfig message, length delimited. Does not implicitly {@link gamebase.JackoptConfig.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {gamebase.IJackoptConfig} message JackoptConfig message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackoptConfig.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a JackoptConfig message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.JackoptConfig} JackoptConfig
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackoptConfig.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.JackoptConfig();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.list && message.list.length))
+                        message.list = [];
+                    message.list.push($root.gamebase.SharePostItem.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a JackoptConfig message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.JackoptConfig} JackoptConfig
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackoptConfig.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a JackoptConfig message.
+         * @function verify
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        JackoptConfig.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.list != null && message.hasOwnProperty("list")) {
+                if (!Array.isArray(message.list))
+                    return "list: array expected";
+                for (var i = 0; i < message.list.length; ++i) {
+                    var error = $root.gamebase.SharePostItem.verify(message.list[i]);
+                    if (error)
+                        return "list." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a JackoptConfig message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.JackoptConfig} JackoptConfig
+         */
+        JackoptConfig.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.JackoptConfig)
+                return object;
+            var message = new $root.gamebase.JackoptConfig();
+            if (object.list) {
+                if (!Array.isArray(object.list))
+                    throw TypeError(".gamebase.JackoptConfig.list: array expected");
+                message.list = [];
+                for (var i = 0; i < object.list.length; ++i) {
+                    if (typeof object.list[i] !== "object")
+                        throw TypeError(".gamebase.JackoptConfig.list: object expected");
+                    message.list[i] = $root.gamebase.SharePostItem.fromObject(object.list[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a JackoptConfig message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.JackoptConfig
+         * @static
+         * @param {gamebase.JackoptConfig} message JackoptConfig
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        JackoptConfig.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.list = [];
+            if (message.list && message.list.length) {
+                object.list = [];
+                for (var j = 0; j < message.list.length; ++j)
+                    object.list[j] = $root.gamebase.SharePostItem.toObject(message.list[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this JackoptConfig to JSON.
+         * @function toJSON
+         * @memberof gamebase.JackoptConfig
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        JackoptConfig.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return JackoptConfig;
+    })();
+
+    gamebase.SharePostItem = (function() {
+
+        /**
+         * Properties of a SharePostItem.
+         * @memberof gamebase
+         * @interface ISharePostItem
+         * @property {number|null} [share_type] SharePostItem share_type
+         * @property {string|null} [title] SharePostItem title
+         * @property {Array.<gamebase.IPoster>|null} [poster] SharePostItem poster
+         * @property {string|null} [share_url] SharePostItem share_url
+         * @property {string|null} [telegram] SharePostItem telegram
+         * @property {string|null} [whatsapp] SharePostItem whatsapp
+         */
+
+        /**
+         * Constructs a new SharePostItem.
+         * @memberof gamebase
+         * @classdesc Represents a SharePostItem.
+         * @implements ISharePostItem
+         * @constructor
+         * @param {gamebase.ISharePostItem=} [properties] Properties to set
+         */
+        function SharePostItem(properties) {
+            this.poster = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * SharePostItem share_type.
+         * @member {number} share_type
+         * @memberof gamebase.SharePostItem
+         * @instance
+         */
+        SharePostItem.prototype.share_type = 0;
+
+        /**
+         * SharePostItem title.
+         * @member {string} title
+         * @memberof gamebase.SharePostItem
+         * @instance
+         */
+        SharePostItem.prototype.title = "";
+
+        /**
+         * SharePostItem poster.
+         * @member {Array.<gamebase.IPoster>} poster
+         * @memberof gamebase.SharePostItem
+         * @instance
+         */
+        SharePostItem.prototype.poster = $util.emptyArray;
+
+        /**
+         * SharePostItem share_url.
+         * @member {string} share_url
+         * @memberof gamebase.SharePostItem
+         * @instance
+         */
+        SharePostItem.prototype.share_url = "";
+
+        /**
+         * SharePostItem telegram.
+         * @member {string} telegram
+         * @memberof gamebase.SharePostItem
+         * @instance
+         */
+        SharePostItem.prototype.telegram = "";
+
+        /**
+         * SharePostItem whatsapp.
+         * @member {string} whatsapp
+         * @memberof gamebase.SharePostItem
+         * @instance
+         */
+        SharePostItem.prototype.whatsapp = "";
+
+        /**
+         * Creates a new SharePostItem instance using the specified properties.
+         * @function create
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {gamebase.ISharePostItem=} [properties] Properties to set
+         * @returns {gamebase.SharePostItem} SharePostItem instance
+         */
+        SharePostItem.create = function create(properties) {
+            return new SharePostItem(properties);
+        };
+
+        /**
+         * Encodes the specified SharePostItem message. Does not implicitly {@link gamebase.SharePostItem.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {gamebase.ISharePostItem} message SharePostItem message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SharePostItem.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.share_type != null && Object.hasOwnProperty.call(message, "share_type"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.share_type);
+            if (message.title != null && Object.hasOwnProperty.call(message, "title"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.title);
+            if (message.poster != null && message.poster.length)
+                for (var i = 0; i < message.poster.length; ++i)
+                    $root.gamebase.Poster.encode(message.poster[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            if (message.share_url != null && Object.hasOwnProperty.call(message, "share_url"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.share_url);
+            if (message.telegram != null && Object.hasOwnProperty.call(message, "telegram"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.telegram);
+            if (message.whatsapp != null && Object.hasOwnProperty.call(message, "whatsapp"))
+                writer.uint32(/* id 6, wireType 2 =*/50).string(message.whatsapp);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified SharePostItem message, length delimited. Does not implicitly {@link gamebase.SharePostItem.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {gamebase.ISharePostItem} message SharePostItem message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SharePostItem.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a SharePostItem message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.SharePostItem} SharePostItem
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SharePostItem.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.SharePostItem();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.share_type = reader.int32();
+                    break;
+                case 2:
+                    message.title = reader.string();
+                    break;
+                case 3:
+                    if (!(message.poster && message.poster.length))
+                        message.poster = [];
+                    message.poster.push($root.gamebase.Poster.decode(reader, reader.uint32()));
+                    break;
+                case 4:
+                    message.share_url = reader.string();
+                    break;
+                case 5:
+                    message.telegram = reader.string();
+                    break;
+                case 6:
+                    message.whatsapp = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a SharePostItem message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.SharePostItem} SharePostItem
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SharePostItem.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a SharePostItem message.
+         * @function verify
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        SharePostItem.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.share_type != null && message.hasOwnProperty("share_type"))
+                if (!$util.isInteger(message.share_type))
+                    return "share_type: integer expected";
+            if (message.title != null && message.hasOwnProperty("title"))
+                if (!$util.isString(message.title))
+                    return "title: string expected";
+            if (message.poster != null && message.hasOwnProperty("poster")) {
+                if (!Array.isArray(message.poster))
+                    return "poster: array expected";
+                for (var i = 0; i < message.poster.length; ++i) {
+                    var error = $root.gamebase.Poster.verify(message.poster[i]);
+                    if (error)
+                        return "poster." + error;
+                }
+            }
+            if (message.share_url != null && message.hasOwnProperty("share_url"))
+                if (!$util.isString(message.share_url))
+                    return "share_url: string expected";
+            if (message.telegram != null && message.hasOwnProperty("telegram"))
+                if (!$util.isString(message.telegram))
+                    return "telegram: string expected";
+            if (message.whatsapp != null && message.hasOwnProperty("whatsapp"))
+                if (!$util.isString(message.whatsapp))
+                    return "whatsapp: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a SharePostItem message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.SharePostItem} SharePostItem
+         */
+        SharePostItem.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.SharePostItem)
+                return object;
+            var message = new $root.gamebase.SharePostItem();
+            if (object.share_type != null)
+                message.share_type = object.share_type | 0;
+            if (object.title != null)
+                message.title = String(object.title);
+            if (object.poster) {
+                if (!Array.isArray(object.poster))
+                    throw TypeError(".gamebase.SharePostItem.poster: array expected");
+                message.poster = [];
+                for (var i = 0; i < object.poster.length; ++i) {
+                    if (typeof object.poster[i] !== "object")
+                        throw TypeError(".gamebase.SharePostItem.poster: object expected");
+                    message.poster[i] = $root.gamebase.Poster.fromObject(object.poster[i]);
+                }
+            }
+            if (object.share_url != null)
+                message.share_url = String(object.share_url);
+            if (object.telegram != null)
+                message.telegram = String(object.telegram);
+            if (object.whatsapp != null)
+                message.whatsapp = String(object.whatsapp);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a SharePostItem message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.SharePostItem
+         * @static
+         * @param {gamebase.SharePostItem} message SharePostItem
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        SharePostItem.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.poster = [];
+            if (options.defaults) {
+                object.share_type = 0;
+                object.title = "";
+                object.share_url = "";
+                object.telegram = "";
+                object.whatsapp = "";
+            }
+            if (message.share_type != null && message.hasOwnProperty("share_type"))
+                object.share_type = message.share_type;
+            if (message.title != null && message.hasOwnProperty("title"))
+                object.title = message.title;
+            if (message.poster && message.poster.length) {
+                object.poster = [];
+                for (var j = 0; j < message.poster.length; ++j)
+                    object.poster[j] = $root.gamebase.Poster.toObject(message.poster[j], options);
+            }
+            if (message.share_url != null && message.hasOwnProperty("share_url"))
+                object.share_url = message.share_url;
+            if (message.telegram != null && message.hasOwnProperty("telegram"))
+                object.telegram = message.telegram;
+            if (message.whatsapp != null && message.hasOwnProperty("whatsapp"))
+                object.whatsapp = message.whatsapp;
+            return object;
+        };
+
+        /**
+         * Converts this SharePostItem to JSON.
+         * @function toJSON
+         * @memberof gamebase.SharePostItem
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        SharePostItem.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return SharePostItem;
+    })();
+
+    gamebase.Poster = (function() {
+
+        /**
+         * Properties of a Poster.
+         * @memberof gamebase
+         * @interface IPoster
+         * @property {number|null} [id] Poster id
+         * @property {string|null} [url] Poster url
+         */
+
+        /**
+         * Constructs a new Poster.
+         * @memberof gamebase
+         * @classdesc Represents a Poster.
+         * @implements IPoster
+         * @constructor
+         * @param {gamebase.IPoster=} [properties] Properties to set
+         */
+        function Poster(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Poster id.
+         * @member {number} id
+         * @memberof gamebase.Poster
+         * @instance
+         */
+        Poster.prototype.id = 0;
+
+        /**
+         * Poster url.
+         * @member {string} url
+         * @memberof gamebase.Poster
+         * @instance
+         */
+        Poster.prototype.url = "";
+
+        /**
+         * Creates a new Poster instance using the specified properties.
+         * @function create
+         * @memberof gamebase.Poster
+         * @static
+         * @param {gamebase.IPoster=} [properties] Properties to set
+         * @returns {gamebase.Poster} Poster instance
+         */
+        Poster.create = function create(properties) {
+            return new Poster(properties);
+        };
+
+        /**
+         * Encodes the specified Poster message. Does not implicitly {@link gamebase.Poster.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.Poster
+         * @static
+         * @param {gamebase.IPoster} message Poster message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Poster.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.id);
+            if (message.url != null && Object.hasOwnProperty.call(message, "url"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.url);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified Poster message, length delimited. Does not implicitly {@link gamebase.Poster.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.Poster
+         * @static
+         * @param {gamebase.IPoster} message Poster message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Poster.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a Poster message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.Poster
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.Poster} Poster
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Poster.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.Poster();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.int32();
+                    break;
+                case 2:
+                    message.url = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a Poster message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.Poster
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.Poster} Poster
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Poster.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a Poster message.
+         * @function verify
+         * @memberof gamebase.Poster
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Poster.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
+            if (message.url != null && message.hasOwnProperty("url"))
+                if (!$util.isString(message.url))
+                    return "url: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a Poster message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.Poster
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.Poster} Poster
+         */
+        Poster.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.Poster)
+                return object;
+            var message = new $root.gamebase.Poster();
+            if (object.id != null)
+                message.id = object.id | 0;
+            if (object.url != null)
+                message.url = String(object.url);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a Poster message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.Poster
+         * @static
+         * @param {gamebase.Poster} message Poster
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Poster.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.id = 0;
+                object.url = "";
+            }
+            if (message.id != null && message.hasOwnProperty("id"))
+                object.id = message.id;
+            if (message.url != null && message.hasOwnProperty("url"))
+                object.url = message.url;
+            return object;
+        };
+
+        /**
+         * Converts this Poster to JSON.
+         * @function toJSON
+         * @memberof gamebase.Poster
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Poster.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return Poster;
+    })();
+
+    gamebase.JackpotExtend = (function() {
+
+        /**
+         * Properties of a JackpotExtend.
+         * @memberof gamebase
+         * @interface IJackpotExtend
+         * @property {number|null} [round_num] JackpotExtend round_num
+         */
+
+        /**
+         * Constructs a new JackpotExtend.
+         * @memberof gamebase
+         * @classdesc Represents a JackpotExtend.
+         * @implements IJackpotExtend
+         * @constructor
+         * @param {gamebase.IJackpotExtend=} [properties] Properties to set
+         */
+        function JackpotExtend(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * JackpotExtend round_num.
+         * @member {number} round_num
+         * @memberof gamebase.JackpotExtend
+         * @instance
+         */
+        JackpotExtend.prototype.round_num = 0;
+
+        /**
+         * Creates a new JackpotExtend instance using the specified properties.
+         * @function create
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {gamebase.IJackpotExtend=} [properties] Properties to set
+         * @returns {gamebase.JackpotExtend} JackpotExtend instance
+         */
+        JackpotExtend.create = function create(properties) {
+            return new JackpotExtend(properties);
+        };
+
+        /**
+         * Encodes the specified JackpotExtend message. Does not implicitly {@link gamebase.JackpotExtend.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {gamebase.IJackpotExtend} message JackpotExtend message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackpotExtend.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.round_num != null && Object.hasOwnProperty.call(message, "round_num"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.round_num);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified JackpotExtend message, length delimited. Does not implicitly {@link gamebase.JackpotExtend.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {gamebase.IJackpotExtend} message JackpotExtend message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackpotExtend.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a JackpotExtend message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.JackpotExtend} JackpotExtend
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackpotExtend.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.JackpotExtend();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.round_num = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a JackpotExtend message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.JackpotExtend} JackpotExtend
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackpotExtend.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a JackpotExtend message.
+         * @function verify
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        JackpotExtend.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.round_num != null && message.hasOwnProperty("round_num"))
+                if (!$util.isInteger(message.round_num))
+                    return "round_num: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a JackpotExtend message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.JackpotExtend} JackpotExtend
+         */
+        JackpotExtend.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.JackpotExtend)
+                return object;
+            var message = new $root.gamebase.JackpotExtend();
+            if (object.round_num != null)
+                message.round_num = object.round_num | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a JackpotExtend message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.JackpotExtend
+         * @static
+         * @param {gamebase.JackpotExtend} message JackpotExtend
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        JackpotExtend.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.round_num = 0;
+            if (message.round_num != null && message.hasOwnProperty("round_num"))
+                object.round_num = message.round_num;
+            return object;
+        };
+
+        /**
+         * Converts this JackpotExtend to JSON.
+         * @function toJSON
+         * @memberof gamebase.JackpotExtend
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        JackpotExtend.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return JackpotExtend;
+    })();
+
+    gamebase.JackpotReportRecord = (function() {
+
+        /**
+         * Properties of a JackpotReportRecord.
+         * @memberof gamebase
+         * @interface IJackpotReportRecord
+         * @property {number|null} [game_vendor_id] JackpotReportRecord game_vendor_id
+         * @property {number|null} [agency_id] JackpotReportRecord agency_id
+         * @property {string|null} [game_vendor] JackpotReportRecord game_vendor
+         * @property {number|null} [game_iD] JackpotReportRecord game_iD
+         * @property {number|null} [tid] JackpotReportRecord tid
+         * @property {number|null} [level_iD] JackpotReportRecord level_iD
+         * @property {string|null} [game_name] JackpotReportRecord game_name
+         * @property {number|null} [jackpot_type] JackpotReportRecord jackpot_type
+         * @property {number|Long|null} [jackpot_amount] JackpotReportRecord jackpot_amount
+         * @property {number|Long|null} [jackpot_pool] JackpotReportRecord jackpot_pool
+         * @property {number|Long|null} [round_total_bet] JackpotReportRecord round_total_bet
+         * @property {number|null} [draw_condition_value] JackpotReportRecord draw_condition_value
+         * @property {number|null} [user_id] JackpotReportRecord user_id
+         * @property {number|Long|null} [order_id] JackpotReportRecord order_id
+         * @property {number|Long|null} [event_time] JackpotReportRecord event_time
+         * @property {gamebase.IJackpotExtend|null} [ext_json] JackpotReportRecord ext_json
+         * @property {number|null} [timezone] JackpotReportRecord timezone
+         * @property {number|Long|null} [round_iD] JackpotReportRecord round_iD
+         * @property {number|Long|null} [bonus_flow] JackpotReportRecord bonus_flow
+         * @property {string|null} [platform_uid] JackpotReportRecord platform_uid
+         */
+
+        /**
+         * Constructs a new JackpotReportRecord.
+         * @memberof gamebase
+         * @classdesc Represents a JackpotReportRecord.
+         * @implements IJackpotReportRecord
+         * @constructor
+         * @param {gamebase.IJackpotReportRecord=} [properties] Properties to set
+         */
+        function JackpotReportRecord(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * JackpotReportRecord game_vendor_id.
+         * @member {number} game_vendor_id
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.game_vendor_id = 0;
+
+        /**
+         * JackpotReportRecord agency_id.
+         * @member {number} agency_id
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.agency_id = 0;
+
+        /**
+         * JackpotReportRecord game_vendor.
+         * @member {string} game_vendor
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.game_vendor = "";
+
+        /**
+         * JackpotReportRecord game_iD.
+         * @member {number} game_iD
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.game_iD = 0;
+
+        /**
+         * JackpotReportRecord tid.
+         * @member {number} tid
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.tid = 0;
+
+        /**
+         * JackpotReportRecord level_iD.
+         * @member {number} level_iD
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.level_iD = 0;
+
+        /**
+         * JackpotReportRecord game_name.
+         * @member {string} game_name
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.game_name = "";
+
+        /**
+         * JackpotReportRecord jackpot_type.
+         * @member {number} jackpot_type
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.jackpot_type = 0;
+
+        /**
+         * JackpotReportRecord jackpot_amount.
+         * @member {number|Long} jackpot_amount
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.jackpot_amount = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord jackpot_pool.
+         * @member {number|Long} jackpot_pool
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.jackpot_pool = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord round_total_bet.
+         * @member {number|Long} round_total_bet
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.round_total_bet = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord draw_condition_value.
+         * @member {number} draw_condition_value
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.draw_condition_value = 0;
+
+        /**
+         * JackpotReportRecord user_id.
+         * @member {number} user_id
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.user_id = 0;
+
+        /**
+         * JackpotReportRecord order_id.
+         * @member {number|Long} order_id
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.order_id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord event_time.
+         * @member {number|Long} event_time
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.event_time = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord ext_json.
+         * @member {gamebase.IJackpotExtend|null|undefined} ext_json
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.ext_json = null;
+
+        /**
+         * JackpotReportRecord timezone.
+         * @member {number} timezone
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.timezone = 0;
+
+        /**
+         * JackpotReportRecord round_iD.
+         * @member {number|Long} round_iD
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.round_iD = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord bonus_flow.
+         * @member {number|Long} bonus_flow
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.bonus_flow = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * JackpotReportRecord platform_uid.
+         * @member {string} platform_uid
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         */
+        JackpotReportRecord.prototype.platform_uid = "";
+
+        /**
+         * Creates a new JackpotReportRecord instance using the specified properties.
+         * @function create
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {gamebase.IJackpotReportRecord=} [properties] Properties to set
+         * @returns {gamebase.JackpotReportRecord} JackpotReportRecord instance
+         */
+        JackpotReportRecord.create = function create(properties) {
+            return new JackpotReportRecord(properties);
+        };
+
+        /**
+         * Encodes the specified JackpotReportRecord message. Does not implicitly {@link gamebase.JackpotReportRecord.verify|verify} messages.
+         * @function encode
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {gamebase.IJackpotReportRecord} message JackpotReportRecord message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackpotReportRecord.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.game_vendor_id != null && Object.hasOwnProperty.call(message, "game_vendor_id"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.game_vendor_id);
+            if (message.agency_id != null && Object.hasOwnProperty.call(message, "agency_id"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.agency_id);
+            if (message.game_vendor != null && Object.hasOwnProperty.call(message, "game_vendor"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.game_vendor);
+            if (message.game_iD != null && Object.hasOwnProperty.call(message, "game_iD"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.game_iD);
+            if (message.tid != null && Object.hasOwnProperty.call(message, "tid"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.tid);
+            if (message.level_iD != null && Object.hasOwnProperty.call(message, "level_iD"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.level_iD);
+            if (message.game_name != null && Object.hasOwnProperty.call(message, "game_name"))
+                writer.uint32(/* id 7, wireType 2 =*/58).string(message.game_name);
+            if (message.jackpot_type != null && Object.hasOwnProperty.call(message, "jackpot_type"))
+                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.jackpot_type);
+            if (message.jackpot_amount != null && Object.hasOwnProperty.call(message, "jackpot_amount"))
+                writer.uint32(/* id 9, wireType 0 =*/72).int64(message.jackpot_amount);
+            if (message.jackpot_pool != null && Object.hasOwnProperty.call(message, "jackpot_pool"))
+                writer.uint32(/* id 10, wireType 0 =*/80).int64(message.jackpot_pool);
+            if (message.round_total_bet != null && Object.hasOwnProperty.call(message, "round_total_bet"))
+                writer.uint32(/* id 11, wireType 0 =*/88).int64(message.round_total_bet);
+            if (message.draw_condition_value != null && Object.hasOwnProperty.call(message, "draw_condition_value"))
+                writer.uint32(/* id 12, wireType 0 =*/96).int32(message.draw_condition_value);
+            if (message.user_id != null && Object.hasOwnProperty.call(message, "user_id"))
+                writer.uint32(/* id 13, wireType 0 =*/104).uint32(message.user_id);
+            if (message.order_id != null && Object.hasOwnProperty.call(message, "order_id"))
+                writer.uint32(/* id 14, wireType 0 =*/112).int64(message.order_id);
+            if (message.event_time != null && Object.hasOwnProperty.call(message, "event_time"))
+                writer.uint32(/* id 15, wireType 0 =*/120).int64(message.event_time);
+            if (message.ext_json != null && Object.hasOwnProperty.call(message, "ext_json"))
+                $root.gamebase.JackpotExtend.encode(message.ext_json, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
+            if (message.timezone != null && Object.hasOwnProperty.call(message, "timezone"))
+                writer.uint32(/* id 17, wireType 0 =*/136).int32(message.timezone);
+            if (message.round_iD != null && Object.hasOwnProperty.call(message, "round_iD"))
+                writer.uint32(/* id 18, wireType 0 =*/144).int64(message.round_iD);
+            if (message.bonus_flow != null && Object.hasOwnProperty.call(message, "bonus_flow"))
+                writer.uint32(/* id 20, wireType 0 =*/160).int64(message.bonus_flow);
+            if (message.platform_uid != null && Object.hasOwnProperty.call(message, "platform_uid"))
+                writer.uint32(/* id 21, wireType 2 =*/170).string(message.platform_uid);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified JackpotReportRecord message, length delimited. Does not implicitly {@link gamebase.JackpotReportRecord.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {gamebase.IJackpotReportRecord} message JackpotReportRecord message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        JackpotReportRecord.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a JackpotReportRecord message from the specified reader or buffer.
+         * @function decode
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {gamebase.JackpotReportRecord} JackpotReportRecord
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackpotReportRecord.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.gamebase.JackpotReportRecord();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.game_vendor_id = reader.int32();
+                    break;
+                case 2:
+                    message.agency_id = reader.int32();
+                    break;
+                case 3:
+                    message.game_vendor = reader.string();
+                    break;
+                case 4:
+                    message.game_iD = reader.int32();
+                    break;
+                case 5:
+                    message.tid = reader.int32();
+                    break;
+                case 6:
+                    message.level_iD = reader.int32();
+                    break;
+                case 7:
+                    message.game_name = reader.string();
+                    break;
+                case 8:
+                    message.jackpot_type = reader.int32();
+                    break;
+                case 9:
+                    message.jackpot_amount = reader.int64();
+                    break;
+                case 10:
+                    message.jackpot_pool = reader.int64();
+                    break;
+                case 11:
+                    message.round_total_bet = reader.int64();
+                    break;
+                case 12:
+                    message.draw_condition_value = reader.int32();
+                    break;
+                case 13:
+                    message.user_id = reader.uint32();
+                    break;
+                case 14:
+                    message.order_id = reader.int64();
+                    break;
+                case 15:
+                    message.event_time = reader.int64();
+                    break;
+                case 16:
+                    message.ext_json = $root.gamebase.JackpotExtend.decode(reader, reader.uint32());
+                    break;
+                case 17:
+                    message.timezone = reader.int32();
+                    break;
+                case 18:
+                    message.round_iD = reader.int64();
+                    break;
+                case 20:
+                    message.bonus_flow = reader.int64();
+                    break;
+                case 21:
+                    message.platform_uid = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a JackpotReportRecord message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {gamebase.JackpotReportRecord} JackpotReportRecord
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        JackpotReportRecord.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a JackpotReportRecord message.
+         * @function verify
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        JackpotReportRecord.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.game_vendor_id != null && message.hasOwnProperty("game_vendor_id"))
+                if (!$util.isInteger(message.game_vendor_id))
+                    return "game_vendor_id: integer expected";
+            if (message.agency_id != null && message.hasOwnProperty("agency_id"))
+                if (!$util.isInteger(message.agency_id))
+                    return "agency_id: integer expected";
+            if (message.game_vendor != null && message.hasOwnProperty("game_vendor"))
+                if (!$util.isString(message.game_vendor))
+                    return "game_vendor: string expected";
+            if (message.game_iD != null && message.hasOwnProperty("game_iD"))
+                if (!$util.isInteger(message.game_iD))
+                    return "game_iD: integer expected";
+            if (message.tid != null && message.hasOwnProperty("tid"))
+                if (!$util.isInteger(message.tid))
+                    return "tid: integer expected";
+            if (message.level_iD != null && message.hasOwnProperty("level_iD"))
+                if (!$util.isInteger(message.level_iD))
+                    return "level_iD: integer expected";
+            if (message.game_name != null && message.hasOwnProperty("game_name"))
+                if (!$util.isString(message.game_name))
+                    return "game_name: string expected";
+            if (message.jackpot_type != null && message.hasOwnProperty("jackpot_type"))
+                if (!$util.isInteger(message.jackpot_type))
+                    return "jackpot_type: integer expected";
+            if (message.jackpot_amount != null && message.hasOwnProperty("jackpot_amount"))
+                if (!$util.isInteger(message.jackpot_amount) && !(message.jackpot_amount && $util.isInteger(message.jackpot_amount.low) && $util.isInteger(message.jackpot_amount.high)))
+                    return "jackpot_amount: integer|Long expected";
+            if (message.jackpot_pool != null && message.hasOwnProperty("jackpot_pool"))
+                if (!$util.isInteger(message.jackpot_pool) && !(message.jackpot_pool && $util.isInteger(message.jackpot_pool.low) && $util.isInteger(message.jackpot_pool.high)))
+                    return "jackpot_pool: integer|Long expected";
+            if (message.round_total_bet != null && message.hasOwnProperty("round_total_bet"))
+                if (!$util.isInteger(message.round_total_bet) && !(message.round_total_bet && $util.isInteger(message.round_total_bet.low) && $util.isInteger(message.round_total_bet.high)))
+                    return "round_total_bet: integer|Long expected";
+            if (message.draw_condition_value != null && message.hasOwnProperty("draw_condition_value"))
+                if (!$util.isInteger(message.draw_condition_value))
+                    return "draw_condition_value: integer expected";
+            if (message.user_id != null && message.hasOwnProperty("user_id"))
+                if (!$util.isInteger(message.user_id))
+                    return "user_id: integer expected";
+            if (message.order_id != null && message.hasOwnProperty("order_id"))
+                if (!$util.isInteger(message.order_id) && !(message.order_id && $util.isInteger(message.order_id.low) && $util.isInteger(message.order_id.high)))
+                    return "order_id: integer|Long expected";
+            if (message.event_time != null && message.hasOwnProperty("event_time"))
+                if (!$util.isInteger(message.event_time) && !(message.event_time && $util.isInteger(message.event_time.low) && $util.isInteger(message.event_time.high)))
+                    return "event_time: integer|Long expected";
+            if (message.ext_json != null && message.hasOwnProperty("ext_json")) {
+                var error = $root.gamebase.JackpotExtend.verify(message.ext_json);
+                if (error)
+                    return "ext_json." + error;
+            }
+            if (message.timezone != null && message.hasOwnProperty("timezone"))
+                if (!$util.isInteger(message.timezone))
+                    return "timezone: integer expected";
+            if (message.round_iD != null && message.hasOwnProperty("round_iD"))
+                if (!$util.isInteger(message.round_iD) && !(message.round_iD && $util.isInteger(message.round_iD.low) && $util.isInteger(message.round_iD.high)))
+                    return "round_iD: integer|Long expected";
+            if (message.bonus_flow != null && message.hasOwnProperty("bonus_flow"))
+                if (!$util.isInteger(message.bonus_flow) && !(message.bonus_flow && $util.isInteger(message.bonus_flow.low) && $util.isInteger(message.bonus_flow.high)))
+                    return "bonus_flow: integer|Long expected";
+            if (message.platform_uid != null && message.hasOwnProperty("platform_uid"))
+                if (!$util.isString(message.platform_uid))
+                    return "platform_uid: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a JackpotReportRecord message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {gamebase.JackpotReportRecord} JackpotReportRecord
+         */
+        JackpotReportRecord.fromObject = function fromObject(object) {
+            if (object instanceof $root.gamebase.JackpotReportRecord)
+                return object;
+            var message = new $root.gamebase.JackpotReportRecord();
+            if (object.game_vendor_id != null)
+                message.game_vendor_id = object.game_vendor_id | 0;
+            if (object.agency_id != null)
+                message.agency_id = object.agency_id | 0;
+            if (object.game_vendor != null)
+                message.game_vendor = String(object.game_vendor);
+            if (object.game_iD != null)
+                message.game_iD = object.game_iD | 0;
+            if (object.tid != null)
+                message.tid = object.tid | 0;
+            if (object.level_iD != null)
+                message.level_iD = object.level_iD | 0;
+            if (object.game_name != null)
+                message.game_name = String(object.game_name);
+            if (object.jackpot_type != null)
+                message.jackpot_type = object.jackpot_type | 0;
+            if (object.jackpot_amount != null)
+                if ($util.Long)
+                    (message.jackpot_amount = $util.Long.fromValue(object.jackpot_amount)).unsigned = false;
+                else if (typeof object.jackpot_amount === "string")
+                    message.jackpot_amount = parseInt(object.jackpot_amount, 10);
+                else if (typeof object.jackpot_amount === "number")
+                    message.jackpot_amount = object.jackpot_amount;
+                else if (typeof object.jackpot_amount === "object")
+                    message.jackpot_amount = new $util.LongBits(object.jackpot_amount.low >>> 0, object.jackpot_amount.high >>> 0).toNumber();
+            if (object.jackpot_pool != null)
+                if ($util.Long)
+                    (message.jackpot_pool = $util.Long.fromValue(object.jackpot_pool)).unsigned = false;
+                else if (typeof object.jackpot_pool === "string")
+                    message.jackpot_pool = parseInt(object.jackpot_pool, 10);
+                else if (typeof object.jackpot_pool === "number")
+                    message.jackpot_pool = object.jackpot_pool;
+                else if (typeof object.jackpot_pool === "object")
+                    message.jackpot_pool = new $util.LongBits(object.jackpot_pool.low >>> 0, object.jackpot_pool.high >>> 0).toNumber();
+            if (object.round_total_bet != null)
+                if ($util.Long)
+                    (message.round_total_bet = $util.Long.fromValue(object.round_total_bet)).unsigned = false;
+                else if (typeof object.round_total_bet === "string")
+                    message.round_total_bet = parseInt(object.round_total_bet, 10);
+                else if (typeof object.round_total_bet === "number")
+                    message.round_total_bet = object.round_total_bet;
+                else if (typeof object.round_total_bet === "object")
+                    message.round_total_bet = new $util.LongBits(object.round_total_bet.low >>> 0, object.round_total_bet.high >>> 0).toNumber();
+            if (object.draw_condition_value != null)
+                message.draw_condition_value = object.draw_condition_value | 0;
+            if (object.user_id != null)
+                message.user_id = object.user_id >>> 0;
+            if (object.order_id != null)
+                if ($util.Long)
+                    (message.order_id = $util.Long.fromValue(object.order_id)).unsigned = false;
+                else if (typeof object.order_id === "string")
+                    message.order_id = parseInt(object.order_id, 10);
+                else if (typeof object.order_id === "number")
+                    message.order_id = object.order_id;
+                else if (typeof object.order_id === "object")
+                    message.order_id = new $util.LongBits(object.order_id.low >>> 0, object.order_id.high >>> 0).toNumber();
+            if (object.event_time != null)
+                if ($util.Long)
+                    (message.event_time = $util.Long.fromValue(object.event_time)).unsigned = false;
+                else if (typeof object.event_time === "string")
+                    message.event_time = parseInt(object.event_time, 10);
+                else if (typeof object.event_time === "number")
+                    message.event_time = object.event_time;
+                else if (typeof object.event_time === "object")
+                    message.event_time = new $util.LongBits(object.event_time.low >>> 0, object.event_time.high >>> 0).toNumber();
+            if (object.ext_json != null) {
+                if (typeof object.ext_json !== "object")
+                    throw TypeError(".gamebase.JackpotReportRecord.ext_json: object expected");
+                message.ext_json = $root.gamebase.JackpotExtend.fromObject(object.ext_json);
+            }
+            if (object.timezone != null)
+                message.timezone = object.timezone | 0;
+            if (object.round_iD != null)
+                if ($util.Long)
+                    (message.round_iD = $util.Long.fromValue(object.round_iD)).unsigned = false;
+                else if (typeof object.round_iD === "string")
+                    message.round_iD = parseInt(object.round_iD, 10);
+                else if (typeof object.round_iD === "number")
+                    message.round_iD = object.round_iD;
+                else if (typeof object.round_iD === "object")
+                    message.round_iD = new $util.LongBits(object.round_iD.low >>> 0, object.round_iD.high >>> 0).toNumber();
+            if (object.bonus_flow != null)
+                if ($util.Long)
+                    (message.bonus_flow = $util.Long.fromValue(object.bonus_flow)).unsigned = false;
+                else if (typeof object.bonus_flow === "string")
+                    message.bonus_flow = parseInt(object.bonus_flow, 10);
+                else if (typeof object.bonus_flow === "number")
+                    message.bonus_flow = object.bonus_flow;
+                else if (typeof object.bonus_flow === "object")
+                    message.bonus_flow = new $util.LongBits(object.bonus_flow.low >>> 0, object.bonus_flow.high >>> 0).toNumber();
+            if (object.platform_uid != null)
+                message.platform_uid = String(object.platform_uid);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a JackpotReportRecord message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof gamebase.JackpotReportRecord
+         * @static
+         * @param {gamebase.JackpotReportRecord} message JackpotReportRecord
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        JackpotReportRecord.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.game_vendor_id = 0;
+                object.agency_id = 0;
+                object.game_vendor = "";
+                object.game_iD = 0;
+                object.tid = 0;
+                object.level_iD = 0;
+                object.game_name = "";
+                object.jackpot_type = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.jackpot_amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.jackpot_amount = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.jackpot_pool = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.jackpot_pool = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.round_total_bet = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.round_total_bet = options.longs === String ? "0" : 0;
+                object.draw_condition_value = 0;
+                object.user_id = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.order_id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.order_id = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.event_time = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.event_time = options.longs === String ? "0" : 0;
+                object.ext_json = null;
+                object.timezone = 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.round_iD = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.round_iD = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, false);
+                    object.bonus_flow = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.bonus_flow = options.longs === String ? "0" : 0;
+                object.platform_uid = "";
+            }
+            if (message.game_vendor_id != null && message.hasOwnProperty("game_vendor_id"))
+                object.game_vendor_id = message.game_vendor_id;
+            if (message.agency_id != null && message.hasOwnProperty("agency_id"))
+                object.agency_id = message.agency_id;
+            if (message.game_vendor != null && message.hasOwnProperty("game_vendor"))
+                object.game_vendor = message.game_vendor;
+            if (message.game_iD != null && message.hasOwnProperty("game_iD"))
+                object.game_iD = message.game_iD;
+            if (message.tid != null && message.hasOwnProperty("tid"))
+                object.tid = message.tid;
+            if (message.level_iD != null && message.hasOwnProperty("level_iD"))
+                object.level_iD = message.level_iD;
+            if (message.game_name != null && message.hasOwnProperty("game_name"))
+                object.game_name = message.game_name;
+            if (message.jackpot_type != null && message.hasOwnProperty("jackpot_type"))
+                object.jackpot_type = message.jackpot_type;
+            if (message.jackpot_amount != null && message.hasOwnProperty("jackpot_amount"))
+                if (typeof message.jackpot_amount === "number")
+                    object.jackpot_amount = options.longs === String ? String(message.jackpot_amount) : message.jackpot_amount;
+                else
+                    object.jackpot_amount = options.longs === String ? $util.Long.prototype.toString.call(message.jackpot_amount) : options.longs === Number ? new $util.LongBits(message.jackpot_amount.low >>> 0, message.jackpot_amount.high >>> 0).toNumber() : message.jackpot_amount;
+            if (message.jackpot_pool != null && message.hasOwnProperty("jackpot_pool"))
+                if (typeof message.jackpot_pool === "number")
+                    object.jackpot_pool = options.longs === String ? String(message.jackpot_pool) : message.jackpot_pool;
+                else
+                    object.jackpot_pool = options.longs === String ? $util.Long.prototype.toString.call(message.jackpot_pool) : options.longs === Number ? new $util.LongBits(message.jackpot_pool.low >>> 0, message.jackpot_pool.high >>> 0).toNumber() : message.jackpot_pool;
+            if (message.round_total_bet != null && message.hasOwnProperty("round_total_bet"))
+                if (typeof message.round_total_bet === "number")
+                    object.round_total_bet = options.longs === String ? String(message.round_total_bet) : message.round_total_bet;
+                else
+                    object.round_total_bet = options.longs === String ? $util.Long.prototype.toString.call(message.round_total_bet) : options.longs === Number ? new $util.LongBits(message.round_total_bet.low >>> 0, message.round_total_bet.high >>> 0).toNumber() : message.round_total_bet;
+            if (message.draw_condition_value != null && message.hasOwnProperty("draw_condition_value"))
+                object.draw_condition_value = message.draw_condition_value;
+            if (message.user_id != null && message.hasOwnProperty("user_id"))
+                object.user_id = message.user_id;
+            if (message.order_id != null && message.hasOwnProperty("order_id"))
+                if (typeof message.order_id === "number")
+                    object.order_id = options.longs === String ? String(message.order_id) : message.order_id;
+                else
+                    object.order_id = options.longs === String ? $util.Long.prototype.toString.call(message.order_id) : options.longs === Number ? new $util.LongBits(message.order_id.low >>> 0, message.order_id.high >>> 0).toNumber() : message.order_id;
+            if (message.event_time != null && message.hasOwnProperty("event_time"))
+                if (typeof message.event_time === "number")
+                    object.event_time = options.longs === String ? String(message.event_time) : message.event_time;
+                else
+                    object.event_time = options.longs === String ? $util.Long.prototype.toString.call(message.event_time) : options.longs === Number ? new $util.LongBits(message.event_time.low >>> 0, message.event_time.high >>> 0).toNumber() : message.event_time;
+            if (message.ext_json != null && message.hasOwnProperty("ext_json"))
+                object.ext_json = $root.gamebase.JackpotExtend.toObject(message.ext_json, options);
+            if (message.timezone != null && message.hasOwnProperty("timezone"))
+                object.timezone = message.timezone;
+            if (message.round_iD != null && message.hasOwnProperty("round_iD"))
+                if (typeof message.round_iD === "number")
+                    object.round_iD = options.longs === String ? String(message.round_iD) : message.round_iD;
+                else
+                    object.round_iD = options.longs === String ? $util.Long.prototype.toString.call(message.round_iD) : options.longs === Number ? new $util.LongBits(message.round_iD.low >>> 0, message.round_iD.high >>> 0).toNumber() : message.round_iD;
+            if (message.bonus_flow != null && message.hasOwnProperty("bonus_flow"))
+                if (typeof message.bonus_flow === "number")
+                    object.bonus_flow = options.longs === String ? String(message.bonus_flow) : message.bonus_flow;
+                else
+                    object.bonus_flow = options.longs === String ? $util.Long.prototype.toString.call(message.bonus_flow) : options.longs === Number ? new $util.LongBits(message.bonus_flow.low >>> 0, message.bonus_flow.high >>> 0).toNumber() : message.bonus_flow;
+            if (message.platform_uid != null && message.hasOwnProperty("platform_uid"))
+                object.platform_uid = message.platform_uid;
+            return object;
+        };
+
+        /**
+         * Converts this JackpotReportRecord to JSON.
+         * @function toJSON
+         * @memberof gamebase.JackpotReportRecord
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        JackpotReportRecord.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return JackpotReportRecord;
     })();
 
     return gamebase;

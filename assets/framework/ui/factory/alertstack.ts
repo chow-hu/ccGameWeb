@@ -95,6 +95,18 @@ export class AlertStack extends EventContract {
         }
     };
 
+    setCustomAlert(prefab: Prefab, helper?: IAlertStackHelper) {
+        this._prefab = prefab;
+        this._helper = helper;
+        this._stack.forEach((val, key) => {
+            if (isValid(val.node)) {
+                val.node.parent = null;
+                val.node.destroy();
+            }
+        });
+        this._stack.clear();
+    }
+
     public open(parm: AlertParm, priority: number = PRIORITY.ALERT, tag?: string) {
         if (!isValid(this._prefab, true) || !isValid(this._panel, true)) {
             return;

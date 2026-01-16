@@ -10,12 +10,12 @@ import { BUILD, HTML5, NATIVE } from "cc/env";
 import EventDispatcher from '../../framework/event/EventDispatcher';
 import { ERichText, ETileButton, NODE_BASE, TileNode, UIBase, convertNum, gui, gutil_char, mixins, sprintf, sprintf_g, ui2d } from '../../framework/ge';
 import { StorageData } from '../../framework/storage/StorageData';
+import { Cache } from '../cache/Cache';
 import { LocalizedLabelPlus } from '../manager/LocalizedLabelPlus/LocalizedLabelPlus';
 import { sdk } from '../sdk/sdk';
 import { AppEvent } from './AppEvent';
 import { Utils } from './Utils';
 import { BUILDER, GDKeys } from './interface';
-import { Cache } from '../cache/Cache';
 
 /**
  * link
@@ -1373,14 +1373,16 @@ export function formatCountdownTime(time) {
  * dig: 保留几位小数,默认2位
  * floatFlag: true小数点后补0 的方式,默认false 能被一百整除那就后面的小数位都补零， 否则不变
 */
-export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, floatFlag: boolean = false) {
-    if (num == null) return;
 
-    if (num == 0) {
+export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, floatFlag: boolean = false) {
+    if (num == null || isNaN(Number(num))) return;
+
+    if (num == 0 || (Number(num) == 0)) {
         return "0.00";
     }
-
-    let numstr = num.toString();
+    //正或负
+    let PorN: boolean = (Number(num) >= 0);
+    let numstr = Math.abs(Number(num)).toString();
     let digits = numstr.split(".");
 
     let left = "";
@@ -1439,7 +1441,11 @@ export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, flo
     for (let i = 0; i < tmp.length; i++) {
         result = result + tmp.charAt(tmp.length - 1 - i);
     }
-    return flag ? result + "." + digits[1] : result;
+    let res = flag ? result + "." + digits[1] : result;
+    if (!PorN) {
+        res = "-" + res;
+    }
+    return res;
 }
 
 export function closeAlertButNet(tag: string | Node | number | -1, filters: string[] = []) {

@@ -65,8 +65,10 @@ export class EButtonTouchLong extends Component {
 
     /** 当前节点包围盒 */
     private _currowBoxRect: Rect = null;
+    /** 当前是否在节点包围盒中 */
+    private _currowIsRect: boolean = false;
     /** 是否支持回调 */
-    private _isCanCallback: boolean = false;
+    private _isCanCallback: boolean = true;
     /** 是否加载完毕 */
     private _isOnload: boolean = false;
     /** 是否注册了事件 */
@@ -173,7 +175,7 @@ export class EButtonTouchLong extends Component {
         this._currowEvent = event;
         this._currowPassTime = 0;
         this._currowBoxRect = null;
-        this._isCanCallback = true;
+        this._currowIsRect = true;
         this._isTouchLong = false;
 
         let uiTransform = this.node.getComponent(UITransform);
@@ -197,17 +199,26 @@ export class EButtonTouchLong extends Component {
             nodeLeftBottomPos.y = nodeLeftBottomPos.y - height * uiTransform.anchorY;
             //矩形盒子大小
             this._currowBoxRect = new Rect(nodeLeftBottomPos.x, nodeLeftBottomPos.y, width, height);
+
+            if (this._isTouchLong == false) {//非长按
+                this.onClickCallback(event, EButtonTouchLongStatus.START);
+            }
+            if (this._isTouchLong) {// 长按
+                this.onLongClickCallback(event, EButtonTouchLongStatus.START);
+            }
         }
 
     }
 
     /** 触摸移动 */
     onTouchtMove(event: EventTouch) {
+        if (!this._currowEvent) { return; };
         this._currowEvent = event;
         this.checkRect();
     }
     /** 触摸结束 */
     onTouchEnd(event: EventTouch) {
+        if (!this._currowEvent) { return; };
         if (this._currowPassTime > this.touchlongtime) {
             event.propagationStopped = true;
         }
@@ -221,24 +232,23 @@ export class EButtonTouchLong extends Component {
         this._currowEvent = null;
         this._isTouchLong = false;
         this._currowPassTime = 0;
-        if (isTouchLong == false && oldEvent != null && this._isCanCallback == true) {//非长按
+        if (isTouchLong == false && oldEvent != null && this._currowIsRect == true) {//非长按
             this.onClickCallback(event, EButtonTouchLongStatus.END);
         }
-        if (isTouchLong == true && oldEvent != null && this.onceLongCallback == false) {//最后一次长按
+        if (isTouchLong == true && oldEvent != null && this.onceLongCallback == false && this._currowIsRect == true) {//最后一次长按
             this.onLongClickCallback(event, EButtonTouchLongStatus.END);
         }
-        this._isCanCallback = false;
+        this._currowIsRect = false;
     }
     /** 移除长按 */
     removeTouchLong() {
         this._currowEvent = null;
         this._isTouchLong = false;
-        this._isCanCallback = false;
     }
 
     /** 引擎更新事件 */
     update(dt: number) {
-        if (this._currowEvent && this.interactable == true && this._isCanCallback == true) {
+        if (this._currowEvent && this.interactable == true && this._currowIsRect == true) {
             this._currowPassTime = this._currowPassTime + dt;
             if (this.touchlongtime <= 0) {
                 this._isTouchLong = false;
@@ -270,7 +280,7 @@ export class EButtonTouchLong extends Component {
             let touchWorldPos = this._currowEvent.touch.getUILocation();
             if (this._currowBoxRect) {
                 if (this._currowBoxRect.contains(touchWorldPos) == false) {
-                    this._isCanCallback = false;
+                    this._currowIsRect = false;
                 }
             }
 

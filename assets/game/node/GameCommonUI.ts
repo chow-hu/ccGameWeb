@@ -4,12 +4,14 @@
  * @Date: 2024-03-06
  * @Reference: 
  */
-import { _decorator, Game, game, Label, log, Node, Prefab, Size } from 'cc';
+import { _decorator, Game, game, Label, Node, Prefab, Size } from 'cc';
+import { HTML5 } from 'cc/env';
 import { gaudio, gui, ui2d, UIBase } from '../../framework/ge';
+import { config } from '../../plug-in/config';
+import { Cache } from '../cache/Cache';
+import { AppEvent } from '../common/AppEvent';
 import { commonAssetLoader } from '../common/CommonAssetLoader';
 import { AlertStackHelper } from './AlertStackHelper';
-import { HTML5, NATIVE } from 'cc/env';
-import { config } from '../../plug-in/config';
 
 const { ccclass, property, menu } = _decorator;
 
@@ -55,7 +57,7 @@ export class GameCommonUI extends UIBase {
         gui.setLoadingInfo(this.panelLoading, this.loadingPrefab)
         gui.setAlert(this.panel_alert, { assets: this.alertPrefab, helper: new AlertStackHelper() });
         gaudio.setInfo(this.panelAudio);
-        this.lb_version.string = `Version ${config.VERSION}`;
+        this.lb_version.string = Cache.User.isKB() ? '' : `Version ${config.VERSION}`;
         // let list: Record<string, Prefab> = {};
         // for (let index = 0; index < this.builderInfos.length; index++) {
         //     const element = this.builderInfos[index];
@@ -69,6 +71,9 @@ export class GameCommonUI extends UIBase {
         this.schedule(this._commonAssetCheck, 0.1);
         // this._commonAssetCheck();
         this.onGameState();
+
+        this.on([AppEvent.SYS_SHOW_OR_HIDE_VERSION]);
+
     }
 
     onGameState() {
@@ -96,7 +101,26 @@ export class GameCommonUI extends UIBase {
             })
         }
     }
+    /** 事件绑定回调 */
+    onEvents(event: string, ...args: any[]) {
+        let key = args[0];
+        let value = args[1];
+        switch (event) {
+            case AppEvent.SYS_SHOW_OR_HIDE_VERSION:
+                this._updateVersionVisible(key);
+                break;
+            default:
+                break;
+        }
+    }
 
+    private _updateVersionVisible(visible = null) {
+        if (visible == null || typeof (visible) != 'boolean') { return; };
+        this.lb_version.string = Cache.User.isKB() ? '' : `Version ${config.VERSION}`;
+
+        this.lb_version.node.active = visible;
+
+    }
     private _commonAssetCheck() {
         commonAssetLoader.check();
         if (commonAssetLoader.finished) {

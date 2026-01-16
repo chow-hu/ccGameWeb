@@ -721,12 +721,14 @@ export namespace Utils {
     export function time(): number {
         return Math.round(StorageData.sysTs / 1000);
     }
+
     /**
-     * 时间戳转时间
-     * @param num 
-     * @returns object {year:?,month:?,day:?,hour:?,minutes:?,seconds:?}
+     * 时间戳转时间，结果为地域时区的时间 默认 DateTime.TimeZone的时区
+     * @param ts 待转换的时间戳(支持13位或者10位) 不传则为当前时间
+     * @param toTimeZone 时区，默认 DateTime.TimeZone的时区
+     * @returns object |null {year:?,month:?,day:?,hour:?,minutes:?,seconds:?}
      */
-    export function timeToDataArray(num: number, toTimeZone = null): {
+    export function timeToDataArray(num?: number, toTimeZone = null): {
         year: number,
         month: number,
         day: number,
@@ -1128,6 +1130,11 @@ export namespace Utils {
         }
         // console.log(yangHuiArr);
         return yangHuiArr;
+    }
+
+    /** 将value限制在[max, min]之间 */
+    export function between(value: number, min: number, max: number): number {
+        return Math.min(max, Math.max(min, value))
     }
 
 }

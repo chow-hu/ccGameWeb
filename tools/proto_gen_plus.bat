@@ -4,6 +4,14 @@ set m=%2
 set t=%3
 echo %m%
 echo %t%
+
+@REM 判断Proto.js目录是否存在，不存在则创建
+if not exist ./Proto.js (
+    cd ../
+    md Proto.js
+    cd tools
+)
+
 if "%b%" == "" (
     set dir=Proto
 )else (

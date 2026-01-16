@@ -27,6 +27,9 @@ export class AppEvent {
     /** ** --------系统事件------------ */
     /** 前后台事件 */
     static SYS_SHOW_OR_HIDE = "SysEvent_ShowOrHide";
+    /** 版本号显隐 */
+    static SYS_SHOW_OR_HIDE_VERSION = "SysEvent_ShowOrHide_Version";
+
     /** 网络连接中 */
     static SYS_NET_READY = "SysEvent_NetReady";
     /** 网络连接失败 */

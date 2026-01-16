@@ -1,13 +1,10 @@
 
-import { EditBox, EventTouch, Label, Node, Toggle, _decorator, profiler } from 'cc';
+import { EditBox, EventTouch, Label, Node, Toggle, _decorator, error, profiler, warn } from 'cc';
 import { DEBUG } from 'cc/env';
 import { PRIORITY, UIBase, gnet, gui, http } from '../../framework/ge';
-import { StorageData } from '../../framework/storage/StorageData';
 import { config } from '../../plug-in/config';
-import { StoreKey } from '../common/AppConst';
 import { AppEvent } from '../common/AppEvent';
 import { SubGameDetail, SubGameEventGame } from '../manager/subGameManager/interface';
-import { gi } from '../manager/subGameManager/subGameGlobal';
 const { ccclass, property } = _decorator;
 
 /**
@@ -61,14 +58,21 @@ export class DebugUI extends UIBase {
 
 
 	/*********************信息显示************************* */
+
+	/*********************是否试玩************************* */
+	@property({ tooltip: "是否试玩显示隐藏", type: Toggle })
+	toggleKBShowOrHide: Toggle | null = null;
+	/*********************信息显示************************* */
+
 	@property({ tooltip: "信息根节点", type: Node })
 	nodeInfo: Node | null = null;
 
 	@property({ tooltip: "信息", type: Label })
 	lblInfo: Label | null = null;
 
-	private _baseUrl = "https://fdsghuk349dfsbjk.ccapi218orbjksapm03fjkds.com"
-
+	private _baseUrl = "https://fdsghuk349dfsbjk.ccapi218orbjksapm03fjkds.com/gamemock/login"
+	/** 试玩请求tokenapi */
+	private _baseKBUrl = `https://api-dh3y1a938kzmg.kbtest193usgzmfhqoldhnv3719sjapu48amcpmrehal213.com/api/singleWallet/LoginWithoutRedirect?GameId=XXX&Lang=en-US&AgentId=KBGame&Balance=5000000`
 	onLoad() {
 		this.on([SubGameEventGame.open, SubGameEventGame.close])
 		this.initView();
@@ -133,38 +137,78 @@ export class DebugUI extends UIBase {
 		}
 		this.nodeDebugView.active = false;
 
-		const agency = agencyID;
-		const gameid = gameID.toString();
-		const queryParams = new URLSearchParams({
-			agency,
-			gameid,
-			_: Date.now().toString()
-		});
-
-		const targetUrl = `${this._baseUrl}/gamemock/login?${queryParams}`;
-		http._send(http.parseOriginRespone, {
-			url: targetUrl, postData: null, cb: (err: string, rsp: any) => {
-				if (err || rsp == "") {
-					console.error("请求失败:", err);
-					return;
-				} else {
-					const currentUrl = window.location.href;
-					const targetUrl = rsp;
-					const targetObj = new URL(targetUrl);
-					const urlObj = new URL(currentUrl);
-					urlObj.search = targetObj.search;
-					console.log(urlObj)
-					window.location.href = urlObj.toString();
-				}
-
-			}
-		}, "text")
-
-		// let orientation = (this.orientationC1.isChecked == true ? 1 : 0);
-		// console.warn("即将打开游戏：", gameID, producer, orientation);
-		// gi.openGame(gameID, producer, orientation);
+		if (this.toggleKBShowOrHide.isChecked) {
+			this.toGetTokenByKB(gameID);
+		} else {
+			this.toGetTokenByExternal(gameID, agencyID);
+		}
 	}
 
+	/** 外放平台获取Token */
+	toGetTokenByExternal(gameID, agencyID) {
+		const queryParams = {
+			agency: agencyID,
+			gameid: gameID,
+		}
+
+		http.lzsend(this._baseUrl, queryParams, (err, rsp) => {
+			const currentUrl = window.location.href;
+			const currentObj = new URL(currentUrl);
+			const realHerf = "http://" + currentObj.host;
+
+			if (err || rsp == "") {
+				console.error("请求失败:", err);
+				window.location.href = realHerf;
+				return;
+			} else {
+				const targetUrl = rsp;
+				const urlObj = new URL(currentUrl);
+				urlObj.search = this.decodeAfterUrl(targetUrl);
+
+				warn(urlObj.toString())
+				window.location.href = urlObj.toString();
+			}
+
+		}, { method: 'GET', retryTimes: 1, resonsType: 'text' })
+	}
+	/** 试玩游戏获取token api */
+	toGetTokenByKB(gameID) {
+
+		const currUrl = String(this._baseKBUrl).replace('XXX', gameID);
+
+		http.lzsend(currUrl, {}, (err, rsp) => {
+			const currentUrl = window.location.href;
+			const currentObj = new URL(currentUrl);
+			const realHerf = "http://" + currentObj.host;
+
+			if (err || rsp == "") {
+				console.error("请求失败:", err);
+				window.location.href = realHerf;
+				return;
+			} else {
+				if (rsp['ErrorCode'] != 0) {
+					error('试玩api获取Token失败', rsp);
+					window.location.href = realHerf;
+					return;
+				}
+				const targetUrl = rsp['Data'];
+
+				const urlObj = new URL(currentUrl);
+				urlObj.search = this.decodeAfterUrl(targetUrl);
+
+				warn(urlObj.toString())
+				window.location.href = urlObj.toString();
+			}
+		}, { method: 'GET', retryTimes: 1, resonsType: 'json' })
+	}
+	/** 解析url ?后面的字符 */
+	decodeAfterUrl(url) {
+		let realUrl = String(url);
+		const i = realUrl.indexOf('?');
+		if (i === -1) return '';        // 没有 ? 时返回空字符串
+		return realUrl.slice(i + 1);
+
+	}
 	/** 点击了帧率显示隐藏 */
 	onClickFpsShowOrHide(e: EventTouch) {
 		// this.toggleFpsShowOrHide.isChecked = !this.toggleFpsShowOrHide.isChecked;

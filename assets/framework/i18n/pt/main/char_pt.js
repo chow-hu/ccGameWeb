@@ -43,6 +43,19 @@ const mapping = {
     "TOKEN_LOSE": ['Anomalia detectada no login da conta. Você foi desconectado.', 'Você foi desconectado do jogo. Retorne ao lobby para fazer login novamente.'],
     "SERVER_LOSE": ['Manutenção do servidor. Você foi desconectado.', 'Manutenção do servidor em andamento. Pedimos desculpas pelo inconveniente.'],
     "TIME_LOSE": ['Você não fez uma aposta há {0} minutos e foi removido da sala.', 'Desconectado do servidor. Retorne ao lobby e reconecte-se.'],
+
+    "MONTH_1": "Jan",
+    "MONTH_10": "Oct",
+    "MONTH_11": "Nov",
+    "MONTH_12": "Dec",
+    "MONTH_2": "Feb",
+    "MONTH_3": "Mar",
+    "MONTH_4": "Apr",
+    "MONTH_5": "May",
+    "MONTH_6": "Jun",
+    "MONTH_7": "Jul",
+    "MONTH_8": "Aug",
+    "MONTH_9": "Sept",
 }
 
 globalThis["char_pt"] = { ...globalThis['char_pt'], ...mapping }

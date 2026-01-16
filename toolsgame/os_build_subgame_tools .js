@@ -55,14 +55,16 @@ let rename = function (name) {
     return dst;
 }
 
-let modifyBuildTemplate = function (name, orientation) {
+let modifyBuildTemplate = function (name, orientation, id) {
     fs.emptyDirSync(`build-templates/${platorm}`);
     // let path = name == 'Crash' ? `build-templates/${platorm}-spribe${kb ? '-kb' : ''}/` : `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
     let path;
-    if (name == 'Crash') {
+    if (/* name == 'Crash' */id == 101) {
         path = `build-templates/${platorm}-abCrash${kb ? '-kb' : ''}/`;
-    } else if (name == 'abJet' || name == 'abChicken2' || name == 'abSquid') {
+    } else if (/* name == 'abJet' || name == 'abChicken2' || name == 'abSquid' */id == 103 || id == 107 || id == 108) {
         path = `build-templates/${platorm}-abJet${kb ? '-kb' : ''}/`;
+    } else if (id == 110) {
+        path = `build-templates/${platorm}-jili${kb ? '-kb' : ''}/`;
     } else {
         path = `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
     }
@@ -82,7 +84,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 
-let backupApk = function (build_env, bundle) {
+function addZero(num) {
+    return num < 10 ? "0" + String(num) : String(num);
+}
+
+let backupApk = function (build_env, bundle, id) {
     fs.copySync(`./build-templates/${platorm}`, `./build/${platorm}`, { overwrite: true })
     var buildHtml = __importDefault(require("../extensions/super-html/dist/core/build.js"))
     let input = path.join(__dirname, `../build/${platorm}`);
@@ -90,7 +96,8 @@ let backupApk = function (build_env, bundle) {
     console.log(`input:${input} out:${out}`)
 
     let name = rename(bundle);
-    dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${name}`);//${platorm}/
+    let date = new Date();
+    dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${id}-${name}-(v${getVersion()})-(${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}_${addZero(date.getHours())}${addZero(date.getMinutes())}${addZero(date.getSeconds())})`);//${platorm}/
     console.log(dst);
     if (fs.existsSync(dst)) {
         fs.emptydirSync(dst);
@@ -138,9 +145,9 @@ let run = function (os_param) {
             let size = (os_param["--size"] || '768/1366').split('/');
             // let orientation = { "port": 'portrait', 'land': 'landscape' }[os_param["--orientation"]] || 'auto';
             modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation, size);
-            modifyBuildTemplate(bundles[0], orientation);
+            modifyBuildTemplate(bundles[0], orientation, os_param["--id"]);
         } else if (step == 2) {
-            backupApk(build_env, bundles[0]);
+            backupApk(build_env, bundles[0], os_param["--id"]);
         }
     } catch (error) {
         console.log(error);

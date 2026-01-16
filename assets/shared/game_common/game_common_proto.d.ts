@@ -1764,7 +1764,8 @@ declare namespace ccgame {
             ROOMALLOC_CMD_LEVEL_CONFIG_REQ = 4704,
             ROOMALLOC_CMD_LEVEL_CONFIG_RESP = 4705,
             ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ = 4706,
-            ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP = 4707
+            ROOMALLOC_CMD_LEVEL_TABLE_INFO_RESP = 4707,
+            CC_GAME_BALANCE_CHANGE_PUSH = 4708
         }
 
         /** Properties of an AllocTableReq. */
@@ -2567,6 +2568,9 @@ declare namespace ccgame {
 
             /** LevelTableInfoResp tableList */
             tableList?: (roomalloc.LevelTableInfoResp.ITableInfo[]|null);
+
+            /** LevelTableInfoResp level */
+            level?: (number|Long|null);
         }
 
         /** Represents a LevelTableInfoResp. */
@@ -2580,6 +2584,9 @@ declare namespace ccgame {
 
             /** LevelTableInfoResp tableList. */
             public tableList: roomalloc.LevelTableInfoResp.ITableInfo[];
+
+            /** LevelTableInfoResp level. */
+            public level: (number|Long);
 
             /**
              * Creates a new LevelTableInfoResp instance using the specified properties.
@@ -2774,6 +2781,102 @@ declare namespace ccgame {
                 public toJSON(): { [k: string]: any };
             }
         }
+
+        /** Properties of a BalanceChangePush. */
+        interface IBalanceChangePush {
+
+            /** BalanceChangePush uid */
+            uid?: (number|null);
+
+            /** BalanceChangePush balance */
+            balance?: (number|Long|null);
+        }
+
+        /** Represents a BalanceChangePush. */
+        class BalanceChangePush implements IBalanceChangePush {
+
+            /**
+             * Constructs a new BalanceChangePush.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: roomalloc.IBalanceChangePush);
+
+            /** BalanceChangePush uid. */
+            public uid: number;
+
+            /** BalanceChangePush balance. */
+            public balance: (number|Long);
+
+            /**
+             * Creates a new BalanceChangePush instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BalanceChangePush instance
+             */
+            public static create(properties?: roomalloc.IBalanceChangePush): roomalloc.BalanceChangePush;
+
+            /**
+             * Encodes the specified BalanceChangePush message. Does not implicitly {@link roomalloc.BalanceChangePush.verify|verify} messages.
+             * @param message BalanceChangePush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: roomalloc.IBalanceChangePush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified BalanceChangePush message, length delimited. Does not implicitly {@link roomalloc.BalanceChangePush.verify|verify} messages.
+             * @param message BalanceChangePush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: roomalloc.IBalanceChangePush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a BalanceChangePush message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BalanceChangePush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): roomalloc.BalanceChangePush;
+
+            /**
+             * Decodes a BalanceChangePush message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BalanceChangePush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): roomalloc.BalanceChangePush;
+
+            /**
+             * Verifies a BalanceChangePush message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a BalanceChangePush message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BalanceChangePush
+             */
+            public static fromObject(object: { [k: string]: any }): roomalloc.BalanceChangePush;
+
+            /**
+             * Creates a plain object from a BalanceChangePush message. Also converts values to other types if specified.
+             * @param message BalanceChangePush
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: roomalloc.BalanceChangePush, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BalanceChangePush to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Namespace gamebase. */
@@ -2795,7 +2898,9 @@ declare namespace ccgame {
             CCGAME_AVIATOR = 101,
             CCGAME_ANDAR = 102,
             CCGAME_AVIATOR2 = 103,
-            CCGAME_SEVENUP = 104
+            CCGAME_SEVENUP = 104,
+            CCGAME_MONEYCOMING = 105,
+            CCGAME_MINES = 106
         }
 
         /** CCGAME_ERR_CODE enum. */
@@ -2858,7 +2963,11 @@ declare namespace ccgame {
             CC_GAME_JACKPOT_POOL_CHANGE_PUSH = 10036,
             CC_GAME_NOTIFICATION_PUSH = 10037,
             CC_GAME_RESET_BALANCE_REQ = 10038,
-            CC_GAME_RESET_BALANCE_RESP = 10039
+            CC_GAME_RESET_BALANCE_RESP = 10039,
+            CC_GAME_GET_GAME_INFO_REQ = 10040,
+            CC_GAME_MODIFY_USER_INFO_REQ = 10041,
+            CC_GAME_MODIFY_USER_INFO_RESP = 10042,
+            CC_GAME_JACKPOT_SWITCH_PUSH = 10043
         }
 
         /** Properties of a Card. */
@@ -3430,6 +3539,9 @@ declare namespace ccgame {
 
             /** UserJoinTableReq table_id */
             table_id?: (number|null);
+
+            /** UserJoinTableReq userinfo */
+            userinfo?: (string|null);
         }
 
         /** Represents a UserJoinTableReq. */
@@ -3443,6 +3555,9 @@ declare namespace ccgame {
 
             /** UserJoinTableReq table_id. */
             public table_id: number;
+
+            /** UserJoinTableReq userinfo. */
+            public userinfo: string;
 
             /**
              * Creates a new UserJoinTableReq instance using the specified properties.
@@ -4056,7 +4171,7 @@ declare namespace ccgame {
             collects?: (number[]|null);
 
             /** JackpotUserData rewardDetail */
-            rewardDetail?: (gamebase.JackpotUserData.IRewardItem[]|null);
+            rewardDetail?: ((number|Long)[]|null);
         }
 
         /** Represents a JackpotUserData. */
@@ -4090,7 +4205,7 @@ declare namespace ccgame {
             public collects: number[];
 
             /** JackpotUserData rewardDetail. */
-            public rewardDetail: gamebase.JackpotUserData.IRewardItem[];
+            public rewardDetail: (number|Long)[];
 
             /**
              * Creates a new JackpotUserData instance using the specified properties.
@@ -4163,113 +4278,11 @@ declare namespace ccgame {
             public toJSON(): { [k: string]: any };
         }
 
-        namespace JackpotUserData {
-
-            /** Properties of a RewardItem. */
-            interface IRewardItem {
-
-                /** RewardItem totalReward */
-                totalReward?: (number|Long|null);
-
-                /** RewardItem shareReward */
-                shareReward?: (number|Long|null);
-            }
-
-            /** Represents a RewardItem. */
-            class RewardItem implements IRewardItem {
-
-                /**
-                 * Constructs a new RewardItem.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: gamebase.JackpotUserData.IRewardItem);
-
-                /** RewardItem totalReward. */
-                public totalReward: (number|Long);
-
-                /** RewardItem shareReward. */
-                public shareReward: (number|Long);
-
-                /**
-                 * Creates a new RewardItem instance using the specified properties.
-                 * @param [properties] Properties to set
-                 * @returns RewardItem instance
-                 */
-                public static create(properties?: gamebase.JackpotUserData.IRewardItem): gamebase.JackpotUserData.RewardItem;
-
-                /**
-                 * Encodes the specified RewardItem message. Does not implicitly {@link gamebase.JackpotUserData.RewardItem.verify|verify} messages.
-                 * @param message RewardItem message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encode(message: gamebase.JackpotUserData.IRewardItem, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Encodes the specified RewardItem message, length delimited. Does not implicitly {@link gamebase.JackpotUserData.RewardItem.verify|verify} messages.
-                 * @param message RewardItem message or plain object to encode
-                 * @param [writer] Writer to encode to
-                 * @returns Writer
-                 */
-                public static encodeDelimited(message: gamebase.JackpotUserData.IRewardItem, writer?: $protobuf.Writer): $protobuf.Writer;
-
-                /**
-                 * Decodes a RewardItem message from the specified reader or buffer.
-                 * @param reader Reader or buffer to decode from
-                 * @param [length] Message length if known beforehand
-                 * @returns RewardItem
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackpotUserData.RewardItem;
-
-                /**
-                 * Decodes a RewardItem message from the specified reader or buffer, length delimited.
-                 * @param reader Reader or buffer to decode from
-                 * @returns RewardItem
-                 * @throws {Error} If the payload is not a reader or valid buffer
-                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
-                 */
-                public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackpotUserData.RewardItem;
-
-                /**
-                 * Verifies a RewardItem message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a RewardItem message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns RewardItem
-                 */
-                public static fromObject(object: { [k: string]: any }): gamebase.JackpotUserData.RewardItem;
-
-                /**
-                 * Creates a plain object from a RewardItem message. Also converts values to other types if specified.
-                 * @param message RewardItem
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: gamebase.JackpotUserData.RewardItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this RewardItem to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-        }
-
         /** Properties of a JackpotGetRewardReq. */
         interface IJackpotGetRewardReq {
 
             /** JackpotGetRewardReq rewardId */
             rewardId?: (number|null);
-
-            /** JackpotGetRewardReq isShared */
-            isShared?: (boolean|null);
         }
 
         /** Represents a JackpotGetRewardReq. */
@@ -4283,9 +4296,6 @@ declare namespace ccgame {
 
             /** JackpotGetRewardReq rewardId. */
             public rewardId: number;
-
-            /** JackpotGetRewardReq isShared. */
-            public isShared: boolean;
 
             /**
              * Creates a new JackpotGetRewardReq instance using the specified properties.
@@ -4378,9 +4388,6 @@ declare namespace ccgame {
 
             /** JackpotGetRewardResp balance */
             balance?: (number|Long|null);
-
-            /** JackpotGetRewardResp isShared */
-            isShared?: (boolean|null);
         }
 
         /** Represents a JackpotGetRewardResp. */
@@ -4409,9 +4416,6 @@ declare namespace ccgame {
 
             /** JackpotGetRewardResp balance. */
             public balance: (number|Long);
-
-            /** JackpotGetRewardResp isShared. */
-            public isShared: boolean;
 
             /**
              * Creates a new JackpotGetRewardResp instance using the specified properties.
@@ -4699,9 +4703,6 @@ declare namespace ccgame {
 
             /** RewardRecord reward */
             reward?: (number|Long|null);
-
-            /** RewardRecord shareReward */
-            shareReward?: (number|Long|null);
         }
 
         /** Represents a RewardRecord. */
@@ -4727,9 +4728,6 @@ declare namespace ccgame {
 
             /** RewardRecord reward. */
             public reward: (number|Long);
-
-            /** RewardRecord shareReward. */
-            public shareReward: (number|Long);
 
             /**
              * Creates a new RewardRecord instance using the specified properties.
@@ -4994,8 +4992,8 @@ declare namespace ccgame {
             /** UserJackReward rewardValue */
             rewardValue?: (number|Long|null);
 
-            /** UserJackReward shareReward */
-            shareReward?: (number|Long|null);
+            /** UserJackReward rewardId */
+            rewardId?: (number|null);
         }
 
         /** Represents a UserJackReward. */
@@ -5022,8 +5020,8 @@ declare namespace ccgame {
             /** UserJackReward rewardValue. */
             public rewardValue: (number|Long);
 
-            /** UserJackReward shareReward. */
-            public shareReward: (number|Long);
+            /** UserJackReward rewardId. */
+            public rewardId: number;
 
             /**
              * Creates a new UserJackReward instance using the specified properties.
@@ -5516,9 +5514,6 @@ declare namespace ccgame {
 
             /** JackpotGetRewardDetailResp cardList */
             cardList?: (gamebase.IJackCollect[]|null);
-
-            /** JackpotGetRewardDetailResp share_ratio */
-            share_ratio?: (number|null);
         }
 
         /** Represents a JackpotGetRewardDetailResp. */
@@ -5550,9 +5545,6 @@ declare namespace ccgame {
 
             /** JackpotGetRewardDetailResp cardList. */
             public cardList: gamebase.IJackCollect[];
-
-            /** JackpotGetRewardDetailResp share_ratio. */
-            public share_ratio: number;
 
             /**
              * Creates a new JackpotGetRewardDetailResp instance using the specified properties.
@@ -6288,6 +6280,102 @@ declare namespace ccgame {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a JackpotSwitchPush. */
+        interface IJackpotSwitchPush {
+
+            /** JackpotSwitchPush open */
+            open?: (number|null);
+
+            /** JackpotSwitchPush jackpotinfo */
+            jackpotinfo?: (gamebase.IJackpotUserData|null);
+        }
+
+        /** Represents a JackpotSwitchPush. */
+        class JackpotSwitchPush implements IJackpotSwitchPush {
+
+            /**
+             * Constructs a new JackpotSwitchPush.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IJackpotSwitchPush);
+
+            /** JackpotSwitchPush open. */
+            public open: number;
+
+            /** JackpotSwitchPush jackpotinfo. */
+            public jackpotinfo?: (gamebase.IJackpotUserData|null);
+
+            /**
+             * Creates a new JackpotSwitchPush instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns JackpotSwitchPush instance
+             */
+            public static create(properties?: gamebase.IJackpotSwitchPush): gamebase.JackpotSwitchPush;
+
+            /**
+             * Encodes the specified JackpotSwitchPush message. Does not implicitly {@link gamebase.JackpotSwitchPush.verify|verify} messages.
+             * @param message JackpotSwitchPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IJackpotSwitchPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified JackpotSwitchPush message, length delimited. Does not implicitly {@link gamebase.JackpotSwitchPush.verify|verify} messages.
+             * @param message JackpotSwitchPush message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IJackpotSwitchPush, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a JackpotSwitchPush message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns JackpotSwitchPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackpotSwitchPush;
+
+            /**
+             * Decodes a JackpotSwitchPush message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns JackpotSwitchPush
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackpotSwitchPush;
+
+            /**
+             * Verifies a JackpotSwitchPush message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a JackpotSwitchPush message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns JackpotSwitchPush
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.JackpotSwitchPush;
+
+            /**
+             * Creates a plain object from a JackpotSwitchPush message. Also converts values to other types if specified.
+             * @param message JackpotSwitchPush
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.JackpotSwitchPush, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this JackpotSwitchPush to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a GameNotificationPush. */
         interface IGameNotificationPush {
 
@@ -6600,6 +6688,9 @@ declare namespace ccgame {
 
             /** UserJackpotRecordDetail reward_value */
             reward_value?: (number|Long|null);
+
+            /** UserJackpotRecordDetail llround_no */
+            llround_no?: (number|Long|null);
         }
 
         /** Represents a UserJackpotRecordDetail. */
@@ -6631,6 +6722,9 @@ declare namespace ccgame {
 
             /** UserJackpotRecordDetail reward_value. */
             public reward_value: (number|Long);
+
+            /** UserJackpotRecordDetail llround_no. */
+            public llround_no: (number|Long);
 
             /**
              * Creates a new UserJackpotRecordDetail instance using the specified properties.
@@ -6698,6 +6792,1002 @@ declare namespace ccgame {
 
             /**
              * Converts this UserJackpotRecordDetail to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ReqGetGameInfoReq. */
+        interface IReqGetGameInfoReq {
+        }
+
+        /** Represents a ReqGetGameInfoReq. */
+        class ReqGetGameInfoReq implements IReqGetGameInfoReq {
+
+            /**
+             * Constructs a new ReqGetGameInfoReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IReqGetGameInfoReq);
+
+            /**
+             * Creates a new ReqGetGameInfoReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ReqGetGameInfoReq instance
+             */
+            public static create(properties?: gamebase.IReqGetGameInfoReq): gamebase.ReqGetGameInfoReq;
+
+            /**
+             * Encodes the specified ReqGetGameInfoReq message. Does not implicitly {@link gamebase.ReqGetGameInfoReq.verify|verify} messages.
+             * @param message ReqGetGameInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IReqGetGameInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ReqGetGameInfoReq message, length delimited. Does not implicitly {@link gamebase.ReqGetGameInfoReq.verify|verify} messages.
+             * @param message ReqGetGameInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IReqGetGameInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ReqGetGameInfoReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ReqGetGameInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.ReqGetGameInfoReq;
+
+            /**
+             * Decodes a ReqGetGameInfoReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ReqGetGameInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.ReqGetGameInfoReq;
+
+            /**
+             * Verifies a ReqGetGameInfoReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ReqGetGameInfoReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ReqGetGameInfoReq
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.ReqGetGameInfoReq;
+
+            /**
+             * Creates a plain object from a ReqGetGameInfoReq message. Also converts values to other types if specified.
+             * @param message ReqGetGameInfoReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.ReqGetGameInfoReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ReqGetGameInfoReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a BetRecordDetail. */
+        interface IBetRecordDetail {
+
+            /** BetRecordDetail index */
+            index?: (number|null);
+
+            /** BetRecordDetail times */
+            times?: (number|null);
+
+            /** BetRecordDetail roundid */
+            roundid?: (number|null);
+
+            /** BetRecordDetail bet */
+            bet?: (number|Long|null);
+
+            /** BetRecordDetail win */
+            win?: (number|Long|null);
+
+            /** BetRecordDetail timestamp */
+            timestamp?: (number|Long|null);
+        }
+
+        /** Represents a BetRecordDetail. */
+        class BetRecordDetail implements IBetRecordDetail {
+
+            /**
+             * Constructs a new BetRecordDetail.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IBetRecordDetail);
+
+            /** BetRecordDetail index. */
+            public index: number;
+
+            /** BetRecordDetail times. */
+            public times: number;
+
+            /** BetRecordDetail roundid. */
+            public roundid: number;
+
+            /** BetRecordDetail bet. */
+            public bet: (number|Long);
+
+            /** BetRecordDetail win. */
+            public win: (number|Long);
+
+            /** BetRecordDetail timestamp. */
+            public timestamp: (number|Long);
+
+            /**
+             * Creates a new BetRecordDetail instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns BetRecordDetail instance
+             */
+            public static create(properties?: gamebase.IBetRecordDetail): gamebase.BetRecordDetail;
+
+            /**
+             * Encodes the specified BetRecordDetail message. Does not implicitly {@link gamebase.BetRecordDetail.verify|verify} messages.
+             * @param message BetRecordDetail message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IBetRecordDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified BetRecordDetail message, length delimited. Does not implicitly {@link gamebase.BetRecordDetail.verify|verify} messages.
+             * @param message BetRecordDetail message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IBetRecordDetail, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a BetRecordDetail message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns BetRecordDetail
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.BetRecordDetail;
+
+            /**
+             * Decodes a BetRecordDetail message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns BetRecordDetail
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.BetRecordDetail;
+
+            /**
+             * Verifies a BetRecordDetail message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a BetRecordDetail message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns BetRecordDetail
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.BetRecordDetail;
+
+            /**
+             * Creates a plain object from a BetRecordDetail message. Also converts values to other types if specified.
+             * @param message BetRecordDetail
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.BetRecordDetail, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this BetRecordDetail to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ModifyUserInfoReq. */
+        interface IModifyUserInfoReq {
+
+            /** ModifyUserInfoReq gender */
+            gender?: (number|null);
+
+            /** ModifyUserInfoReq header */
+            header?: (string|null);
+
+            /** ModifyUserInfoReq nickname */
+            nickname?: (string|null);
+        }
+
+        /** Represents a ModifyUserInfoReq. */
+        class ModifyUserInfoReq implements IModifyUserInfoReq {
+
+            /**
+             * Constructs a new ModifyUserInfoReq.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IModifyUserInfoReq);
+
+            /** ModifyUserInfoReq gender. */
+            public gender: number;
+
+            /** ModifyUserInfoReq header. */
+            public header: string;
+
+            /** ModifyUserInfoReq nickname. */
+            public nickname: string;
+
+            /**
+             * Creates a new ModifyUserInfoReq instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ModifyUserInfoReq instance
+             */
+            public static create(properties?: gamebase.IModifyUserInfoReq): gamebase.ModifyUserInfoReq;
+
+            /**
+             * Encodes the specified ModifyUserInfoReq message. Does not implicitly {@link gamebase.ModifyUserInfoReq.verify|verify} messages.
+             * @param message ModifyUserInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IModifyUserInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ModifyUserInfoReq message, length delimited. Does not implicitly {@link gamebase.ModifyUserInfoReq.verify|verify} messages.
+             * @param message ModifyUserInfoReq message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IModifyUserInfoReq, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ModifyUserInfoReq message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ModifyUserInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.ModifyUserInfoReq;
+
+            /**
+             * Decodes a ModifyUserInfoReq message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ModifyUserInfoReq
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.ModifyUserInfoReq;
+
+            /**
+             * Verifies a ModifyUserInfoReq message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ModifyUserInfoReq message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ModifyUserInfoReq
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.ModifyUserInfoReq;
+
+            /**
+             * Creates a plain object from a ModifyUserInfoReq message. Also converts values to other types if specified.
+             * @param message ModifyUserInfoReq
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.ModifyUserInfoReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ModifyUserInfoReq to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ModifyUserInfoResp. */
+        interface IModifyUserInfoResp {
+
+            /** ModifyUserInfoResp result */
+            result?: (number|null);
+        }
+
+        /** Represents a ModifyUserInfoResp. */
+        class ModifyUserInfoResp implements IModifyUserInfoResp {
+
+            /**
+             * Constructs a new ModifyUserInfoResp.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IModifyUserInfoResp);
+
+            /** ModifyUserInfoResp result. */
+            public result: number;
+
+            /**
+             * Creates a new ModifyUserInfoResp instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ModifyUserInfoResp instance
+             */
+            public static create(properties?: gamebase.IModifyUserInfoResp): gamebase.ModifyUserInfoResp;
+
+            /**
+             * Encodes the specified ModifyUserInfoResp message. Does not implicitly {@link gamebase.ModifyUserInfoResp.verify|verify} messages.
+             * @param message ModifyUserInfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IModifyUserInfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified ModifyUserInfoResp message, length delimited. Does not implicitly {@link gamebase.ModifyUserInfoResp.verify|verify} messages.
+             * @param message ModifyUserInfoResp message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IModifyUserInfoResp, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a ModifyUserInfoResp message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ModifyUserInfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.ModifyUserInfoResp;
+
+            /**
+             * Decodes a ModifyUserInfoResp message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ModifyUserInfoResp
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.ModifyUserInfoResp;
+
+            /**
+             * Verifies a ModifyUserInfoResp message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ModifyUserInfoResp message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ModifyUserInfoResp
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.ModifyUserInfoResp;
+
+            /**
+             * Creates a plain object from a ModifyUserInfoResp message. Also converts values to other types if specified.
+             * @param message ModifyUserInfoResp
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.ModifyUserInfoResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ModifyUserInfoResp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a JackoptConfig. */
+        interface IJackoptConfig {
+
+            /** JackoptConfig list */
+            list?: (gamebase.ISharePostItem[]|null);
+        }
+
+        /** Represents a JackoptConfig. */
+        class JackoptConfig implements IJackoptConfig {
+
+            /**
+             * Constructs a new JackoptConfig.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IJackoptConfig);
+
+            /** JackoptConfig list. */
+            public list: gamebase.ISharePostItem[];
+
+            /**
+             * Creates a new JackoptConfig instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns JackoptConfig instance
+             */
+            public static create(properties?: gamebase.IJackoptConfig): gamebase.JackoptConfig;
+
+            /**
+             * Encodes the specified JackoptConfig message. Does not implicitly {@link gamebase.JackoptConfig.verify|verify} messages.
+             * @param message JackoptConfig message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IJackoptConfig, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified JackoptConfig message, length delimited. Does not implicitly {@link gamebase.JackoptConfig.verify|verify} messages.
+             * @param message JackoptConfig message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IJackoptConfig, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a JackoptConfig message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns JackoptConfig
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackoptConfig;
+
+            /**
+             * Decodes a JackoptConfig message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns JackoptConfig
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackoptConfig;
+
+            /**
+             * Verifies a JackoptConfig message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a JackoptConfig message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns JackoptConfig
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.JackoptConfig;
+
+            /**
+             * Creates a plain object from a JackoptConfig message. Also converts values to other types if specified.
+             * @param message JackoptConfig
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.JackoptConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this JackoptConfig to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a SharePostItem. */
+        interface ISharePostItem {
+
+            /** SharePostItem share_type */
+            share_type?: (number|null);
+
+            /** SharePostItem title */
+            title?: (string|null);
+
+            /** SharePostItem poster */
+            poster?: (gamebase.IPoster[]|null);
+
+            /** SharePostItem share_url */
+            share_url?: (string|null);
+
+            /** SharePostItem telegram */
+            telegram?: (string|null);
+
+            /** SharePostItem whatsapp */
+            whatsapp?: (string|null);
+        }
+
+        /** Represents a SharePostItem. */
+        class SharePostItem implements ISharePostItem {
+
+            /**
+             * Constructs a new SharePostItem.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.ISharePostItem);
+
+            /** SharePostItem share_type. */
+            public share_type: number;
+
+            /** SharePostItem title. */
+            public title: string;
+
+            /** SharePostItem poster. */
+            public poster: gamebase.IPoster[];
+
+            /** SharePostItem share_url. */
+            public share_url: string;
+
+            /** SharePostItem telegram. */
+            public telegram: string;
+
+            /** SharePostItem whatsapp. */
+            public whatsapp: string;
+
+            /**
+             * Creates a new SharePostItem instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns SharePostItem instance
+             */
+            public static create(properties?: gamebase.ISharePostItem): gamebase.SharePostItem;
+
+            /**
+             * Encodes the specified SharePostItem message. Does not implicitly {@link gamebase.SharePostItem.verify|verify} messages.
+             * @param message SharePostItem message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.ISharePostItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified SharePostItem message, length delimited. Does not implicitly {@link gamebase.SharePostItem.verify|verify} messages.
+             * @param message SharePostItem message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.ISharePostItem, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a SharePostItem message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns SharePostItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.SharePostItem;
+
+            /**
+             * Decodes a SharePostItem message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns SharePostItem
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.SharePostItem;
+
+            /**
+             * Verifies a SharePostItem message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a SharePostItem message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns SharePostItem
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.SharePostItem;
+
+            /**
+             * Creates a plain object from a SharePostItem message. Also converts values to other types if specified.
+             * @param message SharePostItem
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.SharePostItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this SharePostItem to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a Poster. */
+        interface IPoster {
+
+            /** Poster id */
+            id?: (number|null);
+
+            /** Poster url */
+            url?: (string|null);
+        }
+
+        /** Represents a Poster. */
+        class Poster implements IPoster {
+
+            /**
+             * Constructs a new Poster.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IPoster);
+
+            /** Poster id. */
+            public id: number;
+
+            /** Poster url. */
+            public url: string;
+
+            /**
+             * Creates a new Poster instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns Poster instance
+             */
+            public static create(properties?: gamebase.IPoster): gamebase.Poster;
+
+            /**
+             * Encodes the specified Poster message. Does not implicitly {@link gamebase.Poster.verify|verify} messages.
+             * @param message Poster message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IPoster, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified Poster message, length delimited. Does not implicitly {@link gamebase.Poster.verify|verify} messages.
+             * @param message Poster message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IPoster, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a Poster message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns Poster
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.Poster;
+
+            /**
+             * Decodes a Poster message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns Poster
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.Poster;
+
+            /**
+             * Verifies a Poster message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Poster message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Poster
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.Poster;
+
+            /**
+             * Creates a plain object from a Poster message. Also converts values to other types if specified.
+             * @param message Poster
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.Poster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Poster to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a JackpotExtend. */
+        interface IJackpotExtend {
+
+            /** JackpotExtend round_num */
+            round_num?: (number|null);
+        }
+
+        /** Represents a JackpotExtend. */
+        class JackpotExtend implements IJackpotExtend {
+
+            /**
+             * Constructs a new JackpotExtend.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IJackpotExtend);
+
+            /** JackpotExtend round_num. */
+            public round_num: number;
+
+            /**
+             * Creates a new JackpotExtend instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns JackpotExtend instance
+             */
+            public static create(properties?: gamebase.IJackpotExtend): gamebase.JackpotExtend;
+
+            /**
+             * Encodes the specified JackpotExtend message. Does not implicitly {@link gamebase.JackpotExtend.verify|verify} messages.
+             * @param message JackpotExtend message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IJackpotExtend, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified JackpotExtend message, length delimited. Does not implicitly {@link gamebase.JackpotExtend.verify|verify} messages.
+             * @param message JackpotExtend message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IJackpotExtend, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a JackpotExtend message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns JackpotExtend
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackpotExtend;
+
+            /**
+             * Decodes a JackpotExtend message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns JackpotExtend
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackpotExtend;
+
+            /**
+             * Verifies a JackpotExtend message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a JackpotExtend message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns JackpotExtend
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.JackpotExtend;
+
+            /**
+             * Creates a plain object from a JackpotExtend message. Also converts values to other types if specified.
+             * @param message JackpotExtend
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.JackpotExtend, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this JackpotExtend to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a JackpotReportRecord. */
+        interface IJackpotReportRecord {
+
+            /** JackpotReportRecord game_vendor_id */
+            game_vendor_id?: (number|null);
+
+            /** JackpotReportRecord agency_id */
+            agency_id?: (number|null);
+
+            /** JackpotReportRecord game_vendor */
+            game_vendor?: (string|null);
+
+            /** JackpotReportRecord game_iD */
+            game_iD?: (number|null);
+
+            /** JackpotReportRecord tid */
+            tid?: (number|null);
+
+            /** JackpotReportRecord level_iD */
+            level_iD?: (number|null);
+
+            /** JackpotReportRecord game_name */
+            game_name?: (string|null);
+
+            /** JackpotReportRecord jackpot_type */
+            jackpot_type?: (number|null);
+
+            /** JackpotReportRecord jackpot_amount */
+            jackpot_amount?: (number|Long|null);
+
+            /** JackpotReportRecord jackpot_pool */
+            jackpot_pool?: (number|Long|null);
+
+            /** JackpotReportRecord round_total_bet */
+            round_total_bet?: (number|Long|null);
+
+            /** JackpotReportRecord draw_condition_value */
+            draw_condition_value?: (number|null);
+
+            /** JackpotReportRecord user_id */
+            user_id?: (number|null);
+
+            /** JackpotReportRecord order_id */
+            order_id?: (number|Long|null);
+
+            /** JackpotReportRecord event_time */
+            event_time?: (number|Long|null);
+
+            /** JackpotReportRecord ext_json */
+            ext_json?: (gamebase.IJackpotExtend|null);
+
+            /** JackpotReportRecord timezone */
+            timezone?: (number|null);
+
+            /** JackpotReportRecord round_iD */
+            round_iD?: (number|Long|null);
+
+            /** JackpotReportRecord bonus_flow */
+            bonus_flow?: (number|Long|null);
+
+            /** JackpotReportRecord platform_uid */
+            platform_uid?: (string|null);
+        }
+
+        /** Represents a JackpotReportRecord. */
+        class JackpotReportRecord implements IJackpotReportRecord {
+
+            /**
+             * Constructs a new JackpotReportRecord.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: gamebase.IJackpotReportRecord);
+
+            /** JackpotReportRecord game_vendor_id. */
+            public game_vendor_id: number;
+
+            /** JackpotReportRecord agency_id. */
+            public agency_id: number;
+
+            /** JackpotReportRecord game_vendor. */
+            public game_vendor: string;
+
+            /** JackpotReportRecord game_iD. */
+            public game_iD: number;
+
+            /** JackpotReportRecord tid. */
+            public tid: number;
+
+            /** JackpotReportRecord level_iD. */
+            public level_iD: number;
+
+            /** JackpotReportRecord game_name. */
+            public game_name: string;
+
+            /** JackpotReportRecord jackpot_type. */
+            public jackpot_type: number;
+
+            /** JackpotReportRecord jackpot_amount. */
+            public jackpot_amount: (number|Long);
+
+            /** JackpotReportRecord jackpot_pool. */
+            public jackpot_pool: (number|Long);
+
+            /** JackpotReportRecord round_total_bet. */
+            public round_total_bet: (number|Long);
+
+            /** JackpotReportRecord draw_condition_value. */
+            public draw_condition_value: number;
+
+            /** JackpotReportRecord user_id. */
+            public user_id: number;
+
+            /** JackpotReportRecord order_id. */
+            public order_id: (number|Long);
+
+            /** JackpotReportRecord event_time. */
+            public event_time: (number|Long);
+
+            /** JackpotReportRecord ext_json. */
+            public ext_json?: (gamebase.IJackpotExtend|null);
+
+            /** JackpotReportRecord timezone. */
+            public timezone: number;
+
+            /** JackpotReportRecord round_iD. */
+            public round_iD: (number|Long);
+
+            /** JackpotReportRecord bonus_flow. */
+            public bonus_flow: (number|Long);
+
+            /** JackpotReportRecord platform_uid. */
+            public platform_uid: string;
+
+            /**
+             * Creates a new JackpotReportRecord instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns JackpotReportRecord instance
+             */
+            public static create(properties?: gamebase.IJackpotReportRecord): gamebase.JackpotReportRecord;
+
+            /**
+             * Encodes the specified JackpotReportRecord message. Does not implicitly {@link gamebase.JackpotReportRecord.verify|verify} messages.
+             * @param message JackpotReportRecord message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: gamebase.IJackpotReportRecord, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Encodes the specified JackpotReportRecord message, length delimited. Does not implicitly {@link gamebase.JackpotReportRecord.verify|verify} messages.
+             * @param message JackpotReportRecord message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: gamebase.IJackpotReportRecord, writer?: $protobuf.Writer): $protobuf.Writer;
+
+            /**
+             * Decodes a JackpotReportRecord message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns JackpotReportRecord
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): gamebase.JackpotReportRecord;
+
+            /**
+             * Decodes a JackpotReportRecord message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns JackpotReportRecord
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): gamebase.JackpotReportRecord;
+
+            /**
+             * Verifies a JackpotReportRecord message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a JackpotReportRecord message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns JackpotReportRecord
+             */
+            public static fromObject(object: { [k: string]: any }): gamebase.JackpotReportRecord;
+
+            /**
+             * Creates a plain object from a JackpotReportRecord message. Also converts values to other types if specified.
+             * @param message JackpotReportRecord
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: gamebase.JackpotReportRecord, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this JackpotReportRecord to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

@@ -50,6 +50,10 @@ export default class GUI {
         alertStack.setInfo(panel, alert.assets, alert.helper);
     }
 
+    public setCustomAlert(alert: { assets: Prefab, helper?: IAlertStackHelper }) {
+        alertStack.setCustomAlert(alert.assets, alert.helper);
+    }
+
     public setBtmBtnsLayerInfo(layers: string[]): void {
         uiStack.setBtmBtnsLayer(layers)
     };

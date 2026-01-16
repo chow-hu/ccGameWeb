@@ -45,6 +45,8 @@ export class DataHandle {
             return 'en';
         } else if (/pt/i.test(lang)) {
             return 'pt'
+        } else if (/hi/i.test(lang)) {
+            return 'hi'
         }
         return 'en';
     }

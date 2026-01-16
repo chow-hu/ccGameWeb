@@ -38,6 +38,7 @@ export const GameResp = {
 
 export const GameProto = {
     GetPropPush: 'client_proto.GetPropPush',
+    BalanceChangePush: 'roomalloc.BalanceChangePush',
 }
 
 /** 自定义事件 */
@@ -100,7 +101,7 @@ export const GameEvent = {
     /** 游戏-请求场次桌子列表 */
     LEVEL_TABLE_INFO: "roomalloc-LevelTableInfoResp",
 
-     /** 更新用户信息 */
+    /** 更新用户信息 */
     UPDATE_USER_INFO: "update-user-info",
 
     /** 修改用户信息返回 */
@@ -115,6 +116,8 @@ export const GameEvent = {
     /** 修改用户性别 */
     UPDATE_USER_GENDER: "update-user-gender",
 
+    /** 修改用户性别 */
+    UPDATE_BANLANCE: "update-banlance",
 }
 /** 自定义事件 */
 export const GameActionType = {
@@ -164,6 +167,8 @@ CmdToPbName[game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_GET_USERINFO
 CmdToPbName[game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_GET_USERINFO_BYFIELD_RESP] = GameResp.GET_USER_INFO_BY_FIELD;
 // 更新玩家游戏信息
 CmdToPbName[game_userinfo_proto.GAME_USERINFO_CMD.GAME_USERINFO_CMD_UPDATE_USERINFO_RESP] = GameResp.UPDATE_USER_INFO;
+
+CmdToPbName[room_alloc_proto.ROOMALLOC_CMD.CC_GAME_BALANCE_CHANGE_PUSH] = GameProto.BalanceChangePush;
 
 /** 玩家信息 */
 export interface IUpdateGameUserInfoData {

@@ -1,10 +1,10 @@
-import { IManager } from "../IManager";
-import { EMgr } from "../interface";
-import trackerSDK from 'kbdata-sdk';
 import { config } from "db://assets/plug-in/config";
-import { TrackType } from "./interface";
+import trackerSDK from 'kbdata-sdk';
 import { Cache } from "../../cache/Cache";
 import { AppConst } from "../../common/AppConst";
+import { IManager } from "../IManager";
+import { EMgr } from "../interface";
+import { TrackType } from "./interface";
 export class ReportManager extends IManager {
 	private tr: trackerSDK;
 
@@ -22,6 +22,9 @@ export class ReportManager extends IManager {
 	};
 
 	initTrack() {
+		if (Cache.User.isKB()) {
+			return;
+		}
 		if (!this.tr) {
 			this.tr = new trackerSDK({
 				appId: 11000,
@@ -56,6 +59,7 @@ export class ReportManager extends IManager {
 		if (!this.tr) {
 			return;
 		}
+
 		let clickTime = new Date().getTime();
 		const base = this.getBaseReportData();
 		this.tr.track(TrackType.click, { ...base, ...{ elementType, elementName, elementID: elementName, elementProperties } })
@@ -65,6 +69,7 @@ export class ReportManager extends IManager {
 		if (!this.tr) {
 			return;
 		}
+
 		let pageExitTime = new Date().getTime();
 		// if (exitTime - parseInt(time) < 1000) {  // 小于1秒不上报
 		// 	return;

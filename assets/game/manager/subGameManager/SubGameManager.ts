@@ -106,7 +106,9 @@ export class SubGameManager extends IManager {
                 return;
             }
             if (this.hasOwnLoading(detail.gameID)) {
-                AssetsLoader.instance.bundleLoad(bundleName, trans.path, Prefab, null, (err, prefab) => {
+                AssetsLoader.instance.bundleLoad(bundleName, trans.path, Prefab, (finished: number, total: number) => {
+                    this.emit(gi.SubGameEventGame.loading, finished / total * 100);
+                }, (err, prefab) => {
                     if (err) {
                         if (globalThis.confirm(gutil_char('DOWNLOAD_GAME_ERROR'))) {
                             location.reload();
@@ -349,12 +351,18 @@ export class SubGameManager extends IManager {
     }
 
     loadGame(progress: number) {
+        let outProgress = globalThis.ccgameprogress || 90;
+        let allProgress = Math.floor(outProgress + progress * (100 - outProgress) / 100);
         if (BUILD) {
             clearInterval(globalThis.ccgameloading);
             let progressText = document.getElementById('progressText');
             if (progressText) {
                 // progressText.style.display = 'block';
-                progressText.innerHTML = `${Math.floor(90 + progress * 0.1)}%`;
+                progressText.innerHTML = `${allProgress}%`;
+            }
+            let progressBar_JiliNew_IN = document.getElementById('progressBar_JiliNew_IN');
+            if (progressBar_JiliNew_IN) {
+                progressBar_JiliNew_IN.style.width = `${allProgress}%`;
             }
         }
     }

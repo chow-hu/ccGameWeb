@@ -16,11 +16,11 @@ import { AppEvent } from "../../common/AppEvent";
 import { Utils } from "../../common/Utils";
 import { IManager } from "../IManager";
 import { EMgr } from "../interface";
+import { GiNetGameReconnData } from "../subGameManager/interfaceGIApi";
+import { jumpToExit } from "../subGameManager/utils";
 import { GameCache } from "./GameCache";
 import { SubGameCache } from "./SubGameCache";
 import { EUserField, GameActionType, GameEvent, GameProto, GameReq, GameResp, IUpdateGameUserInfoData } from "./interface";
-import { GiNetGameReconnData } from "../subGameManager/interfaceGIApi";
-import { jumpToExit } from "../subGameManager/utils";
 
 export class GameManager extends IManager {
 
@@ -112,6 +112,7 @@ export class GameManager extends IManager {
             GameResp.GET_USER_INFO,
             GameResp.GET_USER_INFO_BY_FIELD,
             GameResp.UPDATE_USER_INFO,
+            GameProto.BalanceChangePush,
         ];
         this._eventList = [
             AppEvent.SYS_NET_CLOSED,
@@ -488,14 +489,18 @@ export class GameManager extends IManager {
             case GameResp.SHARE_POSTER:
                 this.emit(GameEvent.SHARE_POSTER, rspData);
                 break;
-            case GameResp.REQUEST_USER_BALANCE: {
+            case GameResp.REQUEST_USER_BALANCE:
                 gui.loading(false);
-                GameCache.game._set(SubGameCache.BALANCE, rspData.balance);
+                Cache.User.setBalance(rspData.balance);
+                //通知:重置玩家资产
                 this.emit(GameEvent.REQUEST_USER_BALANCE, rspData.balance);
-            }
                 break;
             case GameProto.GetPropPush:
                 // this.notifyGetProps(rspData as ccgame.client_proto.GetPropPush);
+                break;
+            case GameProto.BalanceChangePush:
+                Cache.User.setBalance(rspData?.balance || 0);
+                this.emit(GameEvent.UPDATE_BANLANCE);
                 break;
             case GameResp.LEVEL_TABLE_INFO:
                 this.emit(GameEvent.LEVEL_TABLE_INFO, rspData);
@@ -658,9 +663,12 @@ export class GameManager extends IManager {
 
         let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ROOMSERVER;
         let ctype = game_base_proto.CCGAME_MSGID.CC_GAME_JOIN_TABLE_REQ;
+        let userinfo: any = Utils.clone(Cache.User.getUser());
+        userinfo["money"] = Number(userinfo.balance);
         let param = {
             table_id: this._curJoinRoomData.tid,
             dstid: this._curJoinRoomData.svid,
+            userinfo: Utils.JsonEncode(userinfo),
         }
         log(GameReq.JOIN_ROOM, stype + " | " + ctype);
         gnet.send(GameReq.JOIN_ROOM, stype, ctype, param);
@@ -748,7 +756,7 @@ export class GameManager extends IManager {
     }
 
     /** 请求场次桌子列表 */
-    requestLevelTableInfo(game_id: number, level: number, record_num: number, self_tid?: number) {
+    requestLevelTableInfo(game_id: number, level: number, record_num: number, self_tid?: number, force: boolean = false) {
         let stype = game_base_proto.SERVER_INNER_MSG_TYPE.SERVER_TYPE_ROOMALLOC;
         let ctype = room_alloc_proto.ROOMALLOC_CMD.ROOMALLOC_CMD_LEVEL_TABLE_INFO_REQ;
         let param = {
@@ -760,7 +768,7 @@ export class GameManager extends IManager {
             self_svid: this._curJoinRoomData.svid,
         }
 
-        gnet.send(GameReq.LEVEL_TABLE_INFO, stype, ctype, param);
+        gnet.send(GameReq.LEVEL_TABLE_INFO, stype, ctype, param, force);
     }
 
     /** 获取玩家游戏信息   已弃用 */
@@ -801,6 +809,25 @@ export class GameManager extends IManager {
         }
 
         gnet.send(GameReq.UPDATE_USER_INFO, stype, ctype, param);
+    }
+
+    /** 显示玩家资产不足的处理(试玩则显示alert) */
+    showMoneyNotEnoughTips() {
+        if (Cache.User.isKB()) {
+            gui.alert({
+                content: gutil_char('INSUFFICIENT_FUNDS_KB_TIP'),
+                enableClose: false,
+                ok: {
+                    text: gutil_char('INSUFFICIENT_FUNDS_KB_RESET'),
+                    cb: () => {
+                        gui.closeAlert("all");
+                        this.requestResetUserBalance();
+                    }
+                }
+            }, PRIORITY.ALERT, "MONEY_ENOUGH");
+            return;
+        }
+        gui.showTips(gutil_char('GAME_ERROR_11'));
     }
 }
 

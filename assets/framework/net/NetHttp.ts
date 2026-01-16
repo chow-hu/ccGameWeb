@@ -32,10 +32,9 @@ class LOCAL_HTTP {
                 cb = args[index];
             }
         }
-        let resonsType: XMLHttpRequestResponseType | undefined;
+        let resonsType: XMLHttpRequestResponseType | undefined = opts?.resonsType;
         if (opts && opts.method && opts.method === 'GET' && data) {
             url = this._unionURLWithLZData(url, data);
-            resonsType = 'json';
             data = undefined;
         }
         let param = {
@@ -103,10 +102,9 @@ class LOCAL_HTTP {
             }
         }
 
-        let resonsType: XMLHttpRequestResponseType | undefined;
+        let resonsType: XMLHttpRequestResponseType | undefined = opts?.resonsType;
         if (opts && opts.method && opts.method === 'GET' && data) {
             url = this._unionURLWithData(url, data);
-            resonsType = 'json';
             data = undefined;
         }
 
@@ -138,7 +136,7 @@ class LOCAL_HTTP {
         return xhr.responseText || ' ';
     };
 
-    
+
     static _send(onready: Function, param: { url: string, postData: Record<string, any> | null, cb?: Function }, resonsType?: XMLHttpRequestResponseType, opts?: LOCAL_HTTP_OPTIONS) {
         this._netlog(`[php]: `, param);
         let tm: any = 0;
@@ -154,14 +152,14 @@ class LOCAL_HTTP {
                     param.cb && param.cb('sendHttp timeout', null);
                     delete param.cb;
                 } else {
-                    if(opts.retryTimes != null){
+                    if (opts.retryTimes != null) {
                         opts.retryTimes = retryTimes
                     }
                     xhr && _this._send(onready, param, resonsType, opts);
                 }
                 xhr = undefined;
             }, timeOutTs);
-            
+
             if (param.postData) {
                 param.postData.sign = this._generateSignature(param.postData)
                 xhr.responseType = resonsType || 'json';
@@ -171,7 +169,7 @@ class LOCAL_HTTP {
                 xhr.responseType = resonsType || "arraybuffer";
                 xhr.open('GET', param.url, true);
             }
-            xhr.setRequestHeader("Access-Control-Allow-Origin","*");
+            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
             xhr.send(JSON.stringify(param.postData));
             xhr.onreadystatechange = function () { // 下载结束
                 if (!xhr) return;
@@ -216,32 +214,32 @@ class LOCAL_HTTP {
         return null;
     };
 
-    static _generateSignature(data: { [key: string]: any }, signKey?: string): string {  
+    static _generateSignature(data: { [key: string]: any }, signKey?: string): string {
         // 步骤1: 数据排序  
-        const sortedKeys = Object.keys(data).sort();  
-      
+        const sortedKeys = Object.keys(data).sort();
+
         // 步骤2: 构建待签名字符串  
-        let signString = sortedKeys.map(key => {  
-            let value = data[key];  
+        let signString = sortedKeys.map(key => {
+            let value = data[key];
             // 如果值是对象或数组，需要转换为JSON字符串  
-            if (typeof value === 'object' && value !== null) {  
-                value = JSON.stringify(value);  
-            } else if (typeof value === 'string') {  
+            if (typeof value === 'object' && value !== null) {
+                value = JSON.stringify(value);
+            } else if (typeof value === 'string') {
                 // 对字符串进行URL编码  
-                value = encodeURIComponent(value);  
-            }  
-            return `${key}=${value}`;  
-        }).join('&');  
-      
+                value = encodeURIComponent(value);
+            }
+            return `${key}=${value}`;
+        }).join('&');
+
         // 步骤3: 如果有signKey，拼接在字符串后面  
-        if (signKey) {  
-            signString += signKey;  
-        }  
-      
+        if (signKey) {
+            signString += signKey;
+        }
+
         // 步骤4: 签名生成，对构建的待签名字符串进行MD5加密  
-        const signature = md5(signString);  
-      
-        return signature;  
+        const signature = md5(signString);
+
+        return signature;
     }
 
     static _unionURLWithData(url: string, data: Record<string, any>) {

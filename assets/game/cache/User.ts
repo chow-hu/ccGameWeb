@@ -1,14 +1,15 @@
 import { log } from 'cc';
+import _ from 'lodash';
 import { setValueByKey, sprintf } from '../../framework/ge';
+import ccgame from '../../shared/proto';
 import { AppConst } from "../common/AppConst";
+import { AppEvent } from '../common/AppEvent';
 import { Utils } from "../common/Utils";
 import { GameConfig, LoginEvent, UserConfig } from "../manager/account/interface";
-import { CacheBase } from "./CacheBase";
-import _ from 'lodash';
 import { GameCache } from '../manager/game/GameCache';
-import { GiNetGameReconnData } from '../manager/subGameManager/interfaceGIApi';
-import ccgame from '../../shared/proto';
 import { SubGameCache } from '../manager/game/SubGameCache';
+import { GiNetGameReconnData } from '../manager/subGameManager/interfaceGIApi';
+import { CacheBase } from "./CacheBase";
 
 /**
  * Name = User
@@ -170,7 +171,8 @@ export class User extends CacheBase {
         setValueByKey(data, this._dataContinar.user);
         this._dataContinar.user.gameinfo = JSON.parse(this._dataContinar.user.gameinfo as any);
         // this._dataContinar.user.username = nickName.length <= 4 ? nickName : ("*" + nickName.substring(nickName.length - 4, nickName.length));
-        this._dataContinar.user.nick = this._dataContinar.user.gameinfo.env == 100 ? ("DEMO" + sprintf('%04d', nickName.substring(nickName.length - 4))) : (this._dataContinar.user.nick || ("Player" + nickName));
+        // this._dataContinar.user.nick = this._dataContinar.user.gameinfo.env == 100 ? ("DEMO" + sprintf('%04d', nickName.substring(nickName.length - 4))) : (this._dataContinar.user.nick || ("Player" + nickName));
+        this._dataContinar.user.nick = this.isKB() ? ("DEMO" + sprintf('%04d', nickName.substring(nickName.length - 4))) : (this._dataContinar.user.nick || ("Player" + nickName));
 
         // 组装一下session数据
         let asession = {
@@ -189,8 +191,13 @@ export class User extends CacheBase {
             GameCache.game.setReconnData(ingame_info as GiNetGameReconnData);
         }
         console.log("bobo----------***** ", this._dataContinar.user.ingame_info);
+
+        this.emit(AppEvent.SYS_SHOW_OR_HIDE_VERSION, true);
     }
 
+    isKB() {
+        return this._dataContinar?.user?.gameinfo?.env == 100;
+    }
 
     /** 获取登录的Token */
     getToken() {
@@ -301,7 +308,12 @@ export class User extends CacheBase {
         return 0;
     }
 
+    /**
+     * 设置资产
+     * @param balance 
+     */
     setBalance(balance: number) {
+        if (balance == null) { return; };
         this._dataContinar.user.balance = balance || 0;
         GameCache.game._set(SubGameCache.BALANCE, balance);
     }
@@ -310,7 +322,7 @@ export class User extends CacheBase {
         return {
             currency: this._dataContinar?.user?.currency || 'INR',
             rate: this._dataContinar?.user?.currency_unit_multi || 1000,
-            sign: this._dataContinar?.user?.currency_label || '₹',
+            sign: this.isKB() ? "" : (this._dataContinar?.user?.currency_label || '₹'),
         };
     }
 

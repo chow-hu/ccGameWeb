@@ -81,11 +81,16 @@ export namespace AppConst {
         /** 游戏:abMoneyCome */
         105: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "", gameName: 'Money Coming' },
         /** 游戏:abMines */
-        106: { name: "abMines", layer: "lyMinesLoadingViewNew", url: "", md5: "" },
+        106: { name: "abMines", layer: "lyMinesLoadingViewNew", url: "", md5: "", gameName: 'Mines' },
         /** 游戏:abChicken2 */
         107: { name: "abChicken2", layer: "abChicken2Loading/prefab/layer/lyChicken2Loading", url: "", md5: "", gameName: 'Chicken Road 2' },
         /** 游戏: */
         108: { name: "abSquid", layer: "abSquidGameLoading/prefab/layer/lySquidGameLoadingView", url: "", md5: "", gameName: 'Squid Game' },
+        /** 游戏: */
+        110: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "", gameName: 'New Money Coming' },
+        /** 游戏:abPappu */
+        109: { name: "abPappu", layer: "lyPappuLoading", url: "", md5: "", gameName: 'Pappu' },
+
     }
 
     export const NotOwnLoadingGames = [101, 103, 107, 108];

@@ -5,7 +5,7 @@
  * @Reference:
 */
 
-import { Button, instantiate, isValid, Node, Prefab, Sprite, SpriteAtlas, tween, UIOpacity } from "cc";
+import { Button, Color, instantiate, isValid, Node, Prefab, Sprite, SpriteAtlas, tween, UIOpacity } from "cc";
 import { EMap } from "../../common/EMap";
 import { ETw } from "../../common/ETw";
 import { PRIORITY } from "../../common/general";
@@ -54,6 +54,7 @@ export class AlertStack extends EventContract {
     private _tag: string;
     private _helper?: IAlertStackHelper;
     private _last_masked = false;
+    private _opacity: number = 255;
     private static _instance: AlertStack;
     public static get instance() {
         if (this._instance) {
@@ -80,6 +81,14 @@ export class AlertStack extends EventContract {
         return this._stack.count;
     }
 
+    setMaskOpacity(opacity: number) {
+        this._opacity = opacity;
+        let color = this._mask?.getComponent(Sprite)?.color;
+        if (color) {
+            this._mask.getComponent(Sprite).color = new Color(color.r, color.g, color.b, opacity);
+        }
+    }
+
     public setInfo(panel: Node, prefab: Prefab, helper?: IAlertStackHelper): void {
         this._panel = panel;
         this._prefab = prefab;
@@ -87,6 +96,7 @@ export class AlertStack extends EventContract {
 
         let one = this._panel.children[0];
         if (!this._mask) {
+            this.on(['mask', 'force-mask']);
             this._mask = one;
             let btn = this._mask.getComponent(Button);
             if (!btn) btn = this._mask.addComponent(Button);
@@ -98,7 +108,7 @@ export class AlertStack extends EventContract {
     setCustomAlert(prefab: Prefab, helper?: IAlertStackHelper) {
         this._prefab = prefab;
         this._helper = helper;
-        this._stack.forEach((val, key) => {
+        this._stack.forEach((val) => {
             if (isValid(val.node)) {
                 val.node.parent = null;
                 val.node.destroy();
@@ -240,16 +250,29 @@ export class AlertStack extends EventContract {
             if (!v) {
                 this._mask.parent = null;
             } else {
-                ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, maskable ? 255 : 0);
+                ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, maskable ? this._opacity : 0);
             }
         } else if (maskable != this._last_masked) {
             if (!maskable && this._last_masked) {
                 this._mask.parent && ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, 0);
             } else if (maskable && !this._last_masked) {
-                this._mask.parent && ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, 255);
+                this._mask.parent && ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, this._opacity);
             }
         }
         this._last_masked = maskable;
+    }
+
+    public onEvents(event: string, data: any): void {
+        switch (event) {
+            case 'mask':
+                data.tag === 'GUI' && this._doMask(true);
+                break;
+            case 'force-mask': {
+                data.tag === 'GUI' && this._doMask(data.value, true);
+            } break;
+            default:
+                break;
+        }
     }
 }
 

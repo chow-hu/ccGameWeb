@@ -4,7 +4,7 @@
  * @Date: 2021-01-19 15:06:06
  * @Reference:
  */
-import { Button, Color, Component, Node, Prefab, Sprite, SpriteFrame, director, isValid, macro } from 'cc';
+import { Button, Color, Component, Node, Prefab, Sprite, SpriteFrame, director, instantiate, isValid, macro } from 'cc';
 import { AppEvent } from "../../game/common/AppEvent";
 import { EAudio } from '../../game/common/interface';
 import { AssetsLoader, IBundleOption } from '../asset/AssetsLoader';
@@ -21,6 +21,7 @@ import { TileNode } from './helper/tilenode';
 
 
 export default class GUI {
+    private panel_tips: Node;
     private static _instance: GUI;
     public static get instance() {
         if (this._instance) {
@@ -58,6 +59,10 @@ export default class GUI {
         uiStack.setBtmBtnsLayer(layers)
     };
 
+    public setMaskOpacity(opacity: number) {
+        uiStack.setMaskOpacity(opacity);
+        alertStack.setMaskOpacity(opacity);
+    }
 
     public setLoadingInfo(panel: Node, prefab: Prefab): void {
         loadingStack.setInfo(panel, prefab);
@@ -154,6 +159,24 @@ export default class GUI {
         }
         EventDispatcher.instance.dispatchEvent(AppEvent.FLOAT_TIPS, data);
     };
+
+    public setTips(panel: Node) {
+        this.panel_tips = panel;
+    }
+
+    public setCustomTips(asset: Prefab) {
+        if (!isValid(this.panel_tips)) {
+            return
+        }
+        let tip = instantiate(asset);
+        tip.active = true;
+        tip.parent = this.panel_tips;
+        EventDispatcher.instance.dispatchEvent(AppEvent.FLOAT_TIPS_CUSTOM, true);
+    }
+
+    public removeCustomTips() {
+        EventDispatcher.instance.dispatchEvent(AppEvent.FLOAT_TIPS_CUSTOM, false);
+    }
 
     public tidTip(tid: string, ...args: any) {
         let str = gutil_char(tid);

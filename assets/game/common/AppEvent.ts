@@ -43,6 +43,7 @@ export class AppEvent {
 
     /** 浮动土司 */
     static FLOAT_TIPS = "SysEvent_FloatTips";
+    static FLOAT_TIPS_CUSTOM = "SysEvent_FloatTips_Custom";
 
     static GLOBAL_MSG_STATE = "SysEvent_GlobalMsgState";
     static SHOW_RULE = GetAppEventID();

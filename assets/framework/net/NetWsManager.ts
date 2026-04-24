@@ -15,7 +15,7 @@ import { glog, valueset } from "../common/general";
 import out from '../extension/buffer/buffer.js';
 import { StorageData } from "../storage/StorageData";
 import { SchedulerManager } from "../timer/SchedulerManager";
-import { CmdToPbName, GameCmdMap, INetContract, NetEvent, NetFailure, NetMsg, NetState } from "./INet";
+import { CmdToPbName, GameCmdMap, INetContract, NetEvent, NetMsg, NetState } from "./INet";
 
 const HEARTBEAT_INTERVAL = 10; // 10秒发送一次心跳  
 const MISSED_HEARTBEATS_BEFORE_DISCONNECT = 3; // 错过3次心跳后断开连接  
@@ -25,6 +25,13 @@ const HeartBeat = {
     resp: "agent.HeartBeat",
 }
 
+export enum NetWsEvent {
+    success,
+    timeout,
+    heartbeatout,
+    reconnectout,
+    closed,
+}
 
 export default class NetWsManager {
     private static _instance: NetWsManager;
@@ -77,7 +84,7 @@ export default class NetWsManager {
         return this._connected
     }
 
-    public reconnect(): void {
+    public reconnect(event?: any): void {
         if (this._reconnectCount > 0 || this._reconnectNumber == -1) {
             this._reconnectTimer = setTimeout(() => {
                 log('socket reconect');
@@ -86,7 +93,7 @@ export default class NetWsManager {
             }, this._reconnectTimeOut);
         } else {
             this.destroy(false);
-            this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.ReconnectTimeout);
+            this.contract?.onNet(NetEvent.CONNECT_FAILED, { reason: NetWsEvent.reconnectout, event });
         }
     };
 
@@ -158,7 +165,7 @@ export default class NetWsManager {
         this._receiveData(event.data);
     }
 
-    _on_socket_close(event) {
+    _on_socket_close(event: CloseEvent) {
         if (this.state == NetState.READY) {
             log("_on_socket_close");
             this.contract?.onNet(NetEvent.CLOSED);
@@ -169,7 +176,7 @@ export default class NetWsManager {
             return;
         }
         this.close()
-        this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.NormalSocketClose);
+        this.contract?.onNet(NetEvent.CONNECT_FAILED, { reason: NetWsEvent.closed, event });
     }
 
     _on_socket_err(event) {
@@ -209,6 +216,11 @@ export default class NetWsManager {
         this.close();
     }
 
+    public disableInternalReconnect() {
+        this._isDestroy = true;
+        this._reconnectCount = 0;
+    }
+
     private clearReconnectTimer() {
         if (this._reconnectTimer) {
             clearTimeout(this._reconnectTimer);
@@ -228,13 +240,13 @@ export default class NetWsManager {
         if (this._connectTimer) {
             return;
         }
-        this.clearTimeout();
         this._connectTimer = setTimeout(() => {
+            this.clearTimeout();
             if (this._reconnectCount > 0 || this._reconnectNumber == -1) {
                 this.reconnect();
             } else {
                 this.destroy(this._isDestroy);
-                this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.ReconnectTimeout);
+                this.contract?.onNet(NetEvent.CONNECT_FAILED, { reason: NetWsEvent.timeout });
             }
         }, this._connectTimeOut);
     }
@@ -247,7 +259,7 @@ export default class NetWsManager {
                 if (this._nSendHeartId >= MISSED_HEARTBEATS_BEFORE_DISCONNECT) {
                     console.warn("网络异常,需要重连...");
                     this.destroy();
-                    this.contract?.onNet(NetEvent.CONNECT_FAILED, NetFailure.HeartBeatTimeout);
+                    this.contract?.onNet(NetEvent.CONNECT_FAILED, { reason: NetWsEvent.heartbeatout });
                     return
                 }
                 this.sendHeartBeat();
@@ -361,7 +373,7 @@ export default class NetWsManager {
         let route = CmdToPbName[cmd];
         this._deleteSendStack(route);
 
-        var msg = this._protodecode(route, newMsgBuf.buffer);
+        var msg = this._protodecode(route, newMsgBuf.buffer as ArrayBuffer);
         if (route == HeartBeat.resp) {
             this._nSendHeartId = 0;
             this.receiveHeartBeat(msg);

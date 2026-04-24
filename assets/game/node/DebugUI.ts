@@ -1,10 +1,12 @@
 
-import { EditBox, EventTouch, Label, Node, Toggle, _decorator, error, profiler, warn } from 'cc';
+import { Button, EditBox, EventTouch, Label, Node, Toggle, _decorator, error, instantiate, profiler, warn } from 'cc';
 import { DEBUG } from 'cc/env';
 import { PRIORITY, UIBase, gnet, gui, http } from '../../framework/ge';
 import { config } from '../../plug-in/config';
 import { AppEvent } from '../common/AppEvent';
 import { SubGameDetail, SubGameEventGame } from '../manager/subGameManager/interface';
+import { nodelink } from '../common/custom-general';
+import { AppConst } from '../common/AppConst';
 const { ccclass, property } = _decorator;
 
 /**
@@ -70,6 +72,9 @@ export class DebugUI extends UIBase {
 	@property({ tooltip: "信息", type: Label })
 	lblInfo: Label | null = null;
 
+	@property({ type: Node, tooltip: "" })
+	gameList: Node | null = null;
+
 	private _baseUrl = "https://fdsghuk349dfsbjk.ccapi218orbjksapm03fjkds.com/gamemock/login"
 	/** 试玩请求tokenapi */
 	private _baseKBUrl = `https://api-dh3y1a938kzmg.kbtest193usgzmfhqoldhnv3719sjapu48amcpmrehal213.com/api/singleWallet/LoginWithoutRedirect?GameId=XXX&Lang=en-US&AgentId=KBGame&Balance=5000000`
@@ -84,6 +89,7 @@ export class DebugUI extends UIBase {
 		this.toggleFpsShowOrHide.isChecked = profiler?.isShowingStats();
 		this.ToggleLog.isChecked = false;
 		this.updateInfo();
+		this.initGameList();
 	}
 
 	/** 事件绑定回调 */
@@ -127,6 +133,24 @@ export class DebugUI extends UIBase {
 		let serverList = { 1: "内网", 2: "外网测试", 3: "外网正式", 4: "预发布", }
 		this.lblInfo.string = ` Ver:${config.VERSION} 调试模式:${DEBUG}  IO:${serverList[config.IO]} `;
 	}
+
+	initGameList() {
+		let itemCopy = nodelink("view/content/item", this.gameList);
+		const gameConfig = AppConst.GameBundleConf;
+		itemCopy.active = false;
+		for (const key in gameConfig) {
+			const element = gameConfig[key];
+			let item = instantiate(itemCopy);
+			item.active = true;
+			item.parent = itemCopy.parent;
+			item.getComponent(Label).string = element.gameName ?? element.name;
+			gui.onclick(item, () => {
+				this.editGameID.string = key;
+				this.gameList.active = false;
+			});
+		}
+	}
+
 	/** 点击了跳转游戏 */
 	onClickJumpGame(e: EventTouch) {
 		let gameID = Number(this.editGameID.string);
@@ -253,6 +277,10 @@ export class DebugUI extends UIBase {
 		})
 	}
 
-
+	onClickGameDrop(btn: Button) {
+		let node = btn.target;
+		this.gameList.active = !this.gameList.active;
+		node.getComponentInChildren(Label).string = !this.gameList.active ? "V" : "‌Λ";
+	}
 }
 

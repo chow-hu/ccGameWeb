@@ -31,7 +31,8 @@ export class lyGameExit extends UIBase {
     }
 
     initUi(param) {
-        this.logo.active = String(Cache.User.getUser().game) != '101';
+        let game = String(Cache.User.getUser().game)
+        this.logo.active = game != '101' && game != '109' && game != '110';
         // this.img_bg.angle = param.orientation == SubGameOrientation.portrail ? 0 : 90;
         ui2d.size(this.img_frame, param.orientation == SubGameOrientation.portrail ? 690 : 800, 475);
         ui2d.pos(this.img_frame, 0, param.orientation == SubGameOrientation.portrail ? 96 : 0)

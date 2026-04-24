@@ -16111,6 +16111,7 @@ $root.gamebase = (function() {
                 case 3:
                 case 4:
                 case 5:
+                case 6:
                     break;
                 }
             if (message.param != null && message.hasOwnProperty("param"))
@@ -16158,6 +16159,10 @@ $root.gamebase = (function() {
             case "ACTION_OPTIMEOUT_KICK":
             case 5:
                 message.action = 5;
+                break;
+            case "ACTION_AUTO_CASHOUT":
+            case 6:
+                message.action = 6;
                 break;
             }
             if (object.param != null)
@@ -16215,6 +16220,7 @@ $root.gamebase = (function() {
          * @property {number} ACTION_RETIRE_KICK=3 ACTION_RETIRE_KICK value
          * @property {number} ACTION_OPTIMEOUT_TIPS=4 ACTION_OPTIMEOUT_TIPS value
          * @property {number} ACTION_OPTIMEOUT_KICK=5 ACTION_OPTIMEOUT_KICK value
+         * @property {number} ACTION_AUTO_CASHOUT=6 ACTION_AUTO_CASHOUT value
          */
         GameNotificationPush.ActionType = (function() {
             var valuesById = {}, values = Object.create(valuesById);
@@ -16224,6 +16230,7 @@ $root.gamebase = (function() {
             values[valuesById[3] = "ACTION_RETIRE_KICK"] = 3;
             values[valuesById[4] = "ACTION_OPTIMEOUT_TIPS"] = 4;
             values[valuesById[5] = "ACTION_OPTIMEOUT_KICK"] = 5;
+            values[valuesById[6] = "ACTION_AUTO_CASHOUT"] = 6;
             return values;
         })();
 

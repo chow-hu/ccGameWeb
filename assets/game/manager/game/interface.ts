@@ -129,8 +129,12 @@ export const GameActionType = {
     RETIRE_ALLOC: 2,
     /** 房间退休踢人 */
     RETIRE_KICK: 3,
-    ACTION_OPTIMEOUT_TIPS: 4, //超时不操作提示
-    ACTION_OPTIMEOUT_KICK: 5, //超时不操作踢人
+    /** 超时不操作提示 不踢人 */
+    ACTION_OPTIMEOUT_TIPS: 4,
+    /** 超时不操作 踢人 */
+    ACTION_OPTIMEOUT_KICK: 5,
+    /** 自动结算提示 */
+    ACTION_AUTO_CASHOUT : 6,
 }
 
 // 请求游戏配置

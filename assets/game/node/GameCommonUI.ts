@@ -12,6 +12,7 @@ import { Cache } from '../cache/Cache';
 import { AppEvent } from '../common/AppEvent';
 import { commonAssetLoader } from '../common/CommonAssetLoader';
 import { AlertStackHelper } from './AlertStackHelper';
+import { LoginEvent } from '../manager/account/interface';
 
 const { ccclass, property, menu } = _decorator;
 
@@ -48,6 +49,9 @@ export class GameCommonUI extends UIBase {
     @property(Node)
     panel_alert!: Node;
 
+    @property(Node)
+    panel_tips!: Node
+
     onLoad(): void {
         let viewsize: Size = globalThis.viewsize();
         let size: Size = globalThis.uisize();
@@ -57,7 +61,7 @@ export class GameCommonUI extends UIBase {
         gui.setLoadingInfo(this.panelLoading, this.loadingPrefab)
         gui.setAlert(this.panel_alert, { assets: this.alertPrefab, helper: new AlertStackHelper() });
         gaudio.setInfo(this.panelAudio);
-        this.lb_version.string = Cache.User.isKB() ? '' : `Version ${config.VERSION}`;
+        gui.setTips(this.panel_tips);
         // let list: Record<string, Prefab> = {};
         // for (let index = 0; index < this.builderInfos.length; index++) {
         //     const element = this.builderInfos[index];
@@ -72,7 +76,7 @@ export class GameCommonUI extends UIBase {
         // this._commonAssetCheck();
         this.onGameState();
 
-        this.on([AppEvent.SYS_SHOW_OR_HIDE_VERSION]);
+        this.on([AppEvent.SYS_SHOW_OR_HIDE_VERSION, LoginEvent.LOGIN_READY]);
 
     }
 
@@ -109,6 +113,10 @@ export class GameCommonUI extends UIBase {
             case AppEvent.SYS_SHOW_OR_HIDE_VERSION:
                 this._updateVersionVisible(key);
                 break;
+            case LoginEvent.LOGIN_READY:
+                let gameId = Cache.User?.getGameId() || 100;
+                this.lb_version.string = Cache.User.isKB() ? '' : `Version ${config.VERSION}_${config.GameVersion(gameId)} `;
+                break
             default:
                 break;
         }
@@ -116,7 +124,8 @@ export class GameCommonUI extends UIBase {
 
     private _updateVersionVisible(visible = null) {
         if (visible == null || typeof (visible) != 'boolean') { return; };
-        this.lb_version.string = Cache.User.isKB() ? '' : `Version ${config.VERSION}`;
+        let gameId = Cache.User?.getGameId() || 100;
+        this.lb_version.string = Cache.User.isKB() ? '' : `Version ${config.VERSION}_${config.GameVersion(gameId)} `;
 
         this.lb_version.node.active = visible;
 

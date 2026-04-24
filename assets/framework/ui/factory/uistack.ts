@@ -4,7 +4,7 @@
  * @Date: 2022-05-19 10:17:15
  * @Reference: 
  */
-import { Button, Component, isValid, Node, Prefab, Sprite, TweenSystem } from "cc";
+import { Button, Color, Component, isValid, Node, Prefab, Sprite, TweenSystem } from "cc";
 import { ETw } from "../../common/ETw";
 import { EventContract } from "../../event/EventContract";
 import { UIBase, UIType } from "../component/UIBase";
@@ -18,6 +18,7 @@ export class UIStack extends EventContract {
     private _panel?: Node;
     private _mask?: Node;
     private _last_masked = false;
+    private _opacity: number = 255;
     private static _instance: UIStack;
     public static get instance() {
         if (this._instance) {
@@ -30,6 +31,14 @@ export class UIStack extends EventContract {
     constructor(tag: string) {
         super();
     };
+
+    setMaskOpacity(opacity: number) {
+        this._opacity = opacity;
+        let color = this._mask?.getComponent(Sprite)?.color;
+        if (color) {
+            this._mask.getComponent(Sprite).color = new Color(color.r, color.g, color.b, opacity);
+        }
+    }
 
     setInfo(panel: Node, alert: { assets: Prefab, helper?: IAlertStackHelper }, mask?: Node) {
         this._panel = panel;
@@ -169,13 +178,13 @@ export class UIStack extends EventContract {
             if (!v) {
                 this._mask.parent = null;
             } else {
-                ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, maskable ? 255 : 0);
+                ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, maskable ? this._opacity : 0);
             }
         } else if (maskable != this._last_masked) {
             if (!maskable && this._last_masked) {
                 this._mask.parent && ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, 0);
             } else if (maskable && !this._last_masked) {
-                this._mask.parent && ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, 255);
+                this._mask.parent && ETw.fadeTo(this._mask.getComponent(Sprite)!, 0, this._opacity);
             }
         }
         this._last_masked = maskable;

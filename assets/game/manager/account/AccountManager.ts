@@ -7,7 +7,7 @@
  */
 import { log, randomRangeInt, warn } from "cc";
 import { HTML5, NATIVE } from "cc/env";
-import { NetMsg, NetState, PRIORITY, client_proto, gnet, gui, gutil_char, account_proto, proto_asset, NetFailure } from "../../../framework/ge";
+import { NetMsg, NetState, PRIORITY, client_proto, gnet, gui, gutil_char, account_proto, proto_asset } from "../../../framework/ge";
 import { StorageData } from "../../../framework/storage/StorageData";
 import { Cache } from "../../cache/Cache";
 import { AppConst } from "../../common/AppConst";
@@ -25,6 +25,7 @@ import { ReportManager } from "../report/ReportManager";
 import { jumpToExit } from "../subGameManager/utils";
 import { User } from "../../cache/User";
 import _ from "lodash";
+import { NetWsEvent } from "db://assets/framework/net/NetWsManager";
 
 export class AccountManager extends IManager {
     private static _instance: AccountManager;
@@ -45,6 +46,8 @@ export class AccountManager extends IManager {
     private _loaded = false;
     private _loginTime: number = -1;
     private _isFirstLogin: boolean = true;
+    private _wsIdx: number = 0;
+    private _wsCnt: number = 0;
 
     /** 收到pb消息 */
     onRecv(event: string, data: NetMsg) {
@@ -95,42 +98,76 @@ export class AccountManager extends IManager {
                 break;
         }
     };
+
+    private connectFialed(data: any) {
+        let str = gutil_char('NET_RECONNECT_FAILED');
+        if (data?.event?.code) {
+            str += ` [code: ${data?.event?.code}]`;
+        }
+        if (data?.reason) {
+            str += ` [reason: ${data?.reason}]`;
+        }
+        if (this._isFirstLogin) {
+            if (globalThis.confirm(str)) {
+                gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
+            }
+        } else {
+            Cache.User.setLoginState(AppConst.UserLoginState.Offline);
+            Cache.User.LoginRoomState = false;
+            gui.loading(false, PRIORITY.NET);
+            gui.alert({
+                content: str,
+                enableClose: false,
+                ok: {
+                    text: gutil_char('OK'),
+                    cb: () => {
+                        if (data?.reason == NetWsEvent.closed) {
+                            this.loginLogic()
+                        } else {
+                            gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
+                        }
+                    }
+                }
+            }, PRIORITY.NET, 'NET');
+        }
+    }
+
+    private handleConnectFailed(data: any) {
+        let urls = Cache.User.getAgent();
+        this._wsCnt++;
+        if (this._wsCnt >= urls?.length) {
+            this._wsCnt = 0;
+            this._wsIdx = 0;
+            this.connectFialed(data);
+        } else {
+            gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
+        }
+    }
+
+    resetConnet() {
+        let urls = Cache.User.getAgent();
+        if (!urls?.length) {
+            this._wsIdx = 0;
+            this._wsCnt = 0;
+            return;
+        }
+        this._wsIdx = (this._wsIdx + this._wsCnt) % urls.length;
+        this._wsCnt = 0;
+    }
+
     /** 收到事件消息 */
     onEvents(event: string, data: any) {
         switch (event) {
             case AppEvent.SYS_NET_READY:
+                this.resetConnet();
                 this.startLogin();
                 break;
             case SdkEvent.LOGIN:
                 // this._onJSFLogin(data);
                 break;
-            case AppEvent.SYS_NET_CLOSED:
+            // case AppEvent.SYS_NET_CLOSED:
             case AppEvent.SYS_NET_CONNECT_FAILED:
-                if (this._isFirstLogin) {
-                    if (globalThis.confirm(gutil_char('NET_RECONNECT_FAILED'))) {
-                        gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
-                    }
-                    return
-                }
-                Cache.User.setLoginState(AppConst.UserLoginState.Offline);
-                Cache.User.LoginRoomState = false;
-                if (event == AppEvent.SYS_NET_CONNECT_FAILED) {
-                    gui.loading(false, PRIORITY.NET);
-                    gui.alert({
-                        content: gutil_char('NET_RECONNECT_FAILED'),
-                        enableClose: false,
-                        ok: {
-                            text: gutil_char('OK'),
-                            cb: () => {
-                                if (data == NetFailure.NormalSocketClose) {
-                                    this.loginLogic()
-                                } else {
-                                    gmgr.get<AccountManager>(EMgr.ACCOUNT).startConnect()
-                                }
-                            }
-                        }
-                    }, PRIORITY.NET, 'NET');
-                }
+                this.handleConnectFailed(data);
                 break;
             default:
                 break;
@@ -149,16 +186,23 @@ export class AccountManager extends IManager {
 
     /** 开启连接 */
     startConnect() {
-        if (gnet.state == NetState.WAITING || gnet.state == NetState.READY) {
-            return;
-        }
+        // if (gnet.state == NetState.WAITING || gnet.state == NetState.READY) {
+        //     return;
+        // }
         this._loaded = false;
         let urls = Cache.User.getAgent();
-        let aUrl = urls[randomRangeInt(0, urls.length)];
+        if (!urls?.length) {
+            this.handleConnectFailed({});
+            return;
+        }
+        let id = (this._wsIdx + this._wsCnt) % urls.length;
+        let aUrl = urls[id];
         // gui.loading({ forever: true, type: 0 }, PRIORITY.NET);
         if (aUrl) {
-            gnet.connect(aUrl, false);
+            gnet.disableInternalReconnect();
+            gnet.connect(aUrl, true);
         } else {
+            this.handleConnectFailed({});
             log("agnet is null");
         }
     }

@@ -86,14 +86,23 @@ export namespace AppConst {
         107: { name: "abChicken2", layer: "abChicken2Loading/prefab/layer/lyChicken2Loading", url: "", md5: "", gameName: 'Chicken Road 2' },
         /** 游戏: */
         108: { name: "abSquid", layer: "abSquidGameLoading/prefab/layer/lySquidGameLoadingView", url: "", md5: "", gameName: 'Squid Game' },
-        /** 游戏: */
-        110: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "", gameName: 'New Money Coming' },
         /** 游戏:abPappu */
         109: { name: "abPappu", layer: "lyPappuLoading", url: "", md5: "", gameName: 'Pappu' },
+        // /** 游戏: New Money Coming */
+        110: { name: "abMoneyCome", layer: "lyMoneyLoadingView", url: "", md5: "", gameName: 'New Money Coming' },
+        /** 游戏: Go rush */
+        111: { name: "abRocket", layer: "lyRocketLoaingView", url: "", md5: "", gameName: 'Go rush' },
+        /** 游戏: Sudm */
+        112: { name: "abSudm", layer: "abSudmLoading/prefab/layer/lySudmLoading", url: "", md5: "", gameName: 'Sudm' },
+        /** 游戏: FortuneGems2 */
+        113: { name: "abFortuneGems2", layer: "lyFG2LoadingView", url: "", md5: "", gameName: 'FortuneGems2' },
+        /** 游戏:abChicken1 */
+        114: { name: "abChicken1", layer: "abChicken1Loading/prefab/layer/lyChicken1Loading", url: "", md5: "", gameName: 'Chicken Road 1' },
 
+        115: { name: "abSpribeMines", layer: "abMinesLoading/prefab/layer/lySpribeMinesLoading", url: "", md5: "", gameName: 'SpribeMines' },
     }
 
-    export const NotOwnLoadingGames = [101, 103, 107, 108];
+    export const NotOwnLoadingGames = [101, 103, 107, 108, 114, 116];
     /** 附属包配置 */
     export const SubBundleConf: { [key: string | number]: IBundleOption } = {
         /** abJackPot */

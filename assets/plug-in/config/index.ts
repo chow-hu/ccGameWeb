@@ -8,7 +8,26 @@
 import { BUILD, HTML5 } from "cc/env";
 import { _config_ as dev } from "./config-dev";
 import { _config_ as dis } from "./config-dis";
-import { StorageData } from "../../framework/storage/StorageData";
+
+const GameVersion: { [key: string | number]: { version: string } } = {
+    100: { version: '1.0.0' },
+    101: { version: '1.0.0' },
+    102: { version: '1.0.0' },
+    103: { version: '1.0.0' },
+    104: { version: '1.0.0' },
+    105: { version: '1.0.0' },
+    106: { version: '1.0.0' },
+    107: { version: '1.0.0' },
+    108: { version: '1.0.0' },
+    109: { version: '1.0.0' },
+    110: { version: '1.0.0' },
+    111: { version: '1.0.0' },
+    112: { version: '1.0.0' },
+    113: { version: '1.0.0' },
+    114: { version: '1.0.0' },
+    115: { version: '1.0.0' },
+    116: { version: '1.0.0' },
+}
 
 class GameConfig {
     constructor() {
@@ -17,6 +36,10 @@ class GameConfig {
         } else {
             this.lanuage = dev['lanuage'];
         }
+    }
+
+    public GameVersion(id: number | string): string {
+        return GameVersion[id]?.version;
     }
 
     private _output(key: string) {

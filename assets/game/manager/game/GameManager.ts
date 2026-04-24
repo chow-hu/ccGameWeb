@@ -443,12 +443,13 @@ export class GameManager extends IManager {
                 // gui.showTips('退出房间：' + GameCache.game._get(SubGameCache.GAME_TABLEID));
                 break;
             case GameResp.GAMENOTIFICATION_PUSH: // 踢出房间广播
-                warn("============踢人广播============", rspData)
+                warn("============踢人或即将踢人广播============", rspData)
                 if (rspData) {
-                    if (rspData?.action != GameActionType.TIMEOUT_TIPS) {
+                    if (rspData?.action != GameActionType.TIMEOUT_TIPS && rspData?.action != GameActionType.ACTION_OPTIMEOUT_TIPS) {
                         warn(">>>登录房间状态===>false");
                         this.__stopCheckTimeOut();
                         this.__initTimeOutNum();
+
                         Cache.User.LoginRoomState = false;
                         GameCache.game._set(SubGameCache.GAME_TABLEID, 0)
                     }
@@ -468,6 +469,8 @@ export class GameManager extends IManager {
                             }
                         }, PRIORITY.ALERT, 'KICK');
                         break;
+                    } else if (rspData?.action == GameActionType.ACTION_OPTIMEOUT_KICK) {
+                        warn(">>>server踢人===>action=5 ");
                     }
                 }
                 this.emit(GameEvent.GAMENOTIFICATION_PUSH, rspData);

@@ -68,17 +68,12 @@ export class SubGameManager extends IManager {
 
     private doError(detail: SubGameDetail, tag = null) {
         detail.errCallback && detail.errCallback(`预加载包${Utils.JsonEncode(detail.bundleConf)}失败 tag:${tag}`);
-        // this.showCommonUi(true);
-        gui.closeLayer('lyGameLoading');
         this.lastGame = Utils.clone(this.curGame);
-        // this.curGame = null;
         this.closeGame();
     }
 
     private doSuccess(detail: SubGameDetail, showUi: boolean = true) {
         gui.loading(false, PRIORITY.UI);
-        gui.closeLayer('lyGameLoading');
-        // this.showCommonUi(showUi);
         detail.finishCallback && detail.finishCallback();
     }
 
@@ -181,16 +176,6 @@ export class SubGameManager extends IManager {
         this.curGame = detail;
         this.release();
         setOrientation(!!detail.orientation);
-        // gui.openLayer('lyGameLoading', { gameId: detail.gameID }, {
-        //     onAdded: () => {
-        //         if (detail.producer == SubGameProducer.c1) {
-        //             // this.showCommonUi(false, true);
-        //         } else {
-        //             // this.showCommonUi(false);
-        //         }
-        //         this.doOpen(detail);
-        //     }
-        // });
         this.doOpen(detail);
     }
 
@@ -210,17 +195,6 @@ export class SubGameManager extends IManager {
         GameCache.game._set(SubGameCache.GAME_ID, detail.gameID);
         GameCache.game._set(SubGameCache.GAME_PLAT, detail.producer);
         GameCache.game._set(SubGameCache.BALANCE, Cache.User.getBalance());
-    }
-
-    /** 显示或隐藏顶部UI */
-    showCommonUi(active: boolean, force?: boolean) {
-        if (globalThis.commonUI) {
-            // globalThis.commonUI.active = force ? active : active || this.curGame.producer == SubGameProducer.c1;
-
-            const panel_ui = globalThis.commonUI.getChildByName('panel_ui');
-            const panel_bottom = globalThis.commonUI.getChildByName('panel_bottom');
-            panel_ui.active = panel_bottom.active = force ? active : active || this.curGame.producer == SubGameProducer.c1;
-        }
     }
 
     /** 退出游戏 */

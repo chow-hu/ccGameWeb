@@ -172,10 +172,13 @@ export class AudioEngine {
     public setInfo(panel: Node) {
         this._panel = panel;
         this._clips = {};
+    };
+
+    initData() {
         const defaultValue = { allAllow: true, musicAllow: true, effectAllow: true, musicVolume: 0.5, effectVolume: 0.5 };
         this.control = JSON.parse(StorageData.local.get(StoreKey.SYS_APP_AUDIO, JSON.stringify(defaultValue))) as AudioControl;
         this._saveSettings();
-    };
+    }
 
     public push(item: Record<string, AudioClip>) {
         for (const key in item) {

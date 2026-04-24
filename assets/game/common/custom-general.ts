@@ -1366,69 +1366,78 @@ export function formatCountdownTime(time) {
         return (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute) + ":" + (second < 10 ? "0" + second : second);
     }
 }
+/** 将number以转为字符串，并处理科学计数法（使用 toFixed(dig+1) 是为了展开 1e-7 这种数  */
+export function toFixedTrunc(num: number, dig: number = 0): string {
+    let s = Number(num).toFixed(dig + 1);
+    let parts = s.split(".");
+
+    if (dig <= 0) return parts[0]; // 如果不要小数，直接返回整数部分
+
+    let left = parts[0];
+    let right = parts[1] || "";
+
+    // 2. 截取指定位数，不够则补 0
+    right = right.substring(0, dig).padEnd(dig, '0');
+
+    return left + "." + right;
+}
 
 /** 
  * 欧式格式化数字,每三位插入","
  * flag: true小数保留两位, 不传或false不保留小数
  * dig: 保留几位小数,默认2位
  * floatFlag: true小数点后补0 的方式,默认false 能被一百整除那就后面的小数位都补零， 否则不变
-*/
-
-export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, floatFlag: boolean = false) {
-    if (num == null || isNaN(Number(num))) return;
-
-    if (num == 0 || (Number(num) == 0)) {
-        return "0.00";
-    }
-    //正或负
-    let PorN: boolean = (Number(num) >= 0);
-    let numstr = Math.abs(Number(num)).toString();
+ */
+export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, floatFlag: boolean = false): string {
+    // 修正：如果不是数字，返回空字符串或"0"，确保函数始终返回 string
+    if (num === null || num === undefined || isNaN(Number(num))) return "0";
+    let n = Number(num);
+    // 正或负
+    let PorN: boolean = (n >= 0);
+    // 修正：使用 toFixed(dig) 避免科学计数法，并确保小数位符合要求
+    let numstr = toFixedTrunc(Math.abs(n), dig);
     let digits = numstr.split(".");
 
-    let left = "";
+    let left = digits[0] || "0";
     let right = "";
-    let str = "0";
-    if (digits[0]) {
-        left = digits[0];
-    }
 
-    if (digits[1]) {
+    // --- 逻辑修正点 1：只有 dig > 0 且 flag 为 true 时才计算 right ---
+    if (dig > 0) {
+        let rawRight = digits[1] || "";
         for (let i = 0; i < dig; i++) {
-            let a = digits[1][i];
+            let a = rawRight[i];
             if (!floatFlag) {
-                if (a) {
+                // 如果原始有字符则用原始的，没有则补0
+                if (a !== undefined) {
                     right += a;
                 } else {
                     right += "0";
                 }
             } else {
+                // floatFlag 为 true 时，按原逻辑该位强行补 0
                 right += "0";
             }
         }
-    } else {
-        for (let i = 0; i < dig; i++) {
-            right += "0";
-        }
     }
 
-    digits = [left, right];
+    // 这里的 str 仅用于合法性检查，不含逗号
+    let checkStr = left + (right ? "." + right : "");
 
-    str = left + "." + right;
-
-
-    // check if contains illegal charactor other than 0-9 and "."
-    for (let i = 0; i < str.length; i++) {
-        let a = str.charCodeAt(i);
+    // 检查非法字符 (0-9 和 .)
+    for (let i = 0; i < checkStr.length; i++) {
+        let a = checkStr.charCodeAt(i);
         if ((a < 48 || a > 57) && a != 46) {
-            return;
+            return "0";
         }
     }
-    // check the prefix
-    if (digits.length > 2 || str.startsWith(".") || (str.startsWith("0") && !str.startsWith("0."))) {
-        return;
+
+    // 检查前缀合法性
+    if (checkStr.startsWith(".") || (checkStr.startsWith("0") && checkStr.length > 1 && !checkStr.startsWith("0."))) {
+        return "0";
     }
 
-    let numInt = digits[0].split("");
+    // 整数部分千分位处理
+    let numInt = left.split("");
     numInt = numInt.reverse();
     let tmp = "";
     for (let i = 0; i < numInt.length; i++) {
@@ -1437,13 +1446,22 @@ export function formatNumEu(num: any, flag: boolean = true, dig: number = 2, flo
             tmp = tmp + ",";
         }
     }
+
     let result = "";
     for (let i = 0; i < tmp.length; i++) {
         result = result + tmp.charAt(tmp.length - 1 - i);
     }
-    let res = flag ? result + "." + digits[1] : result;
+    // --- 逻辑修正点 2：拼接逻辑 ---
+    // 只有 flag 为 true、dig > 0 且 right 确实有内容时，才拼小数点
+    let res = (flag && dig > 0 && right !== "") ? (result + "." + right) : result;
+
     if (!PorN) {
-        res = "-" + res;
+        // --- 核心修正：解决 -0 问题 ---
+        // 只有当数字不是正数，且格式化后的字符串中包含 1-9 的数字时，才加上负号
+        // 如果 res 是 "0", "0.00", "0,000" 等，则不加负号
+        if (/[1-9]/.test(res)) {
+            res = "-" + res;
+        }
     }
     return res;
 }
@@ -1456,4 +1474,56 @@ export function showTip(message: string) {
     if (HTML5) {
         window.alert(message);
     }
+}
+
+export function isUINodeInScreen(uiNode: Node): boolean {
+        // 1. 获取 UI 节点的世界矩形包围盒
+        const uiTransform = uiNode.getComponent(UITransform);
+        if (!uiTransform) return false;
+    
+        // getBoundingBoxToWorld 返回 { x: number, y: number, width: number, height: number }
+        const worldBoundingBox = uiTransform.getBoundingBoxToWorld();
+    
+        // 2. 获取屏幕的逻辑矩形 (原点在左下角)
+        // const screenSize = screen.windowSize;
+        const viewSize = globalThis.viewsize();
+        // const uiSize = globalThis.uisize();
+    
+        // 3. 矩形相交检测 (AABB碰撞检测)
+        const left = worldBoundingBox.x;
+        const right = worldBoundingBox.x + worldBoundingBox.width;
+        const bottom = worldBoundingBox.y;
+        const top = worldBoundingBox.y + worldBoundingBox.height;
+    
+        const screenLeft = 0;
+        const screenRight = viewSize.width;
+        const screenBottom = 0;
+        const screenTop = viewSize.height;
+    
+        return !(right < screenLeft || left > screenRight || top < screenBottom || bottom > screenTop);
+}
+    
+/**
+ * 从数组中随机取不重复的指定个数元素
+ * @param arr 原数组
+ * @param count 需要取的数量
+ * @returns 新数组
+ */
+export function getRandomUniqueItems(arr: any[], count: number): any[] {
+    // 边界处理：如果需要的数量大于数组长度，则返回整个数组的副本
+    if (count >= arr.length) return [...arr];
+    
+    // 1. 拷贝一份数组，避免修改原数组
+    const shuffled = [...arr];
+    
+    // 2. Fisher-Yates 洗牌算法：只打乱前 count 个位置，性能较好
+    for (let i = 0; i < count; i++) {
+        // 从 i 到末尾随机选一个元素
+        const randomIndex = i + Math.floor(Math.random() * (shuffled.length - i));
+        // 交换位置
+        [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]];
+    }
+    
+    // 3. 返回前 count 个
+    return shuffled.slice(0, count);
 }

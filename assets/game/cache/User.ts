@@ -212,9 +212,9 @@ export class User extends CacheBase {
     getAgent() {
         let info = this._dataContinar?.agent;
         if (info) {
-            return info || null;
+            return info || [];
         }
-        return null;
+        return [];
     }
 
     getDisplayMode() {
@@ -223,6 +223,11 @@ export class User extends CacheBase {
             return info || null;
         }
         return null;
+    }
+
+    getGameId(): string | number {
+        let gameId = this._dataContinar?.gameId;
+        return gameId;
     }
 
     getUser(): UserConfig {

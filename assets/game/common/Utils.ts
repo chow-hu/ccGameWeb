@@ -29,7 +29,14 @@ const Union = {
         M: "M",
         B: "B",
         T: "T",
-    }
+    },
+
+    LowerTxt: {
+        K: "k",
+        M: "m",
+        B: "b",
+        T: "t",
+    },
 }
 
 
@@ -530,7 +537,7 @@ export namespace Utils {
      * @param isAdjust 是否四舍五入 默认false
      * @returns 
      */
-    export function formatMoneyUnion(param: number | string, dot: number = 2, isMatchBet = false, letter: string = ",", isCompletion: boolean = false, isAdjust: boolean = false) {
+    export function formatMoneyUnion(param: number | string, dot: number = 2, isMatchBet = false, letter: string = ",", isCompletion: boolean = false, isAdjust: boolean = false, isLower: boolean = false) {
         //被除数
         let div_K = 1000 //K * 100
         let div_M = 1000000 //M * 10
@@ -614,18 +621,19 @@ export namespace Utils {
             s = Utils.stringMatchStr(s, letter, false);
         }
 
+        let txt = isLower ? Union.LowerTxt : Union.Txt;
         switch (u) {
             case Union.Type.K:
-                s = s + Union.Txt.K;
+                s = s + txt.K;
                 break;
             case Union.Type.M:
-                s = s + Union.Txt.M
+                s = s + txt.M
                 break;
             case Union.Type.B:
-                s = s + Union.Txt.B
+                s = s + txt.B
                 break;
             case Union.Type.T:
-                s = s + Union.Txt.T
+                s = s + txt.T
                 break;
             default:
                 break;
@@ -670,7 +678,7 @@ export namespace Utils {
             }
         }
         let propty = Object.prototype.toString.call(param);
-        if (propty === '[object Object]' || propty == "[object Array]") {
+        if(propty.indexOf('object') != -1){
             return param
         }
         if (isArray) {
@@ -1137,4 +1145,9 @@ export namespace Utils {
         return Math.min(max, Math.max(min, value))
     }
 
+    export function  formatDecimal(value: string | number, decimals: number = 2): string {
+        let num = typeof value === 'string' ? parseFloat(value) : value;
+        let fixed = num.toFixed(decimals);  // 先保留指定位数
+        return parseFloat(fixed).toString(); // 再去掉尾部0
+    }
 }

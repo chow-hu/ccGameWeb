@@ -19,13 +19,15 @@ export class pfTipsPanel extends UIBase {
     @property(Node)
     panel!: Node;
 
+    private isCustom: boolean = false;
+
     private _msglist: string[] = [];
     private _nodepool!: NodePool;
     private _tipingMessage: string[] = [];  // 正在展示的提示
 
     onInit() {
         this._nodepool = new NodePool();
-        this.on([AppEvent.FLOAT_TIPS]);
+        this.on([AppEvent.FLOAT_TIPS, AppEvent.FLOAT_TIPS_CUSTOM]);
     };
 
     start() {
@@ -134,8 +136,13 @@ export class pfTipsPanel extends UIBase {
     onEvents(event: string, data: any) {
         switch (event) {
             case AppEvent.FLOAT_TIPS: {
-                this._pushMsg(data);
+                if (!this.isCustom) {
+                    this._pushMsg(data);
+                }
             } break;
+            case AppEvent.FLOAT_TIPS_CUSTOM:
+                this.isCustom = data;
+                break;
             default:
                 break;
         }

@@ -20,10 +20,13 @@ const mapping = {
     "WHEEL_COPY_URL": "Share link copied.",
     "WHEEL_IMG_SAVE": "Picture saved.",
 
+    'REQUEST_TIMEOUT': "Request timeout",
+    
     GAME_GET_CONFIG_TIME_OUT: "Get level config time out!",
     GAME_MATCH_TABLE_TIME_OUT: "Match time out!",
     GAME_JOIN_TIME_OUT: "Into room time out!",
     GAME_EXIT_TIME_OUT: "Exit room time out!",
+
 
     "GAME_ERROR_1": "Fail",
     "GAME_ERROR_2": "The table is not exist!",

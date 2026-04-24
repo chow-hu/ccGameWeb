@@ -203,9 +203,6 @@ export class EButtonTouchLong extends Component {
             if (this._isTouchLong == false) {//非长按
                 this.onClickCallback(event, EButtonTouchLongStatus.START);
             }
-            if (this._isTouchLong) {// 长按
-                this.onLongClickCallback(event, EButtonTouchLongStatus.START);
-            }
         }
 
     }

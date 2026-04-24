@@ -6487,7 +6487,8 @@ declare namespace ccgame {
                 ACTION_RETIRE_ALLOC = 2,
                 ACTION_RETIRE_KICK = 3,
                 ACTION_OPTIMEOUT_TIPS = 4,
-                ACTION_OPTIMEOUT_KICK = 5
+                ACTION_OPTIMEOUT_KICK = 5,
+                ACTION_AUTO_CASHOUT = 6
             }
         }
 

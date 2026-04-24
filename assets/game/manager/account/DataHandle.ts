@@ -8,6 +8,9 @@ import { Cache } from "../../cache/Cache";
 import EventDispatcher from "../../../framework/event/EventDispatcher";
 import { GameConfig, LoginEvent } from "./interface";
 import { config } from "db://assets/plug-in/config";
+import { StorageData } from "db://assets/framework/storage/StorageData";
+import { AudioEngine } from "db://assets/framework/asset/AudioEngine";
+import { escape } from "lodash";
 
 export class DataHandle {
     private static _instance: DataHandle = null;
@@ -25,6 +28,8 @@ export class DataHandle {
         let data = this.getTekonAndAgent();
         // let data = this.getSomeData()
         config.lanuage = this.testLanuage(data.lang);
+        StorageData.local.setXXTeam(`${data.gameId}`);
+        AudioEngine.instance.initData();
         if (data) {
             Cache.User.saveTokenAndAgent(data as GameConfig);
             // Cache.User.saveSomeData(data);
@@ -127,7 +132,9 @@ export class DataHandle {
             gameId = Number(params["gameID"]);
         }
 
-        return { token: token, agent: agent.split(","), displayMode, gameId, lang: params ? params['lang'] : 'en' };
+        let agents = agent ? agent.split(',') : [];
+
+        return { token: token, agent: agents, displayMode, gameId, lang: params ? params['lang'] : 'en' };
     }
 
 }

@@ -10,7 +10,7 @@ export const _config_: Record<string, any> = {
     report_2: "https://hdsf8pm230.dpeuk328fvdjkweizm29fn0k.org",        //上报地址(动态)
     report_3: "https://prod-collection.topbigdata.com",                //上报地址(动态)
     io: 2, // 1 内网  2 外网测试  3 外网正式  4 预发布
-    version: '1.2.0',
+    version: '2.0.0',
     fps: false,                                 //是否显示帧率
     dev: true,                                 //开发者模式 显示debug
     lanuage: 'en',

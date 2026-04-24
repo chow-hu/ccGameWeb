@@ -44,5 +44,9 @@ export function jumpToExit(tip?: string) {
     let gameId = Cache.User.getUser().game;
     let pack = AppConst.GetGamePackageConfById(gameId);
     let orientation = Cache.User.getDisplayMode() || pack?.orientation || SubGameOrientation.portrail;
-    gui.openLayer('lyGameExit', { orientation, tip: tip || gutil_char('TIME_LOSE')[1] })
+    gui.openLayer('lyGameExit', { orientation, tip: tip || gutil_char('TIME_LOSE')[1] }, {
+        onAdded(node, viewParam) {
+            gui.closeLayer('all', ['lyGameExit']);
+        },
+    })
 }

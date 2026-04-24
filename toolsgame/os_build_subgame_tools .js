@@ -2,6 +2,7 @@ const path = require('path');
 let fs = require('fs-extra');
 const tools = require('./core/tools');
 const { writeJSONSync } = require('fs-extra');
+let zipper = require('zip-local');
 
 let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation, size) {
     // 修改md5Cache
@@ -55,21 +56,38 @@ let rename = function (name) {
     return dst;
 }
 
-let modifyBuildTemplate = function (name, orientation, id) {
+let modifyBuildTemplate = function (name, orientation, id, tl) {
     fs.emptyDirSync(`build-templates/${platorm}`);
     // let path = name == 'Crash' ? `build-templates/${platorm}-spribe${kb ? '-kb' : ''}/` : `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
     let path;
-    if (/* name == 'Crash' */id == 101) {
-        path = `build-templates/${platorm}-abCrash${kb ? '-kb' : ''}/`;
-    } else if (/* name == 'abJet' || name == 'abChicken2' || name == 'abSquid' */id == 103 || id == 107 || id == 108) {
-        path = `build-templates/${platorm}-abJet${kb ? '-kb' : ''}/`;
-    } else if (id == 110) {
-        path = `build-templates/${platorm}-jili${kb ? '-kb' : ''}/`;
+    // if (/* name == 'Crash' */id == 101) {
+    //     path = `build-templates/${platorm}-abCrash${kb ? '-kb' : ''}/`;
+    // } else if (/* name == 'abJet' || name == 'abChicken2' || name == 'abSquid' */id == 103 || id == 107 || id == 108) {
+    //     path = `build-templates/${platorm}-abJet${kb ? '-kb' : ''}/`;
+    // } else if (id == 110 || id == 109 || id == 111 || id == 112 || id == 113) {
+    //     path = `build-templates/${platorm}-jili${kb ? '-kb' : ''}/`;
+    // } else {
+    //     path = `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
+    // }
+    if (tl == 'koolbet') {
+        path = `build-templates/${platorm}-${tl}${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
     } else {
-        path = `build-templates/${platorm}-koolbet${kb ? `-kb-${orientation}` : `-${orientation}`}/`;
+        path = `build-templates/${platorm}-${tl}${kb ? '-kb' : ''}/`;
     }
     console.log(path);
     fs.copySync(path, `build-templates/${platorm}`, { overwrite: true })
+}
+
+let getGameVersion = function (id) {
+    let config = path.join(__dirname, '../assets/plug-in/config/index.ts');
+    let confStr = fs.readFileSync(config, "utf8");
+    const regex = new RegExp(`\\b${id}:\\s*\\{\\s*version:\\s*['"]([^'"]+)['"]\\s*\\}`);
+    const match = confStr.match(regex);
+    if (match) {
+        return match[1];
+    } else {
+        return getVersion();
+    }
 }
 
 let getVersion = function () {
@@ -97,26 +115,33 @@ let backupApk = function (build_env, bundle, id) {
 
     let name = rename(bundle);
     let date = new Date();
-    dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${id}-${name}-(v${getVersion()})-(${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}_${addZero(date.getHours())}${addZero(date.getMinutes())}${addZero(date.getSeconds())})`);//${platorm}/
+    let file = `${id}-${name}-(v${getGameVersion(id)})-(${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}_${addZero(date.getHours())}${addZero(date.getMinutes())}${addZero(date.getSeconds())})`;
+    dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${file}`);//${platorm}/
     console.log(dst);
     if (fs.existsSync(dst)) {
         fs.emptydirSync(dst);
     }
-    fs.copySync(`./build/${platorm}`, `${dst}`, { overwrite: true })
+    tools.copyDirectory(`./build/${platorm}`, `${dst}`, { overwrite: true })
+    zipper.zip(dst, (error, zipped) => {
+        if (!error) {
+            zipped.compress();
+            const zipfile = `${dst}/${file}.zip`;
+            // console.log(zipfile);
+            zipped.save(zipfile, (error) => {
+                if (!error) {
+                    console.log('success');
+                }
+            })
+        }
+    })
     return
 
     new buildHtml.default("3.8.3", input, out, () => {
         console.log("success");
 
-        let name = rename(bundle);
-        dst = path.join(__dirname, `../ccgamePack/game/${platorm}/${build_env}/${getVersion()}/${name}`);//${platorm}/
-        console.log(dst);
-        if (fs.existsSync(dst)) {
-            fs.emptydirSync(dst);
-        }
-        fs.copySync(`./build/${platorm}`, `${dst}/${platorm}`, { overwrite: true })
+        fs.copySync(`./build/${platorm}/index.html`, `${dst}/${platorm}/index.html`, { overwrite: true })
+        fs.copySync(`./build/${platorm}`, `${dst}`, { overwrite: true })
         fs.copySync(urlBuild, `${dst}/index.html`, { overwrite: true })
-        fs.copySync(`./build-templates/${platorm}/logo.gif`, `${dst}/logo.gif`, { overwrite: true })
     });
 }
 
@@ -145,7 +170,7 @@ let run = function (os_param) {
             let size = (os_param["--size"] || '768/1366').split('/');
             // let orientation = { "port": 'portrait', 'land': 'landscape' }[os_param["--orientation"]] || 'auto';
             modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation, size);
-            modifyBuildTemplate(bundles[0], orientation, os_param["--id"]);
+            modifyBuildTemplate(bundles[0], orientation, os_param["--id"], os_param["--tl"] || 'koolbet');
         } else if (step == 2) {
             backupApk(build_env, bundles[0], os_param["--id"]);
         }

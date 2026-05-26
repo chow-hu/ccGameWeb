@@ -10,7 +10,6 @@ import { GameConfig, LoginEvent } from "./interface";
 import { config } from "db://assets/plug-in/config";
 import { StorageData } from "db://assets/framework/storage/StorageData";
 import { AudioEngine } from "db://assets/framework/asset/AudioEngine";
-import { escape } from "lodash";
 
 export class DataHandle {
     private static _instance: DataHandle = null;

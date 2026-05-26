@@ -14,6 +14,22 @@ export class EButtonTouchLongEx extends EButtonTouchLong {
     })
     private cancelEventHandler = new EventHandler();
 
+    @property({
+        tooltip: "开始事件的回调",
+        type: EventHandler,
+    })
+    private startEventHandler = new EventHandler();
+
+    /** 触摸开始 */
+    onTouchtStart(event: EventTouch) {
+        super.onTouchtStart(event);
+
+        if (this.startEventHandler) {
+            this.startEventHandler.emit([event]);
+        }
+    }
+
+
     onTouchEnd(event: EventTouch) {
         super.onTouchEnd(event);
 

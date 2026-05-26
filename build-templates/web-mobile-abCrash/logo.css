@@ -3,22 +3,23 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width:201px;
-  height: 91px;
+  width:363px;
+  height: 157px;
   background: url(./logo_spribe.png) no-repeat center;
-  transform:translate(-50%, -80%) rotate(0deg) scale(0.5, 0.5) ;
+  transform:translate(-50%, -63%) rotate(0deg) scale(0.375, 0.375) ;
   background-color: transparent;
 }
 #animation {
   margin:auto;
   position: absolute;
-  top: 108px;
+  top: 208px;
   left: 0;
   right:0;
   width:80px;
   height: 36px;
   background: url(./logo.gif) no-repeat center;
   background-color: transparent;
+  transform:scale(1.25, 1.25) ;
 }
 
 #splashbg {

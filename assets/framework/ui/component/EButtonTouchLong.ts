@@ -199,10 +199,6 @@ export class EButtonTouchLong extends Component {
             nodeLeftBottomPos.y = nodeLeftBottomPos.y - height * uiTransform.anchorY;
             //矩形盒子大小
             this._currowBoxRect = new Rect(nodeLeftBottomPos.x, nodeLeftBottomPos.y, width, height);
-
-            if (this._isTouchLong == false) {//非长按
-                this.onClickCallback(event, EButtonTouchLongStatus.START);
-            }
         }
 
     }

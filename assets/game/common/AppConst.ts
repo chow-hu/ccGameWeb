@@ -100,6 +100,8 @@ export namespace AppConst {
         114: { name: "abChicken1", layer: "abChicken1Loading/prefab/layer/lyChicken1Loading", url: "", md5: "", gameName: 'Chicken Road 1' },
 
         115: { name: "abSpribeMines", layer: "abMinesLoading/prefab/layer/lySpribeMinesLoading", url: "", md5: "", gameName: 'SpribeMines' },
+        /** 游戏：Twist */
+        116: { name: "abTwist", layer: "abTwistGameLoading/prefab/layer/lyTwistGameLoadingView", url: "", md5: "", gameName: 'Twist Game' },
     }
 
     export const NotOwnLoadingGames = [101, 103, 107, 108, 114, 116];

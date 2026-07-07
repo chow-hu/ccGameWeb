@@ -11,13 +11,13 @@ import { _config_ as dis } from "./config-dis";
 
 const GameVersion: { [key: string | number]: { version: string } } = {
     100: { version: '1.0.0' },
-    101: { version: '1.0.0' },
+    101: { version: '1.0.1' },
     102: { version: '1.0.0' },
     103: { version: '1.0.0' },
-    104: { version: '1.0.0' },
+    104: { version: '1.0.1' },
     105: { version: '1.0.0' },
     106: { version: '1.0.0' },
-    107: { version: '1.0.0' },
+    107: { version: '1.0.1' },
     108: { version: '1.0.0' },
     109: { version: '1.0.0' },
     110: { version: '1.0.0' },

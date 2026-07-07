@@ -56,6 +56,9 @@ const mapping = {
     "MONTH_7": "Jul",
     "MONTH_8": "Aug",
     "MONTH_9": "Sept",
+
+    "OK": "Tá bem",
+    "NO": "Não",
 }
 
 globalThis["char_pt"] = { ...globalThis['char_pt'], ...mapping }

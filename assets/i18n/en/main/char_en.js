@@ -21,7 +21,7 @@ const mapping = {
     "WHEEL_IMG_SAVE": "Picture saved.",
 
     'REQUEST_TIMEOUT': "Request timeout",
-    
+
     GAME_GET_CONFIG_TIME_OUT: "Get level config time out!",
     GAME_MATCH_TABLE_TIME_OUT: "Match time out!",
     GAME_JOIN_TIME_OUT: "Into room time out!",
@@ -73,6 +73,9 @@ const mapping = {
 
     INSUFFICIENT_FUNDS_KB_RESET: "Reset",
     INSUFFICIENT_FUNDS_KB_TIP: "Insufficient funds. Do you want to reset it?",
+
+    "OK": "OK",
+    "NO": "NO",
 }
 
 globalThis["char_en"] = { ...globalThis['char_en'], ...mapping }

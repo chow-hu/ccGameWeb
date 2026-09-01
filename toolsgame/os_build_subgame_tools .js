@@ -4,7 +4,7 @@ const tools = require('./core/tools');
 const { writeJSONSync } = require('fs-extra');
 let zipper = require('zip-local');
 
-let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation, size) {
+let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orientation, size, fix) {
     // 修改md5Cache
     let configStr = fs.readFileSync(path.join(urlPack, `buildConfigJson/buildConfig_${platorm}.json`), { encoding: 'utf-8' });
     if (md5 == "true") {
@@ -36,6 +36,8 @@ let modifyBuild_buildConfig_web_mobile = function (md5, build_env, bundles, orie
     let min = Math.min(size[0], size[1]);
     setingCon.general.designResolution.width = orientation == 'landscape' ? max : min;
     setingCon.general.designResolution.height = orientation == 'landscape' ? min : max;
+    setingCon.general.designResolution.fitWidth = (fix == 0 || fix == 1);
+    setingCon.general.designResolution.fitHeight = (fix == 0 || fix == 2);
     console.log(setingCon)
     fs.writeFileSync(path.join(__dirname, "../settings/v2/packages/project.json"), JSON.stringify(setingCon, undefined, 4));
 
@@ -107,7 +109,12 @@ function addZero(num) {
 }
 
 let backupApk = function (build_env, bundle, id) {
-    fs.copySync(`./build-templates/${platorm}`, `./build/${platorm}`, { overwrite: true })
+    fs.copySync(`./build-templates/${platorm}`, `./build/${platorm}`, {
+        overwrite: true, filter: (src, dest) => {
+            // 剔除所有 .ejs 文件
+            return !src.endsWith('.ejs');
+        }
+    })
     var buildHtml = __importDefault(require("../extensions/super-html/dist/core/build.js"))
     let input = path.join(__dirname, `../build/${platorm}`);
     let out = path.join(__dirname, `../build/super-html`);
@@ -121,6 +128,7 @@ let backupApk = function (build_env, bundle, id) {
     if (fs.existsSync(dst)) {
         fs.emptydirSync(dst);
     }
+
     tools.copyDirectory(`./build/${platorm}`, `${dst}`, { overwrite: true })
     zipper.zip(dst, (error, zipped) => {
         if (!error) {
@@ -136,17 +144,34 @@ let backupApk = function (build_env, bundle, id) {
     })
     return
 
+    require('fs-extra').emptyDirSync(urlBuild);
     new buildHtml.default("3.8.3", input, out, () => {
         console.log("success");
 
         fs.copySync(`./build/${platorm}/index.html`, `${dst}/${platorm}/index.html`, { overwrite: true })
         fs.copySync(`./build/${platorm}`, `${dst}`, { overwrite: true })
-        fs.copySync(urlBuild, `${dst}/index.html`, { overwrite: true })
+        // fs.copySync(urlBuild, `${dst}/index.html`, { overwrite: true })
+        fs.copySync(urlBuild, `${dst}`, { overwrite: true })
+        // fs.copySync(`./build-templates/${platorm}`, `./build/${platorm}`, { overwrite: true })
+
+        zipper.zip(dst, (error, zipped) => {
+            if (!error) {
+                zipped.compress();
+                const zipfile = `${dst}/${file}.zip`;
+                // console.log(zipfile);
+                zipped.save(zipfile, (error) => {
+                    if (!error) {
+                        console.log('success');
+                    }
+                })
+            }
+        })
     });
 }
 
 let urlPack = path.join(__dirname, "../ccgamePack");
-let urlBuild = path.join(__dirname, "../build/super-html/common_min/ccgame_common_min.html")
+// let urlBuild = path.join(__dirname, "../build/super-html/common_min/ccgame_common_min.html")
+let urlBuild = path.join(__dirname, "../build/super-html/common_min/")
 let platorm = 'web-mobile';
 let kb = false;
 let ct = 'false';
@@ -168,8 +193,9 @@ let run = function (os_param) {
         if (step == 1) {
             let md5 = os_param["--md5"] || true;
             let size = (os_param["--size"] || '768/1366').split('/');
+            let fix = os_param["--fix"] || 0;
             // let orientation = { "port": 'portrait', 'land': 'landscape' }[os_param["--orientation"]] || 'auto';
-            modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation, size);
+            modifyBuild_buildConfig_web_mobile(md5, build_env, bundles, orientation, size, fix);
             modifyBuildTemplate(bundles[0], orientation, os_param["--id"], os_param["--tl"] || 'koolbet');
         } else if (step == 2) {
             backupApk(build_env, bundles[0], os_param["--id"]);

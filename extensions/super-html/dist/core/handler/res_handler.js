@@ -1,18 +1,18 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function (o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
+        desc = { enumerable: true, get: function () { return m[k]; } };
     }
     Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
+}) : (function (o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function (o, v) {
     Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
+}) : function (o, v) {
     o["default"] = v;
 });
 var __importStar = (this && this.__importStar) || function (mod) {
@@ -162,6 +162,15 @@ class res_handler {
             s_file_path = s_file_path.replace(/\\/g, "/");
             // 注意,存储时删除BASE_PATH前置
             let s_relative_path = s_file_path.replace(new RegExp(`[.]*${s_input_dir}/`), "");
+            // if (s_relative_path.startsWith("assets/ab")) {
+            //     const s_ext = platform_1.default.extname(s_file_path);
+            //     const is_script = s_ext == ".js" || /config\.[a-f0-9]+\.json$/.test(s_relative_path);
+            //     if (!is_script) {
+            //         if (!config_1.default.d_hot.l_ab_files) config_1.default.d_hot.l_ab_files = [];
+            //         config_1.default.d_hot.l_ab_files.push(s_file_path);
+            //         continue;
+            //     }
+            // }
             let s_value = "";
             if (platform_1.default.extname(s_file_path) == ".js") {
                 s_value = this.read_js(s_file_path);

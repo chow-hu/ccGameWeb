@@ -32,6 +32,7 @@ const config_1 = __importDefault(require("../config/config"));
 const platform_1 = __importDefault(require("../common/platform"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const crypto_1 = __importDefault(require("crypto"));
 class channel_handler {
     async run() {
         const s_out_dir = config_1.default.s_out_dir;
@@ -72,12 +73,12 @@ class channel_handler {
             var s_html_name = d_channel.s_html_name;
             {
                 if (s_html_name) {
-                    s_html_name = `${s_channel_name}_${s_html_name}.html`;
+                    s_html_name = `${s_html_name}.html`;
                 }
                 else {
                     s_html_name = `${s_channel_name}.html`;
                 }
-                if (d_hot.s_title) {
+                if (d_hot.s_title && !d_channel.s_html_name) {
                     s_html_name = `${d_hot.s_title}_${s_html_name}`;
                 }
             }
@@ -126,6 +127,15 @@ class channel_handler {
             s_out_body = l_body.join("\n");
             let s_html_content = this._add_meta_to_meta(d_hot.s_base_html_content, s_channel_meta);
             s_html_content = this._add_script_to_head(s_html_content, s_channel_head);
+            // 资源拆分：写到独立文件，注入外部script标签
+            if (!d_channel.b_out_zip && d_channel.b_split_res) {
+                // 基于内容生成md5拼进文件名，资源变化时文件名随之改变，避免浏览器/CDN缓存旧资源
+                const s_res_md5 = crypto_1.default.createHash('md5').update(s_zip_res_body).digest('hex').slice(0, 8);
+                let s_res_name = s_html_name.replace('.html', `_res.${s_res_md5}.js`);
+                let s_res_path = platform_1.default.join(s_out_dir, s_channel_name, s_res_name);
+                platform_1.default.writeFileSync(s_res_path, s_zip_res_body);
+                s_html_content = s_html_content.replace('</body>', '<script src="' + s_res_name + '"></script>\n</body>');
+            }
             s_html_content = this._add_script_to_body(s_html_content, s_out_body);
             let s_out_file_name = "";
             let out_data = null;
@@ -186,6 +196,23 @@ class channel_handler {
             }
             let s_out_path = platform_1.default.join(s_out_dir, s_channel_name, s_out_file_name);
             platform_1.default.writeFileSync(s_out_path, out_data);
+            // 复制AB子包资源到输出目录
+            const s_ab_dir = platform_1.default.join(s_out_dir, s_channel_name, "assets");
+            if (fs_1.default.existsSync(s_ab_dir)) {
+                fs_1.default.rmSync(s_ab_dir, { recursive: true, force: true });
+            }
+            const l_ab_files = config_1.default.d_hot.l_ab_files;
+            if (l_ab_files && l_ab_files.length > 0) {
+                const s_input_dir = config_1.default.s_input_dir;
+                for (let s_file of l_ab_files) {
+                    let s_file_norm = s_file.replace(/\\/g, "/");
+                    let s_relative = s_file_norm.replace(s_input_dir + "/", "");
+                    let s_dest = platform_1.default.join(s_out_dir, s_channel_name, s_relative);
+                    let s_content = platform_1.default.read_file(s_file);
+                    platform_1.default.writeFileSync(s_dest, s_content);
+                }
+                utils_1.default.log(`[${s_channel_name}] copy ab files: ${l_ab_files.length}`);
+            }
             utils_1.default.log(`[${s_channel_name}] [${utils_1.default.b_to_kb(out_data.length)}] \n${s_out_path}`);
         }
     }
